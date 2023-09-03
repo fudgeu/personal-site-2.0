@@ -1,4 +1,5 @@
 import styles from './page.module.css'
+import GLView from './webgl/component/GLView'
 
 export default function Home() {
   return (
@@ -34,18 +35,33 @@ export default function Home() {
 
 			<div className={styles.contentContainer}>
 				<div className={styles.webGLContainer}>
-
+					<GLView />
 				</div>
 				<div className={styles.textContentContainer}>
-					<h2>THE FUTURE IS NOW.</h2>
+					<div className={styles.subHeader}>
+						<h2>THE FUTURE IS NOW.</h2>
+						<div className={styles.subHeaderDecoration}>
+							<div className={styles.subHeaderDecorationPiece} />	
+							<div className={styles.subHeaderDecorationPiece} />	
+							<div className={styles.subHeaderDecorationPiece} />	
+						</div>						
+					</div>
 					<div className={styles.descriptionAndNav}>
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi volutpat viverra dui, sed lobortis augue elementum nec.</p>	
 						<nav>
 							<ul className={styles.navList}>
-								<li>&gt; ABOUT ME</li>
-								<li>&gt; PROJECTS</li>
-								<li>&gt; EDUCATION</li>
-								<li>&gt; CONTACT</li>
+								<li className={styles.navItem}>
+									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>ABOUT ME</span>
+								</li>
+								<li className={styles.navItem}>
+									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>PROJECTS</span>
+								</li>
+								<li className={styles.navItem}>
+									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
+								</li>
+								<li className={styles.navItem}>
+									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>CONTACT</span>
+								</li>
 							</ul>
 						</nav>
 					</div>
