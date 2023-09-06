@@ -139,13 +139,6 @@ export default function ShadowGL() {
 
     // load models, then world
     Promise.all([
-      loadModel(gl, 'sphere', './sphere.obj'),
-      loadModel(gl, 'cube', './cube.obj'),
-      loadModel(gl, 'iso', './iso.obj'),
-      loadModel(gl, 'torus', './torus.obj'),
-      loadModel(gl, 'stage', './stage.obj'),
-      loadModel(gl, 'circles', './circles.obj'),
-      loadModel(gl, 'kz', './stoodl_axo.obj'),
       loadModel(gl, 'shadow', './shadow.obj'),
     ])
       .then((models) => {
