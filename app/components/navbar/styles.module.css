@@ -1,0 +1,40 @@
+.nav {
+  position: fixed;
+  width: 100vw;
+  font-size: 2rem;
+	align-self: center;
+  line-height: 3.5rem;
+  border-top: solid 2rem var(--accent-color);
+  padding: 0 1rem;
+}
+
+.list {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+}
+
+
+.unselected {
+  -webkit-text-stroke: var(--accent-color) 0.1rem;
+	color: #00000000;
+  transform: translateY(0.2rem);
+}
+
+.selected {
+  color: var(--accent-color);
+  transform: translateY(0.2rem);
+} 
+
+.repeatingDecoration {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.decoBox {
+  height: 75%;
+  width: 1rem;
+  background-color: transparent;
+  border: solid 0.1rem var(--accent-color)
+}

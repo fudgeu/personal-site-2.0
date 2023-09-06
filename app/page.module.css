@@ -10,9 +10,7 @@
 
 .titleTextContainer {
 	font-size: 6rem;
-	text-shadow: var(--accent-color) 50px;
 	align-self: center;
-	box-sizing: content-box;
 	border-left: solid 5rem var(--accent-color);
 	animation-name: titleTextGlitch;
 	animation-duration: 10s;

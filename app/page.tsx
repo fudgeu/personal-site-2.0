@@ -1,6 +1,6 @@
 import styles from './page.module.css'
-import GLView from './webgl/component/GLView'
-import GLView2 from './webgl/component/GLView2'
+import GLView from './webgl/component/glview'
+import GLView2 from './webgl/component/glview2'
 
 export default function Home() {
   return (
