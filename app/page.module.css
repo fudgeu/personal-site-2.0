@@ -216,6 +216,14 @@
 
 }
 
+/* Smaller desktops */
+@media (max-width: 1650px) {
+	.titleTextContainer {
+		font-size: 4rem;
+		animation-name: titleTextGlitchSmall;
+	}
+}
+
 @keyframes textSpin {
 	0% {
 		transform: rotate3d(1, 0, 0, 0deg);
@@ -283,6 +291,57 @@
 	}
 	100% {
 		line-height: 10rem;
+	}
+}
+
+@keyframes titleTextGlitchSmall {
+	0% {
+		line-height: 7rem;
+	}
+	20% {
+		line-height: 7rem;
+	}
+	20.01% {
+		line-height: 4rem;
+	}
+	20.5% {
+		line-height: 4rem;
+	}
+	20.51% {
+		line-height: 7rem;
+	}
+	21.0% {
+		line-height: 7rem;
+	}
+	21.01% {
+		line-height: 4rem;
+	}
+	21.5% {
+		line-height: 4rem;
+	}
+	21.51% {
+		line-height: 7rem;
+	}
+	22% {
+		line-height: 7rem;
+	}
+	22.01% {
+		line-height: 4rem;
+	}
+	50% {
+		line-height: 4rem;
+	}
+	50.01% {
+		line-height: 12rem;
+	}
+	50.5% {
+		line-height: 12rem;
+	}
+	50.51% {
+		line-height: 7rem;
+	}
+	100% {
+		line-height: 7rem;
 	}
 }
 
