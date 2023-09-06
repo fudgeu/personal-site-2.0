@@ -1,9 +1,13 @@
 import styles from './page.module.css'
 import GLView from './webgl/component/GLView'
+import GLView2 from './webgl/component/GLView2'
 
 export default function Home() {
   return (
     <main className={styles.main}>
+			<div className={styles.cornerDecoration2}>
+				<GLView2 />
+			</div>
 
       <div className={styles.titleTextContainer}>
 				<span className={styles.subTitleText}>
@@ -39,7 +43,7 @@ export default function Home() {
 				</div>
 				<div className={styles.textContentContainer}>
 					<div className={styles.subHeader}>
-						<h2>THE FUTURE IS NOW.</h2>
+						<h2>HEE HEE HA HA</h2>
 						<div className={styles.subHeaderDecoration}>
 							<div className={styles.subHeaderDecorationPiece} />	
 							<div className={styles.subHeaderDecorationPiece} />	
@@ -101,6 +105,19 @@ export default function Home() {
 					<div className={styles.cornerDecoRect} />
 					<div className={styles.cornerDecoCircle} />
 				</div>
+			</div>
+
+			<div className={styles.bottomDecoration}>
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
 			</div>
 			
     </main>

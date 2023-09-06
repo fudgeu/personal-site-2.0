@@ -6,26 +6,28 @@ export type WorldObject = {
   worldPosition: mat4
 };
 
-let objects: WorldObject[] = [];
+export class World {
+	objects: WorldObject[] = [];
 
-export function addWorldObjectAtOrigin(object: Object3D) {
-  objects.push({
-    object,
-    worldPosition: mat4.create(),
-  });
-}
+	addObjectAtOrigin(object: Object3D) {
+		this.objects.push({
+			object,
+			worldPosition: mat4.create(),
+		});
+	}
 
-export function addWorldObject(object: Object3D, worldPosition: mat4) {
-  objects.push({
-    object,
-    worldPosition,
-  });
-}
+	addObject(object: Object3D, worldPosition: mat4) {
+		this.objects.push({
+			object,
+			worldPosition,
+		});
+	}
 
-export function getWorldObjects(): WorldObject[] {
-  return objects;
-}
+	getObjects(): WorldObject[] {
+		return this.objects;
+	}
 
-export function clearWorldObjects() {
-  objects = [];
+	clearObjects() {
+		this.objects = []
+	}
 }

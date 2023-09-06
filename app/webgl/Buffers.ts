@@ -5,6 +5,13 @@ export type BufferContainer = {
   normals: WebGLBuffer
 };
 
+export function createBarycentricBuffer(gl: WebGLRenderingContext, coords: Float32Array): WebGLBuffer | null {
+	const bCoordBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, bCoordBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, coords, gl.STATIC_DRAW);
+	return bCoordBuffer;
+}
+
 function initPositionBuffer(gl: WebGLRenderingContext): WebGLBuffer | null {
   const positionBuffer = gl.createBuffer();
 

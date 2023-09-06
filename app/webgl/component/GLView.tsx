@@ -6,7 +6,8 @@ import {
 import initShaderProgram, { ProgramInfo } from '@/app/webgl/Shaders';
 import drawScene from '@/app/webgl/DrawScene';
 import {
-  WorldObject, addWorldObject, clearWorldObjects, getWorldObjects,
+	World,
+  WorldObject
 } from '@/app/webgl/World';
 import { Object3D, createObject } from '@/app/webgl/Object3D';
 import { mat4 } from 'gl-matrix';
@@ -18,8 +19,11 @@ type ModelResult = {
   id: string
 };
 
+let lastUsedShape = "torus"
+
 export default function GLView() {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
+  const [world, setWorld] = useState(new World());
 
   const ref = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,11 +33,11 @@ export default function GLView() {
   const render = useCallback((time: number, gl: WebGLRenderingContext, prgmInfo: ProgramInfo) => {
 
 		// rotate shape
-		getWorldObjects().forEach(({ object, worldPosition }: WorldObject) => {
-			mat4.rotate(object.localPosition, object.localPosition, 0.01, [1, 0.7, 1])
+		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
+			mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1])
 		});
 
-    drawScene(gl, prgmInfo);
+    drawScene(gl, prgmInfo, world);
     animationRequestRef.current = requestAnimationFrame(
       (newTime) => render(newTime, gl, prgmInfo),
     );
@@ -85,6 +89,7 @@ export default function GLView() {
         attribLocations: {
           vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
           vertexNormal: gl.getAttribLocation(shaderProgram, 'aVertexNormal'),
+					barycentricCoords: gl.getAttribLocation(shaderProgram, 'aBarycentricCoords')
         },
         uniformLocations: {
           projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
@@ -97,41 +102,70 @@ export default function GLView() {
     [],
   );
 
+	// Change shape every few seconds
+	const changeShapeEffect = useCallback((gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
+		world.clearObjects();
+		
+		const shapeArray = Array.from(models)
+		let shapeName: string;
+		let shape: MeshWithBuffers;
+		do {
+			const shapeEntry = shapeArray[Math.floor(Math.random() * shapeArray.length)]
+			shapeName = shapeEntry[0]
+			shape = shapeEntry[1]
+		} while (shapeName === lastUsedShape)
+
+		lastUsedShape = shapeName;
+
+		if (shape === undefined) {
+			console.log('Unable to load shape');
+			return;
+		}
+
+		const shape2 = createObject(gl, shape);
+		if (shape2 == null) {
+			console.error("Could not create Object3D")
+			return
+		}
+		mat4.scale(shape2.localPosition, shape2.localPosition, [2.5, 2.5, 2.5]);
+		mat4.rotate(shape2.localPosition, shape2.localPosition, Math.PI / 2, [1, -1, 0]);
+		const shape2Pos = mat4.create();
+		mat4.translate(shape2Pos, shape2Pos, [0, 0, -10]);
+
+		world.addObject(shape2, shape2Pos);
+
+		const timeoutId = setTimeout(() => {changeShapeEffect(gl, models)}, 5000)
+		return () => { clearTimeout(timeoutId) }
+	},
+	[world]
+	);
+
 	// Load World
   const loadWorld = useCallback(
     (gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
-      clearWorldObjects();
+      world.clearObjects();
 
-      const sphere = models.get('sphere');
-      if (sphere === undefined) {
-        console.log('Could not load world, sphere model not loaded');
+			const ico = models.get('iso');
+			if (ico === undefined) {
+        console.log('Could not load world, icosphere model not loaded');
         return;
       }
 
-      const cube = models.get('cube');
-      if (cube === undefined) {
-        console.log('Could not load world, cube model not loaded');
-        return;
-      }
+			const shape2 = createObject(gl, ico);
+			if (shape2 == null) {
+				console.error("Could not create Object3D")
+				return
+			}
+      mat4.scale(shape2.localPosition, shape2.localPosition, [2.5, 2.5, 2.5]);
+      mat4.rotate(shape2.localPosition, shape2.localPosition, Math.PI / 2, [1, -1, 0]);
+      const shape2Pos = mat4.create();
+      mat4.translate(shape2Pos, shape2Pos, [0, 0, -10]);
 
-      const iso = models.get('iso');
-      const torus = models.get('torus');
-			if (torus === undefined) {
-        console.log('Could not load world, torus model not loaded');
-        return;
-      }
+      world.addObject(shape2, shape2Pos);
 
-
-      const cube1: Object3D = createObject(torus);
-      mat4.rotate(cube1.localPosition, cube1.localPosition, Math.PI / 2, [1, 1, 0]);
-      mat4.scale(cube1.localPosition, cube1.localPosition, [1.5, 1.5, 1.5]);
-      const cube1Pos = mat4.create();
-      mat4.translate(cube1Pos, cube1Pos, [0, 0, -10]);
-
-
-      addWorldObject(cube1, cube1Pos);
+			setTimeout(() => {changeShapeEffect(gl, models)}, 5000)
     },
-    [],
+    [changeShapeEffect, world],
   );
 
   // begin init
@@ -139,6 +173,7 @@ export default function GLView() {
     // load gl
     const gl = ref.current?.getContext('webgl');
     if (gl == null) return () => {};
+		gl.getExtension('OES_standard_derivatives')
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -148,6 +183,10 @@ export default function GLView() {
       loadModel(gl, 'cube', './cube.obj'),
       loadModel(gl, 'iso', './iso.obj'),
       loadModel(gl, 'torus', './torus.obj'),
+      //loadModel(gl, 'stage', './stage.obj'),
+      //loadModel(gl, 'circles', './circles.obj'),
+      //loadModel(gl, 'kz', './stoodl_axo.obj'),
+      //loadModel(gl, 'shadow', './shadow.obj'),
     ])
       .then((models) => {
         // register each loaded model

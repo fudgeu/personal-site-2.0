@@ -1,3 +1,4 @@
+#extension GL_OES_standard_derivatives : enable
 precision mediump float;
 
 struct PointLight {
@@ -11,6 +12,7 @@ struct PointLight {
 
 varying highp vec3 vNormal;
 varying highp vec3 vFragPos;
+varying highp vec3 vbc;
 
 vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragmentPos) {
   vec3 lightDirection = normalize(light.position - fragmentPos);
@@ -26,6 +28,12 @@ vec3 calculatePointLight(PointLight light, vec3 normal, vec3 fragmentPos) {
   return ambient + diffuse;
 }
 
+float edgeFactor() {
+  vec3 d = fwidth(vbc);
+  vec3 f = step(d * 0.5, vbc);
+  return min(min(f.x, f.y), f.z);
+}
+
 void main(void) {
   vec3 norm = normalize(vNormal);
 
@@ -35,5 +43,11 @@ void main(void) {
   vec3 lightCalc1 = calculatePointLight(purpleLight, norm, vFragPos);
   vec3 lightCalc2 = calculatePointLight(blueLight, norm, vFragPos);
 
-  gl_FragColor = vec4(lightCalc1 + lightCalc2, 1.0);
+  vec3 color = vec3(lightCalc1 + lightCalc2);
+	if (edgeFactor() == 0.0) {
+		gl_FragColor = vec4(color, 1.0);
+	} else {
+		discard;
+	}
+	//gl_FragColor = vec4(max(vec3(edgeFactor()), color), 1.0);
 }

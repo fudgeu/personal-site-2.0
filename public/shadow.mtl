@@ -1,0 +1,62 @@
+# Blender 3.3.1 MTL File: 'None'
+# www.blender.org
+
+newmtl null
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl shtx_00
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:/Users/patri/Desktop/Textures/shtx_00.png
+
+newmtl shtx_01
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:/Users/patri/Desktop/Textures/shtx_01.png
+
+newmtl shtx_head00
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:/Users/patri/Desktop/Textures/shtx_head00.png
+
+newmtl shtx_s000
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:/Users/patri/Desktop/Textures/shtx_s000.png
+
+newmtl stx_ref00
+Ns 50.000011
+Ka 1.000000 1.000000 1.000000
+Ks 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+map_Kd C:/Users/patri/Desktop/Textures/stx_ref00.png

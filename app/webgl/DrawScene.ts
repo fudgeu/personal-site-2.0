@@ -1,6 +1,6 @@
 import { mat4 } from 'gl-matrix';
 import { MeshWithBuffers } from 'webgl-obj-loader';
-import { WorldObject, getWorldObjects } from './World';
+import { World, WorldObject } from './World';
 import { ProgramInfo } from './Shaders';
 
 function setPositionAttribute(
@@ -46,7 +46,28 @@ function setNormalAttribute(
   gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
 }
 
-export default function drawScene(gl: WebGLRenderingContext, programInfo: ProgramInfo) {
+function setBarycentricCoordsAttribute(
+	gl: WebGLRenderingContext, coords: WebGLBuffer, programInfo: ProgramInfo,
+) {
+	const numComponents = 3;
+  const type = gl.FLOAT;
+  const normalize = false;
+  const stride = 0;
+  const offset = 0;
+
+	gl.bindBuffer(gl.ARRAY_BUFFER, coords)
+	gl.vertexAttribPointer(
+		programInfo.attribLocations.barycentricCoords,
+		numComponents,
+		type,
+		normalize,
+		stride,
+		offset
+	);
+	gl.enableVertexAttribArray(programInfo.attribLocations.barycentricCoords)
+}
+
+export default function drawScene(gl: WebGLRenderingContext, programInfo: ProgramInfo, world: World) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   gl.clearColor(0, 0, 0, 1);
   gl.clearDepth(1.0);
@@ -64,7 +85,7 @@ export default function drawScene(gl: WebGLRenderingContext, programInfo: Progra
   const projMatrix = mat4.create();
   mat4.perspective(projMatrix, fov, aspectRatio, zNear, zFar);
 
-  getWorldObjects().forEach((worldObject: WorldObject) => {
+  world.getObjects().forEach((worldObject: WorldObject) => {
     const buffers = worldObject.object.buffers as MeshWithBuffers;
     const { localPosition } = worldObject.object;
     const { worldPosition } = worldObject;
@@ -77,6 +98,7 @@ export default function drawScene(gl: WebGLRenderingContext, programInfo: Progra
     // provide webgl with our attributes and instructions how to read the arrays
     setPositionAttribute(gl, buffers, programInfo);
     setNormalAttribute(gl, buffers, programInfo);
+		setBarycentricCoordsAttribute(gl, worldObject.object.barycentricCoords, programInfo)
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer);
 
     // give shader program for drawing
@@ -111,6 +133,6 @@ export default function drawScene(gl: WebGLRenderingContext, programInfo: Progra
     const vertexCount = buffers.indexBuffer.numItems;
     const type = gl.UNSIGNED_SHORT;
     const offset = 0;
-    gl.drawElements(gl.LINES, vertexCount, type, offset);
+    gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
   });
 }

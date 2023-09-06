@@ -3,6 +3,7 @@ export type ProgramInfo = {
   attribLocations: {
     vertexPosition: number,
     vertexNormal: number,
+		barycentricCoords: number,
   },
   uniformLocations: {
     projectionMatrix: WebGLUniformLocation | null,
