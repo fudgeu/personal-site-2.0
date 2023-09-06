@@ -145,7 +145,7 @@ export default function GLView() {
     (gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
       world.clearObjects();
 
-			const ico = models.get('iso');
+			const ico = models.get('ico');
 			if (ico === undefined) {
         console.log('Could not load world, icosphere model not loaded');
         return;
@@ -181,7 +181,7 @@ export default function GLView() {
     Promise.all([
       loadModel(gl, 'sphere', './sphere.obj'),
       loadModel(gl, 'cube', './cube.obj'),
-      loadModel(gl, 'iso', './iso.obj'),
+      loadModel(gl, 'ico', './ico.obj'),
       loadModel(gl, 'torus', './torus.obj'),
       //loadModel(gl, 'stage', './stage.obj'),
       //loadModel(gl, 'circles', './circles.obj'),
