@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import styles from './page.module.css'
-import GLView from './webgl/component/main_gl_view'
 import GLView2 from './webgl/component/GLView2'
 import MainGLView from './webgl/component/main_gl_view'
 import BkgGLView from './webgl/component/background_gl'
@@ -69,7 +68,7 @@ export default function Home() {
 			</div>
 
 			<div className={styles.scrollingTextContainer}>
-				<Marquee autoFill speed={10}>01101100 01101111 01101100 00100000 01100111 01100101 01110100 00100000 01110000 01110010 01100001 01101110 01101011 01100101 01100100</Marquee>
+				<Marquee autoFill speed={10} direction="right">011011000110111101101100001000000110011101100101011101000010000001110000011100100110000101101110011010110110010101100100</Marquee>
 			</div>
 
 			<div className={styles.contentContainer}>

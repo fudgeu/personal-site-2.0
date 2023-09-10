@@ -137,7 +137,6 @@ export default function BkgGLView({ mouseX, mouseY }: MainGLProps) {
 
         world.addObject(worldObj, objPos);
       }
-
     },
     [world],
   );

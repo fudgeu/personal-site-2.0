@@ -40,7 +40,7 @@ export default function MainGLView({ mouseX, mouseY }: MainGLProps) {
 
 		// rotate shape
 		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-			mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1])
+			mat4.rotate(object.localPosition, object.localPosition, 0.005, [0, 0, 1])
 		});
 
     drawScene(gl, prgmInfo, world);
@@ -234,32 +234,6 @@ export default function MainGLView({ mouseX, mouseY }: MainGLProps) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [setContainerDimensions]);
-
-	// Handle mouse movement
-	useEffect(() => {
-		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-			const xOffset = lastMousePos.x - mouseX
-			const yOffset = lastMousePos.y - mouseY
-			mat4.translate(
-				worldPosition,
-				worldPosition,
-				[0.0004 * xOffset, -0.0004 * yOffset, 0]
-			)
-			/*mat4.rotate(
-				worldPosition,
-				worldPosition,
-				0.0001 * xOffset,
-				[0, 1, 0]
-			)
-			mat4.rotate(
-				worldPosition,
-				worldPosition,
-				0.0001 * yOffset,
-				[1, 0, 0]
-			)*/
-		});
-		setLastMousePos({x: mouseX, y: mouseY});
-	}, [lastMousePos.x, lastMousePos.y, mouseX, mouseY, world])
 
   return (
     <div className={styles.container} ref={containerRef}>

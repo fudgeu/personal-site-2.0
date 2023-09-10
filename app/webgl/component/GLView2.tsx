@@ -41,7 +41,7 @@ export default function GLView({ mouseX, mouseY }: GLProps) {
 
 		// rotate shape
 		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-			mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1])
+			mat4.rotate(object.localPosition, object.localPosition, 0.005, [0, 0, 1])
 		});
 
     drawScene(gl, prgmInfo, world);
@@ -126,7 +126,7 @@ export default function GLView({ mouseX, mouseY }: GLProps) {
 				console.error("Could not create Object3D")
 				return
 			}
-      mat4.scale(shape2.localPosition, shape2.localPosition, [3, 3, 3]);
+      mat4.scale(shape2.localPosition, shape2.localPosition, [2, 2, 2]);
       mat4.rotate(shape2.localPosition, shape2.localPosition, -0.75, [1, 1, 0]);
       const shape2Pos = mat4.create();
       mat4.translate(shape2Pos, shape2Pos, [5, -5, -10]);
@@ -187,20 +187,6 @@ export default function GLView({ mouseX, mouseY }: GLProps) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [setContainerDimensions]);
-
-	// Handle mouse movement
-	useEffect(() => {
-		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-			const xOffset = lastMousePos.x - mouseX
-			const yOffset = lastMousePos.y - mouseY
-			mat4.translate(
-				worldPosition,
-				worldPosition,
-				[0.0008 * xOffset, -0.0008 * yOffset, 0]
-			)
-		});
-		setLastMousePos({x: mouseX, y: mouseY});
-	}, [lastMousePos.x, lastMousePos.y, mouseX, mouseY, world])
 
   return (
     <div className={styles.container} ref={containerRef}>
