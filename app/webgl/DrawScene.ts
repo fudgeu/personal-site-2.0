@@ -69,7 +69,7 @@ function setBarycentricCoordsAttribute(
 
 export default function drawScene(gl: WebGLRenderingContext, programInfo: ProgramInfo, world: World) {
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  gl.clearColor(0, 0, 0, 1);
+  gl.clearColor(0, 0, 0, 0);
   gl.clearDepth(1.0);
   gl.enable(gl.DEPTH_TEST); // enable depth testing
   gl.depthFunc(gl.LEQUAL); // near objects obscure far objects

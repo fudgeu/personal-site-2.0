@@ -1,16 +1,42 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import styles from './page.module.css'
-import GLView from './webgl/component/GLView'
+import GLView from './webgl/component/main_gl_view'
 import GLView2 from './webgl/component/GLView2'
+import MainGLView from './webgl/component/main_gl_view'
+import BkgGLView from './webgl/component/background_gl'
+import Marquee from 'react-fast-marquee'
 
 export default function Home() {
+
+	const [mousePos, setMousePos] = useState({x: 0, y: 0})
+
+	// mouse pos effect
+	useEffect(() => {
+		const handleMouseMove = (event: MouseEvent) => {
+			setMousePos({x: event.clientX, y: event.clientY})
+		}
+		window.addEventListener('mousemove', handleMouseMove)
+		return () => window.removeEventListener('mousemove', handleMouseMove)
+	})
+
   return (
     <main className={styles.main}>
+
+			<BkgGLView mouseX={mousePos.x} mouseY={mousePos.y} />
+
 			<div className={styles.cornerDecoration2}>
-				<GLView2 />
+				<GLView2 mouseX={mousePos.x} mouseY={mousePos.y} />
 			</div>
 
       <div className={styles.titleTextContainer}>
 				<span className={styles.subTitleText}>
+					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
 					<h1>FUDGEU</h1>
 					<h1>FUDGEU</h1>
 					<h1>FUDGEU</h1>
@@ -34,12 +60,21 @@ export default function Home() {
 					<h1>FUDGEU</h1>
 					<h1>FUDGEU</h1>
 					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
+					<h1>FUDGEU</h1>
 				</span>
+			</div>
+
+			<div className={styles.scrollingTextContainer}>
+				<Marquee autoFill speed={10}>01101100 01101111 01101100 00100000 01100111 01100101 01110100 00100000 01110000 01110010 01100001 01101110 01101011 01100101 01100100</Marquee>
 			</div>
 
 			<div className={styles.contentContainer}>
 				<div className={styles.webGLContainer}>
-					<GLView />
+					<MainGLView mouseX={mousePos.x} mouseY={mousePos.y} />
 				</div>
 				<div className={styles.textContentContainer}>
 					<div className={styles.subHeader}>
@@ -55,16 +90,24 @@ export default function Home() {
 						<nav>
 							<ul className={styles.navList}>
 								<li className={styles.navItem}>
-									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>ABOUT ME</span>
+									<a className={styles.listLink} href="about">
+										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>ABOUT ME</span>
+									</a>
 								</li>
 								<li className={styles.navItem}>
-									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>PROJECTS</span>
+									<a className={styles.listLink} href="shadow">
+											<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>PROJECTS</span>
+									</a>
 								</li>
 								<li className={styles.navItem}>
-									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
+									<a className={styles.listLink} href="shadow">
+											<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
+									</a>
 								</li>
 								<li className={styles.navItem}>
-									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>CONTACT</span>
+									<a className={styles.listLink} href="shadow">
+										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>CONTACT</span>
+									</a>
 								</li>
 							</ul>
 						</nav>
@@ -119,7 +162,6 @@ export default function Home() {
 				<div className={styles.bottomDecoBox} />
 				<div className={styles.bottomDecoBox} />
 			</div>
-			
     </main>
   )
 }

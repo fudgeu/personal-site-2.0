@@ -1,11 +1,9 @@
 .main {
 	display: flex;
 	height: 100vh;
-	overflow-y: hidden;
-	overflow-x: hidden;
+	overflow: hidden;
 	background-color: black;
 	perspective: 2000px;
-
 }
 
 .titleTextContainer {
@@ -26,6 +24,13 @@
 .subTitleText {
 	-webkit-text-stroke: var(--accent-color) 0.1rem;
 	color: #00000000
+}
+
+.scrollingTextContainer {
+	position: absolute;
+	color: var(--accent-color);
+	width: 100vh;
+	transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5);
 }
 
 .contentContainer {
@@ -87,28 +92,29 @@
 	list-style-type: none;
 }
 
-.navList>li {
+.listLink {
+	width: 100%;
+	padding: 0.5rem 0;
 	display: flex;
 	gap: 1rem;
-	padding: 0.5rem 0;
 	font-size: 1.5rem;
 }
 
-.navList>li:hover {
+.navItem:hover {
 	color: black;
 	background-color: var(--accent-color);
 	cursor: pointer;
 	gap: 1.4rem;
 }
 
-.navItem:hover>.navItemArrow {
+.listLink:hover>.navItemArrow {
 	animation-name: textSpin;
 	animation-duration: 1s;
 	animation-timing-function: linear;
 	animation-iteration-count: infinite;
 }
 
-.navItem:hover>.navItemText {
+.listLink:hover>.navItemText {
 	text-decoration: underline;
 }
 

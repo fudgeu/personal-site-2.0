@@ -19,11 +19,17 @@ type ModelResult = {
   id: string
 };
 
+type MainGLProps = {
+	mouseX: number,
+	mouseY: number,
+}
+
 let lastUsedShape = "torus"
 
-export default function GLView() {
+export default function BkgGLView({ mouseX, mouseY }: MainGLProps) {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const [world, setWorld] = useState(new World());
+	const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0});
 
   const ref = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,6 +41,11 @@ export default function GLView() {
 		// rotate shape
 		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
 			mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1])
+			mat4.translate(worldPosition, worldPosition, [0.01, 0, 0]);
+
+			if (worldPosition[12] > 100) {
+				worldPosition[12] = -100
+			}
 		});
 
     drawScene(gl, prgmInfo, world);
@@ -102,70 +113,33 @@ export default function GLView() {
     [],
   );
 
-	// Change shape every few seconds
-	const changeShapeEffect = useCallback((gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
-		world.clearObjects();
-		
-		const shapeArray = Array.from(models)
-		let shapeName: string;
-		let shape: MeshWithBuffers;
-		do {
-			const shapeEntry = shapeArray[Math.floor(Math.random() * shapeArray.length)]
-			shapeName = shapeEntry[0]
-			shape = shapeEntry[1]
-		} while (shapeName === lastUsedShape)
-
-		lastUsedShape = shapeName;
-
-		if (shape === undefined) {
-			console.log('Unable to load shape');
-			return;
-		}
-
-		const shape2 = createObject(gl, shape);
-		if (shape2 == null) {
-			console.error("Could not create Object3D")
-			return
-		}
-		mat4.scale(shape2.localPosition, shape2.localPosition, [2.5, 2.5, 2.5]);
-		mat4.rotate(shape2.localPosition, shape2.localPosition, Math.PI / 2, [1, -1, 0]);
-		const shape2Pos = mat4.create();
-		mat4.translate(shape2Pos, shape2Pos, [0, 0, -10]);
-
-		world.addObject(shape2, shape2Pos);
-
-		const timeoutId = setTimeout(() => {changeShapeEffect(gl, models)}, 5000)
-		return () => { clearTimeout(timeoutId) }
-	},
-	[world]
-	);
-
 	// Load World
   const loadWorld = useCallback(
     (gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
       world.clearObjects();
 
-			const ico = models.get('ico');
-			if (ico === undefined) {
-        console.log('Could not load world, icosphere model not loaded');
-        return;
+			const modelsArray = Array.from(models.values());
+      for (let i = 0; i < 400; i++) {
+        const model = modelsArray[Math.floor(Math.random() * modelsArray.length)];
+        const worldObj = createObject(gl, model);
+				if (worldObj == null) continue;
+        mat4.rotate(worldObj.localPosition, worldObj.localPosition, Math.PI / 2, [1, 1, 0]);
+
+        const scale = 0.1;
+        mat4.scale(worldObj.localPosition, worldObj.localPosition, [scale, scale, scale]);
+
+        const x = Math.random() * 200 - 100;
+        const y = Math.random() * 100 - 50;
+        const z = -Math.random() * 100 - 15;
+
+        const objPos = mat4.create();
+        mat4.translate(objPos, objPos, [x, y, z]);
+
+        world.addObject(worldObj, objPos);
       }
 
-			const shape2 = createObject(gl, ico);
-			if (shape2 == null) {
-				console.error("Could not create Object3D")
-				return
-			}
-      mat4.scale(shape2.localPosition, shape2.localPosition, [2.5, 2.5, 2.5]);
-      mat4.rotate(shape2.localPosition, shape2.localPosition, Math.PI / 2, [1, -1, 0]);
-      const shape2Pos = mat4.create();
-      mat4.translate(shape2Pos, shape2Pos, [0, 0, -10]);
-
-      world.addObject(shape2, shape2Pos);
-
-			setTimeout(() => {changeShapeEffect(gl, models)}, 5000)
     },
-    [changeShapeEffect, world],
+    [world],
   );
 
   // begin init
@@ -227,9 +201,35 @@ export default function GLView() {
     return () => window.removeEventListener('resize', handleResize);
   }, [setContainerDimensions]);
 
+	// Handle mouse movement
+	useEffect(() => {
+		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
+			const xOffset = lastMousePos.x - mouseX
+			const yOffset = lastMousePos.y - mouseY
+			mat4.translate(
+				worldPosition,
+				worldPosition,
+				[0.0004 * xOffset, -0.0004 * yOffset, 0]
+			)
+			/*mat4.rotate(
+				worldPosition,
+				worldPosition,
+				0.0001 * xOffset,
+				[0, 1, 0]
+			)
+			mat4.rotate(
+				worldPosition,
+				worldPosition,
+				0.0001 * yOffset,
+				[1, 0, 0]
+			)*/
+		});
+		setLastMousePos({x: mouseX, y: mouseY});
+	}, [lastMousePos.x, lastMousePos.y, mouseX, mouseY, world])
+
   return (
-    <div className={styles.container} ref={containerRef}>
-      <canvas className={styles.canvas} width={containerDimensions.width} height={containerDimensions.height} ref={ref} />
+    <div className={styles.bkgContainer} ref={containerRef}>
+      <canvas className={styles.bkgCanvas} width={containerDimensions.width} height={containerDimensions.height} ref={ref} />
     </div>
   );
 }
