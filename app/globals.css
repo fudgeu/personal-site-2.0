@@ -5,8 +5,8 @@
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
-  --accent-color: #a5fe00
-
+  --accent-color: #a5fe00;
+	--comp-color: #5a01ff
 }
 
 /* #2feeff */
@@ -32,4 +32,9 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+::selection {
+	background-color: var(--comp-color);
+	color: white;
 }

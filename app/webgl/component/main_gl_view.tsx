@@ -188,7 +188,7 @@ export default function MainGLView({ mouseX, mouseY }: MainGLProps) {
     // load models, then world
     Promise.all([
       loadModel(gl, 'sphere', './sphere.obj'),
-      loadModel(gl, 'cube', './cube.obj'),
+      //loadModel(gl, 'cube', './cube.obj'),
       loadModel(gl, 'ico', './ico.obj'),
       loadModel(gl, 'torus', './torus.obj'),
       //loadModel(gl, 'stage', './stage.obj'),

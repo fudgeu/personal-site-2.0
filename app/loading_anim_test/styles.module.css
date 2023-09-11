@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
+.main {
+	width: 100vw;
+	height: 100vw;
+	padding: 0.5rem 0.5rem;
+	overflow: hidden;
+	background-color: black;
+	font-family: 'Source Code Pro', monospace;
+}
+
+.greenText {
+	color: var(--accent-color)
+}
