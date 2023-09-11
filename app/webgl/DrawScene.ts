@@ -80,7 +80,7 @@ export default function drawScene(gl: WebGLRenderingContext, programInfo: Progra
   const fov = (60 * Math.PI) / 180;
   const aspectRatio = gl.canvas.width / gl.canvas.height;
   const zNear = 0.1;
-  const zFar = 100;
+  const zFar = 200;
 
   const projMatrix = mat4.create();
   mat4.perspective(projMatrix, fov, aspectRatio, zNear, zFar);

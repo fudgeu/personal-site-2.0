@@ -4,7 +4,7 @@
 	display: grid;
 	/*grid-template-columns: 300px auto 300px;
 	grid-template-rows: 33.33% 33.33% 33.33%;*/
-	perspective: 1000px;
+	perspective: 100px;
 }
 
 .topWall {

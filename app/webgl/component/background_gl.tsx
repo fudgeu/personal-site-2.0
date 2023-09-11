@@ -25,10 +25,12 @@ type MainGLProps = {
 }
 
 let lastUsedShape = "torus"
+let then = 0
+let introAnimProgress = 1
 
-export default function BkgGLView({ mouseX, mouseY }: MainGLProps) {
+export default function BackgroundGL({ mouseX, mouseY }: MainGLProps) {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
-  const [world, setWorld] = useState(new World());
+  const [world, _] = useState(new World());
 	const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0});
 
   const ref = useRef<HTMLCanvasElement>(null);
@@ -36,17 +38,26 @@ export default function BkgGLView({ mouseX, mouseY }: MainGLProps) {
   const animationRequestRef = useRef<number>();
 
   // Render WebGL
-  const render = useCallback((time: number, gl: WebGLRenderingContext, prgmInfo: ProgramInfo) => {
+  const render = useCallback((now: number, gl: WebGLRenderingContext, prgmInfo: ProgramInfo) => {
+		now *= 0.001
+		const delta = now - then
+		then = now
 
 		// rotate shape
 		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
 			mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1])
 			mat4.translate(worldPosition, worldPosition, [0.01, 0, 0]);
 
+			if (introAnimProgress < 100) {
+				mat4.translate(worldPosition, worldPosition, [0, 0, -(0.02 * introAnimProgress * (100 - introAnimProgress)) * delta])
+			}
+
 			if (worldPosition[12] > 100) {
 				worldPosition[12] = -100
 			}
 		});
+
+		introAnimProgress += (0.02 * introAnimProgress * (100 - introAnimProgress)) * delta
 
     drawScene(gl, prgmInfo, world);
     animationRequestRef.current = requestAnimationFrame(
@@ -130,7 +141,7 @@ export default function BkgGLView({ mouseX, mouseY }: MainGLProps) {
 
         const x = Math.random() * 200 - 100;
         const y = Math.random() * 100 - 50;
-        const z = -Math.random() * 100 - 15;
+        const z = -Math.random() * 100 + 85;
 
         const objPos = mat4.create();
         mat4.translate(objPos, objPos, [x, y, z]);
