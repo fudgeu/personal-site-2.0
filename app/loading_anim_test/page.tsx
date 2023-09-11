@@ -72,33 +72,51 @@ export default function TestPage() {
 		}
 
 		eventList[7] = {
-			action: () => {setUseGreen(true)},
+			action: () => {},
 			text: "BEGINNING OPERATING SYSTEM LOAD",
 			timeout: 150
 		}
 
 		eventList[8] = {
-			action: () => {setUseGreen(true)},
+			action: () => {},
 			text: "LOADED FILE X:/SYSTEM/BLAH.DLL",
 			timeout: 20
 		}
 
 		eventList[9] = {
-			action: () => {setUseGreen(true)},
+			action: () => {},
 			text: "LOADED FILE X:/SYSTEM/BLAH.DLL",
 			timeout: 20
 		}
 
 		eventList[10] = {
-			action: () => {setUseGreen(true)},
+			action: () => {},
 			text: "LOADED FILE X:/SYSTEM/BLAH.DLL",
 			timeout: 20
 		}
 
 		eventList[11] = {
-			action: () => {setUseGreen(true)},
+			action: () => {},
 			text: "LOADED FILE X:/SYSTEM/BLAH.DLL",
 			timeout: 20
+		}
+
+		eventList[12] = {
+			action: () => {},
+			text: "OPERATING SYSTEM LOAD COMPLETE",
+			timeout: 250
+		}
+
+		eventList[13] = {
+			action: () => {},
+			text: "|\\  _____\\\\  \\|\\  \\|\\   ___ \\|\\   ____\\|\\  ___ \\ |\\  \\|\\  \\        |\\   __  \\|\\   ____\\",
+			timeout: 5
+		}
+
+		eventList[14] = {
+			action: () => {},
+			text: "\\ \\  \\__/\\ \\  \\\\\\  \\ \\  \\_|\\ \\ \\  \\___|\\ \\   __/|\\ \\  \\\\\\  \\       \\ \\  \\|\\  \\ \\  \\___|_",
+			timeout: 5
 		}
 
 		processTerminalEvent(eventList)
