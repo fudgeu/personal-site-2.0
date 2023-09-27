@@ -257,7 +257,7 @@ export default function TestPage() {
 				setLoadingTextFadeOut(true)
 			},
 			text: "",
-			timeout: 1000
+			timeout: 1500
 		})
 
 		eventList.push({
