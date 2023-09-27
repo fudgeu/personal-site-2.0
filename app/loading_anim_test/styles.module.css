@@ -1,14 +1,173 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
 
+.hidden {
+	display: none;
+}
+
 .main {
+	display: flex;
 	width: 100vw;
-	height: 100vw;
-	padding: 0.5rem 0.5rem;
+	height: 100vh;
 	overflow: hidden;
-	background-color: transparent;
-	font-family: 'Source Code Pro', monospace;
+	background-color: black;
+	perspective: 2000px;
 }
 
 .greenText {
 	color: var(--accent-color)
+}
+
+.loadingTextContainer {
+	position: absolute;
+	font-family: 'Source Code Pro', monospace;
+	padding: 0.5rem 0.5rem;
+	transition: transform 5s, filter 2s, opacity 5s;
+}
+
+.fadeOut {
+	transform: scale(0.9);
+	filter: blur(10px);
+	opacity: 0;
+}
+
+.titleTextContainer {
+	font-size: 6rem;
+	align-self: center;
+	border-left: solid 5rem var(--accent-color);
+	animation-name: titleTextGlitch;
+	animation-duration: 10s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	transform: rotate(5deg)
+}
+
+.mainTitleText {
+	color: var(--accent-color);
+}
+
+.subTitleText {
+	-webkit-text-stroke: var(--accent-color) 0.1rem;
+	color: #00000000
+}
+
+.subTitleTextTop {
+	composes: subTitleText;
+	display: flex;
+	flex-direction: column-reverse;
+}
+
+.subTitleText h1, .mainTitleText h1 {
+	animation-name: textLoad;
+	animation-duration: 0.1s;
+	transform-origin: 0% 50%;
+	animation-timing-function: linear;
+}
+
+.scrollingTextContainer {
+	position: absolute;
+	color: var(--accent-color);
+	width: 100vh;
+	transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5); /* translate x is close enough lol */
+}
+
+.scrollingTextIntro {
+	animation-name: scrollingTextIntro;
+	animation-duration: 0.2s;
+	animation-timing-function: linear;
+}
+
+@keyframes titleTextGlitch {
+	0% {
+		line-height: 10rem;
+	}
+	20% {
+		line-height: 10rem;
+	}
+	20.01% {
+		line-height: 6rem;
+	}
+	20.5% {
+		line-height: 6rem;
+	}
+	20.51% {
+		line-height: 10rem;
+	}
+	21.0% {
+		line-height: 10rem;
+	}
+	21.01% {
+		line-height: 6rem;
+	}
+	21.5% {
+		line-height: 6rem;
+	}
+	21.51% {
+		line-height: 10rem;
+	}
+	22% {
+		line-height: 10rem;
+	}
+	22.01% {
+		line-height: 6rem;
+	}
+	50% {
+		line-height: 6rem;
+	}
+	50.01% {
+		line-height: 16rem;
+	}
+	50.5% {
+		line-height: 16rem;
+	}
+	50.51% {
+		line-height: 10rem;
+	}
+	100% {
+		line-height: 10rem;
+	}
+}
+
+@keyframes textLoad {
+	0% {
+		transform: scaleX(1.5) scaleY(0.5);
+	}
+
+	49.99% {
+		transform: scaleX(1.5) scaleY(0.5);
+	}
+
+	50% {
+		transform: scaleX(0.5) scaleY(1.5);
+	}
+
+	99.99% {
+		transform: scaleX(0.5) scaleY(1.5);
+	}
+
+	100% {
+		transform: scaleX(1) scaleY(1);
+	}
+}
+
+@keyframes scrollingTextIntro {
+	0% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(2.5) scaleY(0.8);
+	}
+
+	49.99% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(2.5) scaleY(0.8);
+	}
+
+	50% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5) scaleY(1.5);
+	}
+
+	99.99% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5) scaleY(1.5);
+	}
+
+	100% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5);
+	}
+	
 }

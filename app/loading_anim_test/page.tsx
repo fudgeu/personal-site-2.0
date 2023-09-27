@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import clsx from 'clsx'
 import BackgroundGL from '../webgl/component/background_gl'
+import Marquee from 'react-fast-marquee'
 
 type TerminalEvent = {
 	action: () => void,
@@ -16,6 +17,10 @@ export default function TestPage() {
 	const [textList, setTextList] = useState<string[]>([])
 	const [useGreen, setUseGreen] = useState(false)
 	const [showBackground, setShowBackground] = useState(false)
+	const [loadingTextFadeOut, setLoadingTextFadeOut] = useState(false);
+	const [hideTitleText, setHideTitleText] = useState(true)
+	const [amtTitleSubTexts, setAmtTitleSubTexts] = useState(0);
+	const [hideScrollingBinary, setHideScrollingBinary] = useState(true)
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
 
 	// mouse pos effect
@@ -249,16 +254,43 @@ export default function TestPage() {
 					previous[previous.length - 3] = previous[previous.length - 3] + "."
 					return previous
 				})
+				setLoadingTextFadeOut(true)
 			},
 			text: "",
-			timeout: 750
+			timeout: 1000
 		})
 
+		eventList.push({
+			action: () => setHideTitleText(false),
+			text: "",
+			timeout: 50
+		})
 
+		// add expanding subtexts
+		for (let i = 0; i < 10; i++) {
+			eventList.push({
+				action: () => setAmtTitleSubTexts((prev) => prev + 1),
+				text: "",
+				timeout: 50
+			})
+		}
+
+		eventList.push({
+			action: () => setHideScrollingBinary(false),
+			text: "",
+			timeout: 50
+		})
 
 		processTerminalEvent(eventList)
 
 	}, [])
+
+	const getSubtexts = useCallback(
+		() => {
+			return Array(amtTitleSubTexts).fill(<h1>FUDGEU</h1>)
+		},
+		[amtTitleSubTexts]
+	)
 
 	return (
 		<main className={
@@ -267,12 +299,41 @@ export default function TestPage() {
 				[styles.greenText]: useGreen
 			})
 		}>
-			{showBackground && <BackgroundGL mouseX={mousePos.x} mouseY={mousePos.y}/>}
-			{
-				textList.map((val, index) => {
-					return (<pre key={index}>{val}</pre>)
-				})
-			}
+			{showBackground && <BackgroundGL mouseX={mousePos.x} mouseY={mousePos.y} />}
+			<div className={clsx({
+				[styles.loadingTextContainer]: true,
+				[styles.fadeOut]: loadingTextFadeOut
+			})}>
+				{
+					textList.map((val, index) => {
+						return (<pre key={index}>{val}</pre>)
+					})
+				}
+			</div>
+
+			<div className={clsx({
+					[styles.titleTextContainer]: true,
+					[styles.hidden]: hideTitleText,
+			})}>
+				<span className={styles.subTitleTextTop}>
+					{getSubtexts()}
+				</span>
+				<div className={styles.mainTitleText}>
+					<h1>FUDGEU</h1>
+				</div>
+				<span className={styles.subTitleText}>
+					{getSubtexts()}
+				</span>
+			</div>
+
+			<div className={clsx({
+				[styles.scrollingTextContainer]: true,
+				[styles.hidden]: hideScrollingBinary,
+				[styles.scrollingTextIntro]: !hideScrollingBinary,
+			})}>
+				<Marquee autoFill speed={10} direction="right">011011000110111101101100001000000110011101100101011101000010000001110000011100100110000101101110011010110110010101100100</Marquee>
+			</div>
+
 		</main>
 	)
 

@@ -2,9 +2,7 @@
 	width: 100vw;
 	height: 100vh;
 	display: grid;
-	/*grid-template-columns: 300px auto 300px;
-	grid-template-rows: 33.33% 33.33% 33.33%;*/
-	perspective: 100px;
+	perspective: 1000px;
 }
 
 .topWall {
@@ -26,6 +24,7 @@
 	transform-origin: 0% 50%;
 	transform: rotate3d(0, 1, 0, 90deg);
 	background-image: url(https://cdn.discordapp.com/attachments/840291689889529907/1150638996293165117/pattern_155.gif);
+	border: solid 5px blue;
 }
 
 .rightWall {
@@ -35,7 +34,7 @@
 	height: 100%;
 	background-color: green;
 	transform-origin: 100% 50%;
-	transform: rotate3d(0, 1, 0, -90deg);
+	transform:rotateY(-90deg);
 	background-image: url(https://cdn.discordapp.com/attachments/840291689889529907/1150638995882115092/pattern_58.gif);
 }
 
