@@ -72,12 +72,9 @@ export default function Home() {
 			</div>
 
 			<div className={styles.contentContainer}>
-				<div className={styles.webGLContainer}>
-					<MainGLView mouseX={mousePos.x} mouseY={mousePos.y} />
-				</div>
 				<div className={styles.textContentContainer}>
 					<div className={styles.subHeader}>
-						<h2>HEE HEE HA HA</h2>
+						<h2>AKA PATRICK KOSS</h2>
 						<div className={styles.subHeaderDecoration}>
 							<div className={styles.subHeaderDecorationPiece} />	
 							<div className={styles.subHeaderDecorationPiece} />	
@@ -85,7 +82,7 @@ export default function Home() {
 						</div>						
 					</div>
 					<div className={styles.descriptionAndNav}>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi volutpat viverra dui, sed lobortis augue elementum nec.</p>	
+						<p>ASPIRING WEB DEVELOPER, GAME DEVELOPER, AND MAYBE MORE?</p>	
 						<nav>
 							<ul className={styles.navList}>
 								<li className={styles.navItem}>

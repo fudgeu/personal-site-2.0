@@ -37,5 +37,4 @@ a {
 
 ::selection {
 	background-color: var(--comp-color);
-	color: white;
 }

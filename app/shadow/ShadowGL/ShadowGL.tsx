@@ -131,7 +131,7 @@ export default function ShadowGL() {
   // begin init
   useEffect((): () => void => {
     // load gl
-    const gl = ref.current?.getContext('webgl');
+    const gl = ref.current?.getContext('webgl', {antialias: true});
     if (gl == null) return () => {};
 		gl.getExtension('OES_standard_derivatives')
     gl.clearColor(0, 0, 0, 1);
