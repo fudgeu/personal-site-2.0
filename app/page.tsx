@@ -71,43 +71,41 @@ export default function Home() {
 				<Marquee autoFill speed={10} direction="right">011011000110111101101100001000000110011101100101011101000010000001110000011100100110000101101110011010110110010101100100</Marquee>
 			</div>
 
-			<div className={styles.contentContainer}>
-				<div className={styles.textContentContainer}>
-					<div className={styles.subHeader}>
-						<h2>AKA PATRICK KOSS</h2>
-						<div className={styles.subHeaderDecoration}>
-							<div className={styles.subHeaderDecorationPiece} />	
-							<div className={styles.subHeaderDecorationPiece} />	
-							<div className={styles.subHeaderDecorationPiece} />	
-						</div>						
+			<div className={styles.textContentContainer}>
+				<div className={styles.subHeader}>
+					<h2>AKA PATRICK KOSS</h2>
+					<div className={styles.subHeaderDecoration}>
+						<div className={styles.subHeaderDecorationPiece} />	
+						<div className={styles.subHeaderDecorationPiece} />	
+						<div className={styles.subHeaderDecorationPiece} />	
 					</div>
-					<div className={styles.descriptionAndNav}>
-						<p>ASPIRING WEB DEVELOPER, GAME DEVELOPER, AND MAYBE MORE?</p>	
-						<nav>
-							<ul className={styles.navList}>
-								<li className={styles.navItem}>
-									<a className={styles.listLink} href="about">
-										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>ABOUT ME</span>
-									</a>
-								</li>
-								<li className={styles.navItem}>
-									<a className={styles.listLink} href="shadow">
-											<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>PROJECTS</span>
-									</a>
-								</li>
-								<li className={styles.navItem}>
-									<a className={styles.listLink} href="shadow">
-											<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
-									</a>
-								</li>
-								<li className={styles.navItem}>
-									<a className={styles.listLink} href="shadow">
-										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>CONTACT</span>
-									</a>
-								</li>
-							</ul>
-						</nav>
-					</div>
+				</div>
+				<div className={styles.descriptionAndNav}>
+					<p>ASPIRING WEB DEVELOPER, GAME DEVELOPER, AND MAYBE MORE?</p>	
+					<nav>
+						<ul className={styles.navList}>
+							<li className={styles.navItem}>
+								<a className={styles.listLink} href="about">
+									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>ABOUT ME</span>
+								</a>
+							</li>
+							<li className={styles.navItem}>
+								<a className={styles.listLink} href="shadow">
+										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>PROJECTS</span>
+								</a>
+							</li>
+							<li className={styles.navItem}>
+								<a className={styles.listLink} href="shadow">
+										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
+								</a>
+							</li>
+							<li className={styles.navItem}>
+								<a className={styles.listLink} href="shadow">
+									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>CONTACT</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
 				</div>
 			</div>
 

@@ -33,22 +33,16 @@
 	transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5); /* translate x is close enough lol */
 }
 
-.contentContainer {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	padding-left: 5rem;
-	flex-grow: 1;
-}
-
 .webGLContainer {
 	height: 50%;
 }
 
 .textContentContainer {
 	display: flex;
+	justify-content: center;
 	flex-direction: column;
 	gap: 1rem;
+	padding-left: 5rem;
 	transform: rotate(5deg);
 }
 

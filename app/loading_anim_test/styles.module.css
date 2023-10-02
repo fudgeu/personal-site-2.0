@@ -76,6 +76,107 @@
 	animation-timing-function: linear;
 }
 
+.textContentContainer {
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	gap: 1rem;
+	padding-left: 5rem;
+	transform: rotate(5deg);
+	flex-grow: 1;
+}
+
+.subHeader {
+	display: none;
+}
+
+.showSubHeader {
+	display: flex;
+	animation-name: textLoad;
+	animation-duration: 0.1s;
+	animation-timing-function: linear;
+}
+
+.subHeader>h2 {
+	background-color: var(--accent-color);
+	padding: 0 1rem;
+	color: black;
+	flex-grow: 1;
+	font-size: 1.75rem;
+}
+
+.subHeaderDecoration {
+	display: flex;
+	background-color: var(--accent-color);
+	gap: 1rem;
+	padding-right: 1rem;
+}
+
+.subHeaderDecorationPiece {
+	width: 1rem;
+	height: 100%;
+	background-color: black;
+	transform: rotate(10deg) scaleY(1.1);
+}
+
+.descriptionAndNav {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	max-width: 65rem;
+	padding: 0 1rem;
+	font-size: 1.25rem;
+	color: white;
+}
+
+.description {
+	display: none;
+}
+
+.navList {
+	display: flex;
+	flex-direction: column;
+	list-style-type: none;
+}
+
+.navItem {
+	display: none;
+}
+
+.navItem:hover {
+	color: black;
+	background-color: var(--accent-color);
+	cursor: pointer;
+	gap: 1.4rem;
+}
+
+.showNavItem {
+	display: block;
+	animation-name: textLoad;
+	animation-duration: 0.1s;
+	animation-timing-function: linear;
+}
+
+.listLink {
+	width: 100%;
+	padding: 0.5rem 0;
+	display: flex;
+	gap: 1rem;
+	font-size: 2.5rem;
+}
+
+.listLink:hover>.navItemArrow {
+	animation-name: textSpin;
+	animation-duration: 1s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+.listLink:hover>.navItemText {
+	text-decoration: underline;
+	text-decoration-thickness: 0.25rem;
+}
+
 @keyframes titleTextGlitch {
 	0% {
 		line-height: 10rem;

@@ -21,6 +21,7 @@ export default function TestPage() {
 	const [hideTitleText, setHideTitleText] = useState(true)
 	const [amtTitleSubTexts, setAmtTitleSubTexts] = useState(0);
 	const [hideScrollingBinary, setHideScrollingBinary] = useState(true)
+	const [navItemShowList, setNavItemShowList] = useState([false, false, false, false])
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
 
 	// mouse pos effect
@@ -281,6 +282,72 @@ export default function TestPage() {
 			timeout: 50
 		})
 
+		eventList.push({
+			action: () => {
+				setNavItemShowList((prev) => {
+					prev[0] = true
+					return prev
+				})
+			},
+			text: "",
+			timeout: 50,
+		})
+
+		eventList.push({
+			action: () => {
+				setNavItemShowList((prev) => {
+					prev[1] = true
+					return prev
+				})
+			},
+			text: "",
+			timeout: 50,
+		})
+
+		eventList.push({
+			action: () => {
+				setNavItemShowList((prev) => {
+					prev[2] = true
+					return prev
+				})
+			},
+			text: "",
+			timeout: 50,
+		})
+
+		eventList.push({
+			action: () => {
+				setNavItemShowList((prev) => {
+					prev[3] = true
+					return prev
+				})
+			},
+			text: "",
+			timeout: 50,
+		})
+
+		eventList.push({
+			action: () => {
+				setNavItemShowList((prev) => {
+					prev[4] = true
+					return prev
+				})
+			},
+			text: "",
+			timeout: 50,
+		})
+
+		eventList.push({
+			action: () => {
+				setNavItemShowList((prev) => {
+					prev[5] = true
+					return prev
+				})
+			},
+			text: "",
+			timeout: 50,
+		})
+
 		processTerminalEvent(eventList)
 
 	}, [])
@@ -299,7 +366,11 @@ export default function TestPage() {
 				[styles.greenText]: useGreen
 			})
 		}>
+
+			{/* Background */}
 			{showBackground && <BackgroundGL mouseX={mousePos.x} mouseY={mousePos.y} />}
+
+			{/* Intro Code Text */}
 			<div className={clsx({
 				[styles.loadingTextContainer]: true,
 				[styles.fadeOut]: loadingTextFadeOut
@@ -311,6 +382,7 @@ export default function TestPage() {
 				}
 			</div>
 
+			{/* Title Text */}
 			<div className={clsx({
 					[styles.titleTextContainer]: true,
 					[styles.hidden]: hideTitleText,
@@ -326,12 +398,72 @@ export default function TestPage() {
 				</span>
 			</div>
 
+			{/* Scrolling Binary Text */}
 			<div className={clsx({
 				[styles.scrollingTextContainer]: true,
 				[styles.hidden]: hideScrollingBinary,
 				[styles.scrollingTextIntro]: !hideScrollingBinary,
 			})}>
 				<Marquee autoFill speed={10} direction="right">011011000110111101101100001000000110011101100101011101000010000001110000011100100110000101101110011010110110010101100100</Marquee>
+			</div>
+
+			{/* Content Container */}
+			<div className={styles.textContentContainer}>
+				<div className={clsx({
+					[styles.subHeader]: true,
+					[styles.showSubHeader]: navItemShowList[0]
+				})}>
+					<h2>AKA PATRICK KOSS</h2>
+					<div className={styles.subHeaderDecoration}>
+						<div className={styles.subHeaderDecorationPiece} />	
+						<div className={styles.subHeaderDecorationPiece} />	
+						<div className={styles.subHeaderDecorationPiece} />	
+					</div>
+				</div>
+				<div className={styles.descriptionAndNav}>
+					<p className={clsx({
+						[styles.description]: true,
+						[styles.showNavItem]: navItemShowList[1]
+					})}>
+						ASPIRING WEB DEVELOPER, GAME DEVELOPER, AND MAYBE MORE?
+					</p>	
+					<nav>
+						<ul className={styles.navList}>
+							<li className={clsx({
+								[styles.navItem]: true,
+								[styles.showNavItem]: navItemShowList[2]
+							})}>
+								<a className={styles.listLink} href="about">
+									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>ABOUT ME</span>
+								</a>
+							</li>
+							<li className={clsx({
+								[styles.navItem]: true,
+								[styles.showNavItem]: navItemShowList[3]
+							})}>
+								<a className={styles.listLink} href="shadow">
+										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>PROJECTS</span>
+								</a>
+							</li>
+							<li className={clsx({
+								[styles.navItem]: true,
+								[styles.showNavItem]: navItemShowList[4]
+							})}>
+								<a className={styles.listLink} href="shadow">
+										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
+								</a>
+							</li>
+							<li className={clsx({
+								[styles.navItem]: true,
+								[styles.showNavItem]: navItemShowList[5]
+							})}>
+								<a className={styles.listLink} href="shadow">
+									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>CONTACT</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
 			</div>
 
 		</main>
