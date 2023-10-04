@@ -119,7 +119,7 @@ export default function ShadowGL() {
 				console.error("Could not create Object3D")
 				return
 			}
-      mat4.scale(shape2.localPosition, shape2.localPosition, [30, 30, 30]);
+      mat4.scale(shape2.localPosition, shape2.localPosition, [0.5, 0.5, 0.5]);
       const shape2Pos = mat4.create();
       mat4.translate(shape2Pos, shape2Pos, [0, 0, -10]);
 

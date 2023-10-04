@@ -22,13 +22,14 @@ type ModelResult = {
 type MainGLProps = {
 	mouseX: number,
 	mouseY: number,
+	model: string,
 }
 
 let lastUsedShape = "torus"
 let then = 0
 let introAnimProgress = 1
 
-export default function BackgroundGL({ mouseX, mouseY }: MainGLProps) {
+export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const [world, _] = useState(new World());
 	const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0});
@@ -162,15 +163,23 @@ export default function BackgroundGL({ mouseX, mouseY }: MainGLProps) {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // load models, then world
+
+		let loadList = []
+		if (model === "all") {
+			loadList = [
+				loadModel(gl, 'sphere', './sphere.obj'),
+      	loadModel(gl, 'cube', './cube.obj'),
+      	loadModel(gl, 'ico', './ico.obj'),
+      	loadModel(gl, 'torus', './torus.obj'),
+			]
+		} else {
+			loadList = [
+				loadModel(gl, model, `./${model}.obj`)
+			]
+		}
+
     Promise.all([
-      loadModel(gl, 'sphere', './sphere.obj'),
-      loadModel(gl, 'cube', './cube.obj'),
-      loadModel(gl, 'ico', './ico.obj'),
-      loadModel(gl, 'torus', './torus.obj'),
-      //loadModel(gl, 'stage', './stage.obj'),
-      //loadModel(gl, 'circles', './circles.obj'),
-      //loadModel(gl, 'kz', './stoodl_axo.obj'),
-      //loadModel(gl, 'shadow', './shadow.obj'),
+      ...loadList
     ])
       .then((models) => {
         // register each loaded model
@@ -199,7 +208,7 @@ export default function BackgroundGL({ mouseX, mouseY }: MainGLProps) {
       if (animationRequestRef.current == null) return;
       cancelAnimationFrame(animationRequestRef.current);
     };
-  }, [loadShader, loadModel, loadWorld, render]);
+  }, [loadShader, loadModel, loadWorld, render, model]);
 
   // Handle Resize
   useEffect(() => {

@@ -119,9 +119,9 @@ export default function ShadowGL() {
 				console.error("Could not create Object3D")
 				return
 			}
-      mat4.scale(shape2.localPosition, shape2.localPosition, [75, 75, 75]);
+      mat4.scale(shape2.localPosition, shape2.localPosition, [1, 1, 1]);
       const shape2Pos = mat4.create();
-      mat4.translate(shape2Pos, shape2Pos, [0, -1, -10]);
+      mat4.translate(shape2Pos, shape2Pos, [0, 0, -10]);
 
       world.addObject(shape2, shape2Pos);
     },

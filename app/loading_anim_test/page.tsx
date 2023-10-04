@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import styles from './styles.module.css'
 import clsx from 'clsx'
 import BackgroundGL from '../webgl/component/background_gl'
@@ -26,6 +27,8 @@ export default function TestPage() {
 	const [showTRCornerDeco, setShowTRCornerDeco] = useState(false)
 	const [showBottomDeco, setShowBottomDeco] = useState(false)
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
+
+	const searchParams = useSearchParams();
 
 	// mouse pos effect
 	useEffect(() => {
@@ -387,7 +390,7 @@ export default function TestPage() {
 		}>
 
 			{/* Background */}
-			{showBackground && <BackgroundGL mouseX={mousePos.x} mouseY={mousePos.y} />}
+			{showBackground && <BackgroundGL mouseX={mousePos.x} mouseY={mousePos.y} model={searchParams.get("model") || "all"} />}
 
 			{/* Intro Code Text */}
 			<div className={clsx({
@@ -452,7 +455,7 @@ export default function TestPage() {
 								[styles.navItem]: true,
 								[styles.showNavItem]: navItemShowList[2]
 							})}>
-								<a className={styles.listLink} href="about">
+								<a className={styles.listLink} href="rat">
 									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>ABOUT ME</span>
 								</a>
 							</li>
@@ -468,7 +471,7 @@ export default function TestPage() {
 								[styles.navItem]: true,
 								[styles.showNavItem]: navItemShowList[4]
 							})}>
-								<a className={styles.listLink} href="shadow">
+								<a className={styles.listLink} href="?model=4krat">
 										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
 								</a>
 							</li>
@@ -476,7 +479,7 @@ export default function TestPage() {
 								[styles.navItem]: true,
 								[styles.showNavItem]: navItemShowList[5]
 							})}>
-								<a className={styles.listLink} href="shadow">
+								<a className={styles.listLink} href="?model=shadow">
 									<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>CONTACT</span>
 								</a>
 							</li>
