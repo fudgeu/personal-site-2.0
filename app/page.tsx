@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
 
-			<BkgGLView mouseX={mousePos.x} mouseY={mousePos.y} />
+			<BkgGLView mouseX={mousePos.x} mouseY={mousePos.y} model="all" />
 
 			<div className={styles.cornerDecoration2}>
 				<GLView2 mouseX={mousePos.x} mouseY={mousePos.y} />
