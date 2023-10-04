@@ -124,13 +124,14 @@
 	flex-direction: column;
 	gap: 1rem;
 	max-width: 65rem;
-	padding: 0 1rem;
+	
 	font-size: 1.25rem;
 	color: white;
 }
 
 .description {
 	display: none;
+	padding-left: 1rem;
 }
 
 .navList {
@@ -141,6 +142,7 @@
 
 .navItem {
 	display: none;
+	padding-left: 1rem;
 }
 
 .navItem:hover {
@@ -176,6 +178,85 @@
 	text-decoration: underline;
 	text-decoration-thickness: 0.25rem;
 }
+
+.cornerDecoration {
+	display: none;
+	flex-direction: column;
+	gap: 4rem;
+	position: absolute;
+	top: -9rem;
+	right: -9rem;
+}
+
+.cornerDecorationShow {
+	display: flex;
+	animation-name: trCornerIntro;
+	animation-duration: 0.2s;
+	animation-timing-function: linear;
+}
+
+.cornerDecorationLine {
+	display: flex;
+	gap: 1rem;
+	animation-name: cornerLoop1;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+.cornerDecorationLineRev {
+	composes: cornerDecorationLine;
+	animation-direction: reverse;
+}
+
+.cornerDecoRect {
+	border: solid 0.1rem var(--accent-color);
+	border-radius: 1000px;
+	width: 8rem;
+	height: 1rem;
+}
+
+.cornerDecoCircle {
+	border: solid 0.1rem var(--accent-color);
+	border-radius: 1000px;
+	width: 1rem;
+	height: 1rem;
+}
+
+.brCornerDecoration {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	display: flex;
+	width: 50vh;
+	height: 50vh;
+	z-index: -10;
+}
+
+.bottomDecoration {
+	position: absolute;
+	bottom: 0;
+	left: -10rem;
+	width: 110vw;
+	display: none;
+	gap: 5%;
+	animation-name: bottomAnimation;
+	animation-duration: 2s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-direction: reverse;
+}
+
+.showBottomDecoration {
+	display: flex;
+}
+
+.bottomDecoBox {
+	width: 5%;
+	height: 1rem;
+	background-color: var(--accent-color);
+}
+
 
 @keyframes titleTextGlitch {
 	0% {
@@ -271,4 +352,71 @@
 		transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5);
 	}
 	
+}
+
+@keyframes trCornerIntro {
+	0% {
+		transform: scale(1);
+	}
+
+	49.99% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.5);
+	}
+
+	74.99% {
+		transform: scale(1.5);
+	}
+
+	75% {
+		transform: scale(0.5);
+	}
+
+	99.99% {
+		transform: scale(0.5);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes cornerLoop1 {
+	0% {
+		transform: translate(0px, 0px) rotate(45deg)
+	}
+	100% {
+		transform: translate(7.8rem, 7.8rem) rotate(45deg)
+	}
+}
+
+@keyframes bottomAnimation {
+	0% {
+		transform: translateX(0)
+	}
+
+	100% {
+		transform: translateX(10%)
+	}
+}
+
+@keyframes bottomIntro {
+	0% {
+		transform: scaleY(1.5);
+	}
+
+	49.99% {
+		transform: scaleY(1.5);
+	}
+
+	50% {
+		transform: scaleY(0.5);
+	}
+
+	99.99% {
+		transform: scaleY(0.5);
+	}
 }

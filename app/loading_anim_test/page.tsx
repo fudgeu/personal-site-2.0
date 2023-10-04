@@ -5,6 +5,7 @@ import styles from './styles.module.css'
 import clsx from 'clsx'
 import BackgroundGL from '../webgl/component/background_gl'
 import Marquee from 'react-fast-marquee'
+import GLView2 from '../webgl/component/GLView2'
 
 type TerminalEvent = {
 	action: () => void,
@@ -22,6 +23,8 @@ export default function TestPage() {
 	const [amtTitleSubTexts, setAmtTitleSubTexts] = useState(0);
 	const [hideScrollingBinary, setHideScrollingBinary] = useState(true)
 	const [navItemShowList, setNavItemShowList] = useState([false, false, false, false])
+	const [showTRCornerDeco, setShowTRCornerDeco] = useState(false)
+	const [showBottomDeco, setShowBottomDeco] = useState(false)
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
 
 	// mouse pos effect
@@ -348,6 +351,22 @@ export default function TestPage() {
 			timeout: 50,
 		})
 
+		eventList.push({
+			action: () => {
+				setShowTRCornerDeco(true)
+			},
+			text: "",
+			timeout: 50,
+		})
+
+		eventList.push({
+			action: () => {
+				setShowBottomDeco(true)
+			},
+			text: "",
+			timeout: 50,
+		})
+
 		processTerminalEvent(eventList)
 
 	}, [])
@@ -464,6 +483,67 @@ export default function TestPage() {
 						</ul>
 					</nav>
 				</div>
+			</div>
+
+			{/* Top Right Corner Decoration */}
+			<div className={clsx({
+				[styles.cornerDecoration]: true,
+				[styles.cornerDecorationShow]: showTRCornerDeco
+			})}>
+				<div className={styles.cornerDecorationLine}>
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+				</div>
+				
+				<div className={styles.cornerDecorationLineRev}>
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+				</div>
+
+				<div className={styles.cornerDecorationLine}>
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+					<div className={styles.cornerDecoRect} />
+					<div className={styles.cornerDecoCircle} />
+				</div>
+			</div>
+
+			{/* Bottom Right GL Decoration */}
+			<div className={styles.brCornerDecoration}>
+				<GLView2 mouseX={mousePos.x} mouseY={mousePos.y} />
+			</div>
+			
+			{/* Bottom Decoration */}
+			<div className={clsx({
+				[styles.bottomDecoration]: true,
+				[styles.showBottomDecoration]: showBottomDeco
+			})}>
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
+				<div className={styles.bottomDecoBox} />
 			</div>
 
 		</main>
