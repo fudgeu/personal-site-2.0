@@ -26,6 +26,7 @@ export default function TestPage() {
 	const [navItemShowList, setNavItemShowList] = useState([false, false, false, false])
 	const [showTRCornerDeco, setShowTRCornerDeco] = useState(false)
 	const [showBottomDeco, setShowBottomDeco] = useState(false)
+	const [showBRCornerDeco, setShowBRCornerDeco] = useState(false)
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
 
 	const searchParams = useSearchParams();
@@ -370,6 +371,14 @@ export default function TestPage() {
 			timeout: 50,
 		})
 
+		eventList.push({
+			action: () => {
+				setShowBRCornerDeco(true)
+			},
+			text: "",
+			timeout: 50,
+		})
+
 		processTerminalEvent(eventList)
 
 	}, [])
@@ -528,7 +537,10 @@ export default function TestPage() {
 			</div>
 
 			{/* Bottom Right GL Decoration */}
-			<div className={styles.brCornerDecoration}>
+			<div className={clsx({
+				[styles.brCornerDecoration]: true,
+				[styles.showBRCornerDeco] : showBRCornerDeco
+			})}>
 				<GLView2 mouseX={mousePos.x} mouseY={mousePos.y} />
 			</div>
 			

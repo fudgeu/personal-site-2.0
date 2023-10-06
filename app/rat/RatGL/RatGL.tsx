@@ -24,10 +24,45 @@ let lastUsedShape = "torus"
 export default function ShadowGL() {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const [world, setWorld] = useState(new World());
+	const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0})
+	const [mousePos, setMousePos] = useState({x: 0, y: 0})
+	const [mouseButton, setMouseButton] = useState(false)
 
   const ref = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRequestRef = useRef<number>();
+
+	// Mouse position
+	useEffect(() => {
+		const handleMouseMove = (event: MouseEvent) => {
+			setLastMousePos({x: mousePos.x, y: mousePos.y})
+			setMousePos({x: event.clientX, y: event.clientY})
+		}
+		window.addEventListener('mousemove', handleMouseMove)
+		return () => window.removeEventListener('mousemove', handleMouseMove)
+	}, [mousePos.x, mousePos.y])
+
+	// Mouse down
+	useEffect(() => {
+		const handleMouseDown = (event: MouseEvent) => {
+			if (event.button == 0) {
+				setMouseButton(true)
+			}
+		}
+		window.addEventListener("mousedown", handleMouseDown);
+		return () => window.removeEventListener("mousedown", handleMouseDown)
+	}, [])
+
+	// Mouse up
+	useEffect(() => {
+		const handleMouseDown = (event: MouseEvent) => {
+			if (event.button == 0) {
+				setMouseButton(false)
+			}
+		}
+		window.addEventListener("mouseup", handleMouseDown);
+		return () => window.removeEventListener("mouseup", handleMouseDown)
+	}, [])
 
   // Render WebGL
   const render = useCallback((time: number, gl: WebGLRenderingContext, prgmInfo: ProgramInfo) => {
@@ -37,11 +72,22 @@ export default function ShadowGL() {
 			mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 1, 0])
 		});
 
+		// check for drag, rotate further
+		if (mouseButton) {
+			const deltaX = lastMousePos.x - mousePos.x
+			const deltaY = lastMousePos.y - mousePos.y
+			world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
+				mat4.rotate(object.localPosition, object.localPosition, 0.01 * deltaX, [1, 0, 0])
+				mat4.rotate(object.localPosition, object.localPosition, 0.01 * deltaY, [0, 1, 0])
+			});
+		}
+
     drawScene(gl, prgmInfo, world);
     animationRequestRef.current = requestAnimationFrame(
       (newTime) => render(newTime, gl, prgmInfo),
     );
-  }, [world]);
+		return () => {if (animationRequestRef.current) cancelAnimationFrame(animationRequestRef.current)}
+  }, [lastMousePos.x, lastMousePos.y, mouseButton, mousePos.x, mousePos.y, world]);
 
   // Init WebGL
   const loadModel = useCallback(
