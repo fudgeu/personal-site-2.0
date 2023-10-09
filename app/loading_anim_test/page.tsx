@@ -561,6 +561,8 @@ export default function TestPage() {
 				<div className={styles.bottomDecoBox} />
 			</div>
 
+			{/* CRT effect, courtesy of greenlemon */}
+			<div className={styles.lines}></div>
 		</main>
 	)
 

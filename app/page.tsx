@@ -156,6 +156,7 @@ export default function Home() {
 				<div className={styles.bottomDecoBox} />
 				<div className={styles.bottomDecoBox} />
 			</div>
+
     </main>
   )
 }

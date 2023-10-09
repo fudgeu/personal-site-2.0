@@ -13,6 +13,7 @@ import { Object3D, createObject } from '@/app/webgl/Object3D';
 import { mat4 } from 'gl-matrix';
 import { MeshWithBuffers, OBJ } from 'webgl-obj-loader';
 import styles from './styles.module.css';
+import { dotProduct } from '@/app/util/Util';
 
 type ModelResult = {
   model: MeshWithBuffers,
@@ -21,12 +22,15 @@ type ModelResult = {
 
 let lastUsedShape = "torus"
 
+/* there will usually only be 1 instance of this element per page + using state for interactivity is not feasible */
+let mousePos = {x: 0, y: 0}
+let lastMousePos = {x: 0, y: 0}
+let mouseUpdateWaiting = false
+let isMouseButtonDown = false
+
 export default function ShadowGL() {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const [world, setWorld] = useState(new World());
-	const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0})
-	const [mousePos, setMousePos] = useState({x: 0, y: 0})
-	const [mouseButton, setMouseButton] = useState(false)
 
   const ref = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,18 +39,19 @@ export default function ShadowGL() {
 	// Mouse position
 	useEffect(() => {
 		const handleMouseMove = (event: MouseEvent) => {
-			setLastMousePos({x: mousePos.x, y: mousePos.y})
-			setMousePos({x: event.clientX, y: event.clientY})
+			lastMousePos = {x: mousePos.x, y: mousePos.y}
+			mousePos = {x: event.clientX, y: event.clientY}
+			mouseUpdateWaiting = true;
 		}
 		window.addEventListener('mousemove', handleMouseMove)
 		return () => window.removeEventListener('mousemove', handleMouseMove)
-	}, [mousePos.x, mousePos.y])
+	}, [])
 
 	// Mouse down
 	useEffect(() => {
 		const handleMouseDown = (event: MouseEvent) => {
 			if (event.button == 0) {
-				setMouseButton(true)
+				isMouseButtonDown = true
 			}
 		}
 		window.addEventListener("mousedown", handleMouseDown);
@@ -57,7 +62,7 @@ export default function ShadowGL() {
 	useEffect(() => {
 		const handleMouseDown = (event: MouseEvent) => {
 			if (event.button == 0) {
-				setMouseButton(false)
+				isMouseButtonDown = false
 			}
 		}
 		window.addEventListener("mouseup", handleMouseDown);
@@ -73,13 +78,14 @@ export default function ShadowGL() {
 		});
 
 		// check for drag, rotate further
-		if (mouseButton) {
+		if (isMouseButtonDown && mouseUpdateWaiting) {
 			const deltaX = lastMousePos.x - mousePos.x
 			const deltaY = lastMousePos.y - mousePos.y
 			world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-				mat4.rotate(object.localPosition, object.localPosition, 0.01 * deltaX, [1, 0, 0])
-				mat4.rotate(object.localPosition, object.localPosition, 0.01 * deltaY, [0, 1, 0])
+				mat4.rotate(object.localPosition, object.localPosition, -0.02 * deltaX, [0, 1, 0])
+				mat4.rotate(worldPosition, worldPosition, -0.02 * deltaY, [1, 0, 0])
 			});
+			mouseUpdateWaiting = false;
 		}
 
     drawScene(gl, prgmInfo, world);
@@ -87,7 +93,7 @@ export default function ShadowGL() {
       (newTime) => render(newTime, gl, prgmInfo),
     );
 		return () => {if (animationRequestRef.current) cancelAnimationFrame(animationRequestRef.current)}
-  }, [lastMousePos.x, lastMousePos.y, mouseButton, mousePos.x, mousePos.y, world]);
+  }, [world]);
 
   // Init WebGL
   const loadModel = useCallback(
