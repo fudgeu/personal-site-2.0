@@ -41,6 +41,7 @@ export default function TestPage() {
 	const taskBarIconRef = useRef<HTMLDivElement>(null);
 	const [aboutMeTaskActive, setAboutMeTaskActive] = useState(true)
 	const windowRef = useRef<HTMLDivElement>(null);
+	const [spawnWindow, setSpawnWindow] = useState(false)
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
 
 	const searchParams = useSearchParams();
@@ -440,6 +441,12 @@ export default function TestPage() {
 		})
 
 		eventList.push({
+			action: () => {setSpawnWindow(true)},
+			text: "",
+			timeout: 10
+		})
+
+		eventList.push({
 			action: () => {unMinimizeWindow(windowRef)},
 			text: "",
 			timeout: 10
@@ -665,7 +672,7 @@ export default function TestPage() {
 			</div>
 
 			{/* Window */}
-			<Window
+			{spawnWindow && <Window
 				title="ABOUT"
 				onMinimize={() => {
 					minimizeWindow(windowRef, taskBarIconRef);
@@ -678,7 +685,7 @@ export default function TestPage() {
 					<img src="https://cdn.discordapp.com/attachments/575127872516259859/1163345799250456636/image.png" width="600" />
 					<p>01100001 01100111 01101111 01101110 01111001</p>
 				</div>
-			</Window>
+			</Window>}
 
 			{/* CRT effect, courtesy of greenlemon */}
 			<div className={styles.lines}></div>
