@@ -13,7 +13,6 @@ import { Object3D, createObject } from '@/app/webgl/Object3D';
 import { mat4 } from 'gl-matrix';
 import { MeshWithBuffers, OBJ } from 'webgl-obj-loader';
 import styles from './styles.module.css';
-import { dotProduct } from '@/app/util/Util';
 
 type ModelResult = {
   model: MeshWithBuffers,

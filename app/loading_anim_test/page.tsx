@@ -1,17 +1,26 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import styles from './styles.module.css'
 import clsx from 'clsx'
 import BackgroundGL from '../webgl/component/background_gl'
 import Marquee from 'react-fast-marquee'
 import GLView2 from '../webgl/component/GLView2'
+import Window from '../components/window/Window'
 
 type TerminalEvent = {
 	action: () => void,
 	text: string,
 	timeout: number,
+}
+
+enum ElementAnimState {
+	Hidden,
+	Loading,
+	Showing,
+	Unloading,
 }
 
 export default function TestPage() {
@@ -20,13 +29,18 @@ export default function TestPage() {
 	const [useGreen, setUseGreen] = useState(false)
 	const [showBackground, setShowBackground] = useState(false)
 	const [loadingTextFadeOut, setLoadingTextFadeOut] = useState(false);
-	const [hideTitleText, setHideTitleText] = useState(true)
+	const [titleTextState, setTitleTextState] = useState(ElementAnimState.Hidden)
 	const [amtTitleSubTexts, setAmtTitleSubTexts] = useState(0);
-	const [hideScrollingBinary, setHideScrollingBinary] = useState(true)
+	const [scrollingBinaryState, setScrollingBinaryState] = useState(ElementAnimState.Hidden)
+	const [contentContainerState, setContentContainerState] = useState(ElementAnimState.Showing)
 	const [navItemShowList, setNavItemShowList] = useState([false, false, false, false])
 	const [showTRCornerDeco, setShowTRCornerDeco] = useState(false)
 	const [showBottomDeco, setShowBottomDeco] = useState(false)
 	const [showBRCornerDeco, setShowBRCornerDeco] = useState(false)
+	const [taskbarState, setTaskbarState] = useState(ElementAnimState.Hidden)
+	const taskBarIconRef = useRef<HTMLDivElement>(null);
+	const [aboutMeTaskActive, setAboutMeTaskActive] = useState(true)
+	const windowRef = useRef<HTMLDivElement>(null);
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
 
 	const searchParams = useSearchParams();
@@ -49,6 +63,21 @@ export default function TestPage() {
 		if (eventList.length == 0) return
 		setTimeout(() => processTerminalEvent(eventList), curEvent.timeout)
 	}, []);
+
+	const minimizeWindow = useCallback((ref: RefObject<HTMLDivElement>, toRef: RefObject<HTMLDivElement>) => {
+		if (!ref.current) return;
+		const toX = ((toRef.current?.getBoundingClientRect().left || 0) + (toRef.current?.getBoundingClientRect().right || 0)) / 2
+		const toY = ((toRef.current?.getBoundingClientRect().top || 0) + (toRef.current?.getBoundingClientRect().bottom || 0)) / 2
+		const deltaX = toX - (ref.current.getBoundingClientRect().left + ref.current.getBoundingClientRect().right) / 2;
+		const deltaY = toY - (ref.current.getBoundingClientRect().top + ref.current.getBoundingClientRect().bottom) / 2;
+		console.log(`${deltaX}, ${deltaY}`)
+		ref.current.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0)`
+	}, [])
+
+	const unMinimizeWindow = useCallback((ref: RefObject<HTMLDivElement>) => {
+		if (!ref.current) return;
+		ref.current.style.transform = "translate(0, 0) scale(1)"
+	}, [])
 
 	// loading animation
 	useEffect(() => {
@@ -269,7 +298,7 @@ export default function TestPage() {
 		})
 
 		eventList.push({
-			action: () => setHideTitleText(false),
+			action: () => setTitleTextState(ElementAnimState.Loading),
 			text: "",
 			timeout: 50
 		})
@@ -284,7 +313,7 @@ export default function TestPage() {
 		}
 
 		eventList.push({
-			action: () => setHideScrollingBinary(false),
+			action: () => setScrollingBinaryState(ElementAnimState.Loading),
 			text: "",
 			timeout: 50
 		})
@@ -383,6 +412,42 @@ export default function TestPage() {
 
 	}, [])
 
+	const loadSection = useCallback(() => {
+		const eventList: TerminalEvent[] = [];
+
+		eventList.push({
+			action: () => {setTitleTextState(ElementAnimState.Unloading)},
+			text: "",
+			timeout: 10
+		})
+
+		eventList.push({
+			action: () => {setScrollingBinaryState(ElementAnimState.Unloading)},
+			text: "",
+			timeout: 10
+		})
+
+		eventList.push({
+			action: () => {setContentContainerState(ElementAnimState.Unloading)},
+			text: "",
+			timeout: 200
+		})
+
+		eventList.push({
+			action: () => {setTaskbarState(ElementAnimState.Loading)},
+			text: "",
+			timeout: 10
+		})
+
+		eventList.push({
+			action: () => {unMinimizeWindow(windowRef)},
+			text: "",
+			timeout: 10
+		})
+
+		processTerminalEvent(eventList)
+	}, [processTerminalEvent, unMinimizeWindow])
+
 	const getSubtexts = useCallback(
 		() => {
 			return Array(amtTitleSubTexts).fill(<h1>FUDGEU</h1>)
@@ -416,7 +481,8 @@ export default function TestPage() {
 			{/* Title Text */}
 			<div className={clsx({
 					[styles.titleTextContainer]: true,
-					[styles.hidden]: hideTitleText,
+					[styles.hidden]: titleTextState == ElementAnimState.Hidden,
+					[styles.titleTextUnloaded]: titleTextState == ElementAnimState.Unloading,
 			})}>
 				<span className={styles.subTitleTextTop}>
 					{getSubtexts()}
@@ -432,14 +498,18 @@ export default function TestPage() {
 			{/* Scrolling Binary Text */}
 			<div className={clsx({
 				[styles.scrollingTextContainer]: true,
-				[styles.hidden]: hideScrollingBinary,
-				[styles.scrollingTextIntro]: !hideScrollingBinary,
+				[styles.hidden]: scrollingBinaryState == ElementAnimState.Hidden,
+				[styles.scrollingTextLoad]: scrollingBinaryState == ElementAnimState.Loading,
+				[styles.scrollingTextUnload]: scrollingBinaryState == ElementAnimState.Unloading,
 			})}>
 				<Marquee autoFill speed={10} direction="right">011011000110111101101100001000000110011101100101011101000010000001110000011100100110000101101110011010110110010101100100</Marquee>
 			</div>
 
 			{/* Content Container */}
-			<div className={styles.textContentContainer}>
+			<div className={clsx({
+				[styles.textContentContainer]: true,
+				[styles.textContentContainerUnload]: contentContainerState == ElementAnimState.Unloading,
+			})}>
 				<div className={clsx({
 					[styles.subHeader]: true,
 					[styles.showSubHeader]: navItemShowList[0]
@@ -480,9 +550,9 @@ export default function TestPage() {
 								[styles.navItem]: true,
 								[styles.showNavItem]: navItemShowList[4]
 							})}>
-								<a className={styles.listLink} href="?model=4krat">
+								<button className={styles.listLink} onClick={() => loadSection()}>
 										<span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
-								</a>
+								</button>
 							</li>
 							<li className={clsx({
 								[styles.navItem]: true,
@@ -560,6 +630,55 @@ export default function TestPage() {
 				<div className={styles.bottomDecoBox} />
 				<div className={styles.bottomDecoBox} />
 			</div>
+
+			{/* Taskbar */}
+			<div className={clsx({
+				[styles.taskbar]: true,
+				[styles.taskbarLoad]: taskbarState == ElementAnimState.Loading
+			})}>
+				<div className={styles.taskbarLeft}>
+					<div className={styles.taskbarIcon}>FUDGEU</div>
+					<div 
+						className={clsx({
+							[styles.taskbarIcon]: !aboutMeTaskActive,
+							[styles.taskbarIconActive]: aboutMeTaskActive,
+						})}
+						onClick={() => {
+							if (aboutMeTaskActive) {
+								minimizeWindow(windowRef, taskBarIconRef)
+							} else {
+								unMinimizeWindow(windowRef)
+							}
+							setAboutMeTaskActive(!aboutMeTaskActive)
+						}}
+						ref={taskBarIconRef}
+					>
+							ABOUT ME
+						</div>
+					<div className={styles.taskbarIcon}>PROJECTS</div>
+					<div className={styles.taskbarIcon}>EDUCATION</div>
+					<div className={styles.taskbarIcon}>CONTACT</div>
+				</div>
+				<div className={styles.taskbarRight}>
+					10:26 PM
+				</div>
+			</div>
+
+			{/* Window */}
+			<Window
+				title="ABOUT"
+				onMinimize={() => {
+					minimizeWindow(windowRef, taskBarIconRef);
+					setAboutMeTaskActive(false);
+				}}
+				ref={windowRef}
+			>
+				<div className={styles.windowContentContainer}>
+					<p>Congratulations, you are our lucky winner!</p>
+					<img src="https://cdn.discordapp.com/attachments/575127872516259859/1163345799250456636/image.png" width="600" />
+					<p>01100001 01100111 01101111 01101110 01111001</p>
+				</div>
+			</Window>
 
 			{/* CRT effect, courtesy of greenlemon */}
 			<div className={styles.lines}></div>

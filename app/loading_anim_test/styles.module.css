@@ -41,6 +41,14 @@
 	transform: rotate(5deg)
 }
 
+.titleTextUnloaded {
+	animation-name: textUnload;
+	animation-duration: 0.1s;
+	animation-timing-function: linear;
+	animation-iteration-count: unset;
+	animation-fill-mode: forwards;
+}
+
 .mainTitleText {
 	color: var(--accent-color);
 }
@@ -70,10 +78,17 @@
 	transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5); /* translate x is close enough lol */
 }
 
-.scrollingTextIntro {
-	animation-name: scrollingTextIntro;
+.scrollingTextLoad {
+	animation-name: scrollingTextLoad;
 	animation-duration: 0.2s;
 	animation-timing-function: linear;
+}
+
+.scrollingTextUnload {
+	animation-name: scrollingTextUnload;
+	animation-duration: 0.2s;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
 }
 
 .textContentContainer {
@@ -84,6 +99,13 @@
 	padding-left: 5rem;
 	transform: rotate(5deg);
 	flex-grow: 1;
+}
+
+.textContentContainerUnload {
+	animation-name: textUnload;
+	animation-duration: 0.2s;
+	animation-timing-function: linear;
+	animation-fill-mode: forwards;
 }
 
 .subHeader {
@@ -160,6 +182,7 @@
 }
 
 .listLink {
+	all: unset;
 	width: 100%;
 	padding: 0.5rem 0;
 	display: flex;
@@ -262,6 +285,73 @@
 	background-color: var(--accent-color);
 }
 
+.taskbar {
+	display: none;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 3rem;
+	padding: 0 1rem;
+	justify-content: space-between;
+	width: 100%;
+	background-color: var(--accent-color);
+	color: black;
+}
+
+.taskbarLoad {
+	display: flex;
+	animation-name: taskbarLoad;
+	animation-duration: 0.1s;
+	animation-timing-function: linear;
+}
+
+.taskbarLeft {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.taskbarRight {
+	display: flex;
+	align-items: center;
+}
+
+.taskbarIcon {
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 1rem;
+	border: outset 3px var(--accent-color);
+	user-select: none;
+}
+
+.taskbarIcon:hover {
+	cursor: pointer;
+}
+
+.taskbarIcon:active {
+	border: inset 3px var(--accent-color);
+}
+
+.taskbarIconActive {
+	composes: taskbarIcon;
+	background-color: black;
+	color: var(--accent-color);
+	border: inset 3px var(--accent-color);
+}
+
+.windowContentContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1rem;
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden;
+	color: white;
+	font-family: 'Times New Roman', Times, serif;
+	font-size: 18px;
+}
+
 .lines {
 	position: fixed;
 	left: 0;
@@ -283,7 +373,8 @@
 	pointer-events: none;
 	background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, .5) 51%);
 	background-size: 100% 4px;
-	will-change: background, background-size; animation: scanlines 0.2s linear infinite;
+	will-change: background, background-size;
+	animation: scanlines 0.2s linear infinite;
 	transform: rotate(5deg);
 }
 
@@ -360,7 +451,30 @@
 	}
 }
 
-@keyframes scrollingTextIntro {
+@keyframes textUnload {
+	0% {
+		transform: scaleX(0.5) scaleY(1.5);
+	}
+
+	49.99% {
+		transform: scaleX(0.5) scaleY(1.5);
+	}
+
+	50% {
+		transform: scaleX(1.5) scaleY(0.5);
+	}
+
+	99.99% {
+		transform: scaleX(1.5) scaleY(0.5);
+	}
+
+	100% {
+		transform: scaleX(1.5) scaleY(0.5);
+		display: none;
+	}
+}
+
+@keyframes scrollingTextLoad {
 	0% {
 		transform: translateX(-46.45%) rotate(-85deg) scaleX(2.5) scaleY(0.8);
 	}
@@ -380,7 +494,29 @@
 	100% {
 		transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5);
 	}
-	
+}
+
+@keyframes scrollingTextUnload {
+	0% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(2.5) scaleY(0.8);
+	}
+
+	49.99% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(2.5) scaleY(0.8);
+	}
+
+	50% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5) scaleY(1.5);
+	}
+
+	99.99% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5) scaleY(1.5);
+	}
+
+	100% {
+		transform: translateX(-46.45%) rotate(-85deg) scaleX(1.5);
+		display: none;
+	}	
 }
 
 @keyframes trCornerIntro {
@@ -447,6 +583,15 @@
 
 	99.99% {
 		transform: scaleY(0.5);
+	}
+}
+
+@keyframes taskbarLoad {
+	0% {
+		transform: translateY(100%);
+	}
+	100% {
+		transform: translateY(0);
 	}
 }
 
