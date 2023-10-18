@@ -9,6 +9,7 @@ import BackgroundGL from '../webgl/component/background_gl'
 import Marquee from 'react-fast-marquee'
 import GLView2 from '../webgl/component/GLView2'
 import Window from '../components/window/Window'
+import FudgeWindow from '../util/FudgeWindow'
 
 type TerminalEvent = {
 	action: () => void,
@@ -43,6 +44,10 @@ export default function TestPage() {
 	const windowRef = useRef<HTMLDivElement>(null);
 	const [spawnWindow, setSpawnWindow] = useState(false)
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
+
+	const [ forceRerender, setRerender ] = useState(0);
+
+	const [ windows, setWindows ] = useState<FudgeWindow[]>([]);
 
 	const searchParams = useSearchParams();
 
@@ -447,7 +452,26 @@ export default function TestPage() {
 		})
 
 		eventList.push({
-			action: () => {unMinimizeWindow(windowRef)},
+			//action: () => {unMinimizeWindow(windowRef)},
+			action: () => {
+				const recurse = () => {
+					console.log("recursing!")
+					const wind = new FudgeWindow("About", Math.random() * window.outerWidth, Math.random() * window.outerHeight, 800, 600, (
+						<div className={styles.windowContentContainer}>
+							<p>Congratulations, you are our lucky winner!</p>
+							<img src="https://cdn.discordapp.com/attachments/575127872516259859/1163345799250456636/image.png" width="600" />
+							<p>01100001 01100111 01101111 01101110 01111001</p>
+						</div>
+					))
+					setWindows((cur) => {
+						cur.push(wind)
+						return cur;
+					});
+					setRerender(Math.random())
+					setTimeout(() => {recurse()}, 50)
+				}
+				recurse();
+			},
 			text: "",
 			timeout: 10
 		})
@@ -672,20 +696,9 @@ export default function TestPage() {
 			</div>
 
 			{/* Window */}
-			{spawnWindow && <Window
-				title="ABOUT"
-				onMinimize={() => {
-					minimizeWindow(windowRef, taskBarIconRef);
-					setAboutMeTaskActive(false);
-				}}
-				ref={windowRef}
-			>
-				<div className={styles.windowContentContainer}>
-					<p>Congratulations, you are our lucky winner!</p>
-					<img src="https://cdn.discordapp.com/attachments/575127872516259859/1163345799250456636/image.png" width="600" />
-					<p>01100001 01100111 01101111 01101110 01111001</p>
-				</div>
-			</Window>}
+			{windows.map(window => {
+				return <Window key={window.title} from={window} />
+			})}
 
 			{/* CRT effect, courtesy of greenlemon */}
 			<div className={styles.lines}></div>

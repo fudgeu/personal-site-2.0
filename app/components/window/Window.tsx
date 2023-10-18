@@ -2,11 +2,13 @@
 import { createElement, forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
 import styles from './styles.module.css'
 import ResizeFrame from '../resize-frame/ResizeFrame';
+import FudgeWindow from '@/app/util/FudgeWindow';
 
 type WindowProps = {
-	title: string;
+	/*title: string;
 	onMinimize: () => void;
-	children: React.ReactNode;
+	children: React.ReactNode;*/
+	from: FudgeWindow;
 }
 
 type MousePos = {
@@ -14,7 +16,7 @@ type MousePos = {
 	y: number;
 }
 
-export default forwardRef<HTMLDivElement, WindowProps>(function Window({ title, onMinimize, children }, ref) {
+export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from }, ref) {
 
 	const windowRef = useRef<HTMLDivElement>(null);
 	const titleBarRef = useRef<HTMLDivElement>(null);
@@ -32,8 +34,10 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ title, 
 		const deltaX = lastMousePos.current.x - e.clientX;
 		const deltaY = lastMousePos.current.y - e.clientY;
 
-		windowRef.current.style.top  = (windowRef.current.offsetTop - deltaY).toString() + "px";
-		windowRef.current.style.left = (windowRef.current.offsetLeft - deltaX).toString() + "px";
+		//windowRef.current.style.top  = (windowRef.current.offsetTop - deltaY).toString() + "px";
+		//windowRef.current.style.left = (windowRef.current.offsetLeft - deltaX).toString() + "px";
+		from.x -= deltaX;
+		from.y -= deltaY;
 		lastMousePos.current = {x: e.clientX, y: e.clientY}
 	}, [])
 
@@ -59,28 +63,20 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ title, 
 
 	/* Resize handlers */
 	const changeWidth = useCallback((deltaX: number) => {
-		const ref = windowRef.current;
-		if (!ref) return;
-		ref.style.width = (ref.offsetWidth + deltaX).toString() + "px"; 
-	}, [])
+		from.width += deltaX;
+	}, [from])
 
 	const changeHeight = useCallback((deltaY: number) => {
-		const ref = windowRef.current;
-		if (!ref) return;
-		ref.style.height = (ref.offsetHeight + deltaY).toString() + "px"; 
-	}, [])
+		from.height += deltaY
+	}, [from])
 
 	const changeLeft = useCallback((deltaX: number) => {
-		const ref = windowRef.current;
-		if (!ref) return;
-		ref.style.left = (ref.offsetLeft + deltaX).toString() + "px"; 
-	}, [])
+		from.x += deltaX
+	}, [from])
 
 	const changeTop = useCallback((deltaY: number) => {
-		const ref = windowRef.current;
-		if (!ref) return;
-		ref.style.top = (ref.offsetTop + deltaY).toString() + "px"; 
-	}, [])
+		from.y += deltaY;
+	}, [from])
 
 	/* Set to middle of screen by default */
 	useEffect(() => {
@@ -88,15 +84,23 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ title, 
 		windowRef.current.style.top = ((window.innerHeight - windowRef.current.offsetHeight) / 2).toString() + "px"
 		windowRef.current.style.left = ((window.innerWidth - windowRef.current.offsetWidth) / 2).toString() + "px"
 	}, [])
+
+	useEffect(() => {
+		if (!windowRef.current) return;
+		windowRef.current.style.top  = from.y.toString() + "px"
+		windowRef.current.style.left = from.x.toString() + "px"
+		windowRef.current.style.height = from.height.toString() + "px"
+		windowRef.current.style.width  = from.width.toString() + "px"
+	}, [from.height, from.width, from.x, from.y])
 	
 	return (
 		<article className={styles.container} ref={windowRef}>
 			<div className={styles.titleBar} ref={titleBarRef}>
 				<div className={styles.titleBarLeft}>
-					<span>{title}</span>
+					<span>{from.title}</span>
 				</div>
 				<div className={styles.titleBarRight}>
-					<div className={styles.button} onClick={onMinimize}>
+					<div className={styles.button} onClick={() => {}}>
 						<img alt="Minimize window" src="dash.svg" />
 					</div>
 					<div className={styles.button}>
@@ -108,7 +112,7 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ title, 
 				</div>
 			</div>
 			<div className={styles.content}>
-				{children}
+				{from.content}
 			</div>
 			<ResizeFrame changeWidth={changeWidth} changeHeight={changeHeight} changeLeft={changeLeft} changeTop={changeTop} />
 		</article>
