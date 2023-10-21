@@ -9,6 +9,7 @@
 	background-color: black;
 	gap: 0.25rem;
 	transition: transform 0.2s;
+	transform: translate(0, 0) scale(0);
 }
 
 .titleBar {

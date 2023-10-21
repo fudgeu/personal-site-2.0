@@ -10,6 +10,9 @@ import Marquee from 'react-fast-marquee'
 import GLView2 from '../webgl/component/GLView2'
 import Window from '../components/window/Window'
 import FudgeWindow from '../util/FudgeWindow'
+import ShadowGL from '../rat/RatGL/RatGL'
+import { FudgeApp, minimizeApp, startApp, unminimizeApp } from '../util/FudgeApp'
+import { defaultApps } from './DefaultApps'
 
 type TerminalEvent = {
 	action: () => void,
@@ -45,7 +48,9 @@ export default function TestPage() {
 	const [spawnWindow, setSpawnWindow] = useState(false)
 	const [mousePos, setMousePos] = useState({x: 0, y: 0})
 
-	const [ forceRerender, setRerender ] = useState(0);
+	const [applications, setApplications] = useState<FudgeApp[]>(defaultApps)
+
+	const [ _, forceRerender ] = useState(0);
 
 	const [ windows, setWindows ] = useState<FudgeWindow[]>([]);
 
@@ -70,19 +75,11 @@ export default function TestPage() {
 		setTimeout(() => processTerminalEvent(eventList), curEvent.timeout)
 	}, []);
 
-	const minimizeWindow = useCallback((ref: RefObject<HTMLDivElement>, toRef: RefObject<HTMLDivElement>) => {
-		if (!ref.current) return;
-		const toX = ((toRef.current?.getBoundingClientRect().left || 0) + (toRef.current?.getBoundingClientRect().right || 0)) / 2
-		const toY = ((toRef.current?.getBoundingClientRect().top || 0) + (toRef.current?.getBoundingClientRect().bottom || 0)) / 2
-		const deltaX = toX - (ref.current.getBoundingClientRect().left + ref.current.getBoundingClientRect().right) / 2;
-		const deltaY = toY - (ref.current.getBoundingClientRect().top + ref.current.getBoundingClientRect().bottom) / 2;
-		console.log(`${deltaX}, ${deltaY}`)
-		ref.current.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0)`
-	}, [])
-
-	const unMinimizeWindow = useCallback((ref: RefObject<HTMLDivElement>) => {
-		if (!ref.current) return;
-		ref.current.style.transform = "translate(0, 0) scale(1)"
+	const getMinimizeTo = useCallback((ref: RefObject<HTMLDivElement>): {x: number, y: number} => {
+		if (!ref.current) return {x: 0, y: 0};
+		const x = ((ref.current?.getBoundingClientRect().left || 0) + (ref.current?.getBoundingClientRect().right || 0)) / 2
+		const y = ((ref.current?.getBoundingClientRect().top || 0) + (ref.current?.getBoundingClientRect().bottom || 0)) / 2
+		return {x, y}
 	}, [])
 
 	// loading animation
@@ -452,32 +449,52 @@ export default function TestPage() {
 		})
 
 		eventList.push({
-			//action: () => {unMinimizeWindow(windowRef)},
 			action: () => {
-				const recurse = () => {
-					console.log("recursing!")
-					const wind = new FudgeWindow("About", Math.random() * window.outerWidth, Math.random() * window.outerHeight, 800, 600, (
-						<div className={styles.windowContentContainer}>
-							<p>Congratulations, you are our lucky winner!</p>
-							<img src="https://cdn.discordapp.com/attachments/575127872516259859/1163345799250456636/image.png" width="600" />
-							<p>01100001 01100111 01101111 01101110 01111001</p>
-						</div>
-					))
-					setWindows((cur) => {
-						cur.push(wind)
-						return cur;
-					});
-					setRerender(Math.random())
-					setTimeout(() => {recurse()}, 50)
-				}
-				recurse();
+				const title = "About"
+				setApplications(applications.map((a) => {
+					if (a.title == title) return startApp(a, forceRerender);
+					return a;
+				}))
+				setTimeout(() => {
+					setApplications((apps) => apps.map((a) => {
+						if (a.title == title) return unminimizeApp(a);
+						return a;
+					}))
+				}, 100)
+				// const toX = ((taskBarIconRef.current?.getBoundingClientRect().left || 0) + (taskBarIconRef.current?.getBoundingClientRect().right || 0) / 2);
+				// const toY = ((taskBarIconRef.current?.getBoundingClientRect().top || 0) + (taskBarIconRef.current?.getBoundingClientRect().bottom || 0) / 2);
+				// wind.minimizeTo(toX, toY)
+				// setWindows((cur) => {
+				// 	cur.push(wind)
+				// 	return cur;
+				// });
 			},
 			text: "",
-			timeout: 10
+			timeout: 150
 		})
+		
 
 		processTerminalEvent(eventList)
-	}, [processTerminalEvent, unMinimizeWindow])
+	}, [processTerminalEvent])
+
+	const handleAppFunction = useCallback((app: FudgeApp) => {
+		setApplications(applications.map((a) => {
+			if (a.title == app.title) return app;
+			return a;
+		}))
+	}, [applications])
+
+	const setFocus = useCallback((appTitle: string) => {
+		setApplications(applications.map((app) => {
+			if (!app.windowInstance) return app;
+			if (app.title === appTitle) {
+				app.windowInstance.zIndex = 2;
+				return app;
+			}
+			app.windowInstance.zIndex = 1;
+			return app;
+		}))
+	}, [applications])
 
 	const getSubtexts = useCallback(
 		() => {
@@ -669,26 +686,88 @@ export default function TestPage() {
 			})}>
 				<div className={styles.taskbarLeft}>
 					<div className={styles.taskbarIcon}>FUDGEU</div>
-					<div 
+					{
+						applications.map((app) => (
+							<div 
+								key={app.title}
+								className={clsx({
+									[styles.taskbarIcon]: true,
+									[styles.taskbarIconActive]: !app.isMinimized,
+								})}
+								onClick={() => {
+									// Handle app open
+									if (!app.isOpen) {
+										setApplications(applications.map((a) => {
+											if (a.title == app.title) return startApp(a, forceRerender);
+											return a;
+										}))
+										return
+									}
+									// Handle app un/minimize
+									if (app.isMinimized) {
+										setApplications(applications.map((a) => {
+											if (a.title == app.title) return unminimizeApp(a);
+											return a;
+										}))
+									} else {
+										setApplications(applications.map((a) => {
+											if (a.title == app.title) return minimizeApp(a);
+											return a;
+										}))
+									}
+								}}
+							>
+								{app.title}
+							</div>
+						))
+					}
+					{/*<div 
 						className={clsx({
 							[styles.taskbarIcon]: !aboutMeTaskActive,
 							[styles.taskbarIconActive]: aboutMeTaskActive,
 						})}
 						onClick={() => {
 							if (aboutMeTaskActive) {
-								minimizeWindow(windowRef, taskBarIconRef)
+								windows.forEach((window) => {
+									const minTo = getMinimizeTo(taskBarIconRef);
+									window.minimizeTo(minTo.x, minTo.y);
+								})
 							} else {
-								unMinimizeWindow(windowRef)
+								windows.forEach((window) => window.unminimize())
 							}
 							setAboutMeTaskActive(!aboutMeTaskActive)
 						}}
 						ref={taskBarIconRef}
 					>
-							ABOUT ME
-						</div>
-					<div className={styles.taskbarIcon}>PROJECTS</div>
-					<div className={styles.taskbarIcon}>EDUCATION</div>
-					<div className={styles.taskbarIcon}>CONTACT</div>
+						ABOUT ME
+					</div>
+					<div className={styles.taskbarIcon} onClick={() => {
+						const wind = new FudgeWindow(forceRerender, "Projects", 0, 0, 800, 600, (
+							<div className={styles.windowContentContainer}>
+								<ShadowGL />
+							</div>
+						))
+						wind.unminimize()
+						setWindows((cur) => {
+							cur.push(wind)
+							return cur;
+						});
+					}}>
+						PROJECTS
+					</div>
+					<div className={styles.taskbarIcon} onClick={() => {
+						const wind = new FudgeWindow(forceRerender, "Education", 100, 100, 1200, 1000, (
+							<iframe className={styles.iframe} src="http://firecade.neocities.org" />
+						))
+						wind.unminimize()
+						setWindows((cur) => {
+							cur.push(wind)
+							return cur;
+						});
+					}}>
+						EDUCATION
+					</div>
+				<div className={styles.taskbarIcon}>CONTACT</div> */}
 				</div>
 				<div className={styles.taskbarRight}>
 					10:26 PM
@@ -696,8 +775,15 @@ export default function TestPage() {
 			</div>
 
 			{/* Window */}
-			{windows.map(window => {
-				return <Window key={window.title} from={window} />
+			{applications.map(app => {
+				if (!app.isOpen || !app.windowInstance) return [];
+				return <Window 
+					key={app.title}
+					from={app.windowInstance}
+					minimizeTo={getMinimizeTo(taskBarIconRef)}
+					onMinimize={() => handleAppFunction(minimizeApp(app))}
+					onClick={() => setFocus(app.title)}
+				/>
 			})}
 
 			{/* CRT effect, courtesy of greenlemon */}

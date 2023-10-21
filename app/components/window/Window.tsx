@@ -9,6 +9,9 @@ type WindowProps = {
 	onMinimize: () => void;
 	children: React.ReactNode;*/
 	from: FudgeWindow;
+	minimizeTo: {x: number, y: number}
+	onMinimize: () => void;
+	onClick: () => void;
 }
 
 type MousePos = {
@@ -16,7 +19,7 @@ type MousePos = {
 	y: number;
 }
 
-export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from }, ref) {
+export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from, minimizeTo, onMinimize, onClick }, ref) {
 
 	const windowRef = useRef<HTMLDivElement>(null);
 	const titleBarRef = useRef<HTMLDivElement>(null);
@@ -39,7 +42,7 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from },
 		from.x -= deltaX;
 		from.y -= deltaY;
 		lastMousePos.current = {x: e.clientX, y: e.clientY}
-	}, [])
+	}, [from])
 
 	const onMouseUp = useCallback((e: MouseEvent) => {
 		document.body.style.userSelect = "auto";
@@ -83,15 +86,20 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from },
 		if (!windowRef.current) return;
 		windowRef.current.style.top = ((window.innerHeight - windowRef.current.offsetHeight) / 2).toString() + "px"
 		windowRef.current.style.left = ((window.innerWidth - windowRef.current.offsetWidth) / 2).toString() + "px"
+		windowRef.current.addEventListener("mousedown", onClick);
+		const refCur = windowRef.current;
+		return () => refCur.removeEventListener("mousedown", onClick)
 	}, [])
 
 	useEffect(() => {
 		if (!windowRef.current) return;
-		windowRef.current.style.top  = from.y.toString() + "px"
-		windowRef.current.style.left = from.x.toString() + "px"
-		windowRef.current.style.height = from.height.toString() + "px"
-		windowRef.current.style.width  = from.width.toString() + "px"
-	}, [from.height, from.width, from.x, from.y])
+		windowRef.current.style.top  = `${from.y}px`
+		windowRef.current.style.left = `${from.x}px`
+		windowRef.current.style.height = `${from.height}px`
+		windowRef.current.style.width  = `${from.width}px`
+		windowRef.current.style.transform = `translate(${from.translateX}px, ${from.translateY}px) scale(${from.scale})`;
+		windowRef.current.style.zIndex = from.zIndex.toString();
+	}, [from.height, from.scale, from.translateX, from.translateY, from.width, from.x, from.y, from.zIndex])
 	
 	return (
 		<article className={styles.container} ref={windowRef}>
@@ -100,7 +108,10 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from },
 					<span>{from.title}</span>
 				</div>
 				<div className={styles.titleBarRight}>
-					<div className={styles.button} onClick={() => {}}>
+					<div className={styles.button} onClick={() => {
+						from.minimizeTo(minimizeTo.x, minimizeTo.y)
+						onMinimize();
+					}}>
 						<img alt="Minimize window" src="dash.svg" />
 					</div>
 					<div className={styles.button}>
