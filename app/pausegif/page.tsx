@@ -15,8 +15,8 @@ export default function PauseGif() {
 	}, [])
 	return (
 		<div className={styles.container}>
-			<video id="testVideo" width="600" height="100%" autoPlay loop muted playsInline>
-        <source src="https://rotato.netlify.app/alpha-demo/movie-webm.webm" type="video/webm" />
+			<video id="testVideo" width="600" autoPlay loop muted playsInline>
+        <source src="https://cdn.discordapp.com/attachments/840291689889529907/1165388413558599822/0001-0020.webm" type="video/webm" />
       </video>
 		</div>
 	)
