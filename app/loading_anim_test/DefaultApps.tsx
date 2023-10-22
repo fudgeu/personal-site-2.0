@@ -11,6 +11,6 @@ export const defaultApps = [
 		</div>
 	)),
 	makeApp("Projects", () => <ShadowGL />),
-	makeApp("Education", () => <iframe className={styles.iframe} src="http://firecade.neocities.org" />),
+	makeApp("Education", () => <iframe className={styles.iframe} src="https://firecade.neocities.org" />),
 	makeApp("Contact", () => []),
 ]
