@@ -9,7 +9,7 @@ export default class FudgeWindow {
 	translateX: number = 0;
 	translateY: number = 0;
 	scale: number = 0;
-	zIndex: number = 2;
+	zIndex: number = 1;
 	content: ReactNode;
 	rerender: Dispatch<SetStateAction<number>>;
 

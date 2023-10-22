@@ -26,8 +26,10 @@ export function makeApp(
 	}
 }
 
-export function startApp(app: FudgeApp, forceRerender: Dispatch<SetStateAction<number>>): FudgeApp {
-	const window = new FudgeWindow(forceRerender, app.title, 0, 0, app.defaultWidth, app.defaultHeight, app.getContent())
+export function startApp(app: FudgeApp, surfaceWidth: number, surfaceHeight: number, forceRerender: Dispatch<SetStateAction<number>>): FudgeApp {
+	const windowX = (surfaceWidth - app.defaultWidth) / 2;
+	const windowY = (surfaceHeight - app.defaultHeight) / 2;
+	const window = new FudgeWindow(forceRerender, app.title, windowX, windowY, app.defaultWidth, app.defaultHeight, app.getContent())
 	window.unminimize()
 	return {
 		...app,
@@ -48,5 +50,18 @@ export function minimizeApp(app: FudgeApp): FudgeApp {
 	if (!app.isOpen) return app;
 	app.isMinimized = true;
 	app.windowInstance?.minimizeTo(0, 0);
+	return app;
+}
+
+export function minimizeAppTo(app: FudgeApp, rect: DOMRect | undefined): FudgeApp {
+	if (!app.isOpen) return app;
+	app.isMinimized = true;
+	let toX = 0;
+	let toY = 0;
+	if (rect) {
+		toX = rect.left + (rect.width / 2)
+		toY = rect.top + (rect.height / 2)
+	}
+	app.windowInstance?.minimizeTo(toX, toY);
 	return app;
 }

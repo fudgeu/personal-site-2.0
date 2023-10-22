@@ -11,7 +11,7 @@ import GLView2 from '../webgl/component/GLView2'
 import Window from '../components/window/Window'
 import FudgeWindow from '../util/FudgeWindow'
 import ShadowGL from '../rat/RatGL/RatGL'
-import { FudgeApp, minimizeApp, startApp, unminimizeApp } from '../util/FudgeApp'
+import { FudgeApp, minimizeApp, minimizeAppTo, startApp, unminimizeApp } from '../util/FudgeApp'
 import { defaultApps } from './DefaultApps'
 
 type TerminalEvent = {
@@ -55,6 +55,8 @@ export default function TestPage() {
 	const [ windows, setWindows ] = useState<FudgeWindow[]>([]);
 
 	const searchParams = useSearchParams();
+
+	const taskbarRefs: {[key: string]: HTMLDivElement | null} = {}
 
 	// mouse pos effect
 	useEffect(() => {
@@ -452,7 +454,7 @@ export default function TestPage() {
 			action: () => {
 				const title = "About"
 				setApplications(applications.map((a) => {
-					if (a.title == title) return startApp(a, forceRerender);
+					if (a.title == title) return startApp(a, window.innerWidth, window.innerHeight, forceRerender);
 					return a;
 				}))
 				setTimeout(() => {
@@ -484,17 +486,29 @@ export default function TestPage() {
 		}))
 	}, [applications])
 
-	const setFocus = useCallback((appTitle: string) => {
-		setApplications(applications.map((app) => {
-			if (!app.windowInstance) return app;
-			if (app.title === appTitle) {
-				app.windowInstance.zIndex = 2;
-				return app;
+	const getAmtOpenApps = useCallback((apps: FudgeApp[]): number => {
+		let amt = 0;
+		apps.forEach((app) => {
+			if (app.isOpen) amt++;
+		})
+		return amt;
+	}, [])
+
+	const setFocus = useCallback((app: FudgeApp) => {
+		const curZIndex = app.windowInstance?.zIndex || 0
+		setApplications((apps) => apps.map((a) => {
+			if (!a.windowInstance) return a;
+			if (a.title === app.title) {
+				a.windowInstance.zIndex = getAmtOpenApps(apps);
+				return a;
 			}
-			app.windowInstance.zIndex = 1;
-			return app;
+			if (a.windowInstance.zIndex > curZIndex) {
+				a.windowInstance.zIndex--;
+				return a;
+			}
+			return a;
 		}))
-	}, [applications])
+	}, [getAmtOpenApps])
 
 	const getSubtexts = useCallback(
 		() => {
@@ -694,26 +708,27 @@ export default function TestPage() {
 									[styles.taskbarIcon]: true,
 									[styles.taskbarIconActive]: !app.isMinimized,
 								})}
+								ref={ref => taskbarRefs[app.title] = ref}
 								onClick={() => {
 									// Handle app open
 									if (!app.isOpen) {
 										setApplications(applications.map((a) => {
-											if (a.title == app.title) return startApp(a, forceRerender);
+											if (a.title == app.title) {
+												const startedApp = startApp(a, window.innerWidth, window.innerHeight, forceRerender);
+												if (startedApp.windowInstance)
+													startedApp.windowInstance.zIndex = getAmtOpenApps(applications) + 1
+												return startedApp;
+											}
 											return a;
 										}))
 										return
 									}
 									// Handle app un/minimize
 									if (app.isMinimized) {
-										setApplications(applications.map((a) => {
-											if (a.title == app.title) return unminimizeApp(a);
-											return a;
-										}))
+										handleAppFunction(unminimizeApp(app))
+										setFocus(app)
 									} else {
-										setApplications(applications.map((a) => {
-											if (a.title == app.title) return minimizeApp(a);
-											return a;
-										}))
+										handleAppFunction(minimizeAppTo(app, taskbarRefs[app.title]?.getBoundingClientRect()))
 									}
 								}}
 							>
@@ -781,8 +796,8 @@ export default function TestPage() {
 					key={app.title}
 					from={app.windowInstance}
 					minimizeTo={getMinimizeTo(taskBarIconRef)}
-					onMinimize={() => handleAppFunction(minimizeApp(app))}
-					onClick={() => setFocus(app.title)}
+					onMinimize={() => handleAppFunction(minimizeAppTo(app, taskbarRefs[app.title]?.getBoundingClientRect()))}
+					onClick={() => setFocus(app)}
 				/>
 			})}
 
@@ -790,7 +805,4 @@ export default function TestPage() {
 			<div className={styles.lines}></div>
 		</main>
 	)
-
-
-
 }
