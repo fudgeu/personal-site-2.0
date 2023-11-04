@@ -12,5 +12,5 @@ export const defaultApps = [
 	)),
 	makeApp("Projects", () => <ShadowGL />),
 	makeApp("Education", () => <iframe className={styles.iframe} src="https://firecade.neocities.org" />),
-	makeApp("Contact", () => []),
+	makeApp("Contact", () => <iframe src="https://scratch.mit.edu/projects/392505255/embed" width="800" height="600"></iframe>),
 ]

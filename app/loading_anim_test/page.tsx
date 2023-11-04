@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react'
+import { Dispatch, RefObject, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import styles from './styles.module.css'
 import clsx from 'clsx'
@@ -11,7 +11,7 @@ import GLView2 from '../webgl/component/GLView2'
 import Window from '../components/window/Window'
 import FudgeWindow from '../util/FudgeWindow'
 import ShadowGL from '../rat/RatGL/RatGL'
-import { FudgeApp, minimizeApp, minimizeAppTo, startApp, unminimizeApp } from '../util/FudgeApp'
+import { FudgeApp, closeApp, maximizeApp, minimizeApp, minimizeAppTo, onDrag, startApp, unminimizeApp } from '../util/FudgeApp'
 import { defaultApps } from './DefaultApps'
 
 type TerminalEvent = {
@@ -32,7 +32,7 @@ export default function TestPage() {
 	const [textList, setTextList] = useState<string[]>([])
 	const [useGreen, setUseGreen] = useState(false)
 	const [showBackground, setShowBackground] = useState(false)
-	const [loadingTextFadeOut, setLoadingTextFadeOut] = useState(false);
+	const [loadingTextState, setLoadingTextState] = useState(ElementAnimState.Showing)
 	const [titleTextState, setTitleTextState] = useState(ElementAnimState.Hidden)
 	const [amtTitleSubTexts, setAmtTitleSubTexts] = useState(0);
 	const [scrollingBinaryState, setScrollingBinaryState] = useState(ElementAnimState.Hidden)
@@ -41,6 +41,7 @@ export default function TestPage() {
 	const [showTRCornerDeco, setShowTRCornerDeco] = useState(false)
 	const [showBottomDeco, setShowBottomDeco] = useState(false)
 	const [showBRCornerDeco, setShowBRCornerDeco] = useState(false)
+	const taskbarRef = useRef<HTMLDivElement>(null);
 	const [taskbarState, setTaskbarState] = useState(ElementAnimState.Hidden)
 	const taskBarIconRef = useRef<HTMLDivElement>(null);
 	const [aboutMeTaskActive, setAboutMeTaskActive] = useState(true)
@@ -83,6 +84,16 @@ export default function TestPage() {
 		const y = ((ref.current?.getBoundingClientRect().top || 0) + (ref.current?.getBoundingClientRect().bottom || 0)) / 2
 		return {x, y}
 	}, [])
+
+	const unload = useCallback((elementSetState: Dispatch<SetStateAction<ElementAnimState>>) => {
+		elementSetState(ElementAnimState.Unloading)
+		setTimeout(() => elementSetState(ElementAnimState.Hidden), 100);
+	}, []);
+
+	const unloadTimed = useCallback((elementSetState: Dispatch<SetStateAction<ElementAnimState>>, timeout: number) => {
+		elementSetState(ElementAnimState.Unloading)
+		setTimeout(() => elementSetState(ElementAnimState.Hidden), timeout);
+	}, []);
 
 	// loading animation
 	useEffect(() => {
@@ -296,7 +307,7 @@ export default function TestPage() {
 					previous[previous.length - 3] = previous[previous.length - 3] + "."
 					return previous
 				})
-				setLoadingTextFadeOut(true)
+				unloadTimed(setLoadingTextState, 5000)
 			},
 			text: "",
 			timeout: 1500
@@ -321,6 +332,12 @@ export default function TestPage() {
 			action: () => setScrollingBinaryState(ElementAnimState.Loading),
 			text: "",
 			timeout: 50
+		})
+
+		eventList.push({
+			action: () => setContentContainerState(ElementAnimState.Loading),
+			text: "",
+			timeout: 1,
 		})
 
 		eventList.push({
@@ -421,19 +438,19 @@ export default function TestPage() {
 		const eventList: TerminalEvent[] = [];
 
 		eventList.push({
-			action: () => {setTitleTextState(ElementAnimState.Unloading)},
+			action: () => {unload(setTitleTextState)},
 			text: "",
 			timeout: 10
 		})
 
 		eventList.push({
-			action: () => {setScrollingBinaryState(ElementAnimState.Unloading)},
+			action: () => {unload(setScrollingBinaryState)},
 			text: "",
 			timeout: 10
 		})
 
 		eventList.push({
-			action: () => {setContentContainerState(ElementAnimState.Unloading)},
+			action: () => {unload(setContentContainerState)},
 			text: "",
 			timeout: 200
 		})
@@ -480,11 +497,11 @@ export default function TestPage() {
 	}, [processTerminalEvent])
 
 	const handleAppFunction = useCallback((app: FudgeApp) => {
-		setApplications(applications.map((a) => {
+		setApplications((apps) => apps.map((a) => {
 			if (a.title == app.title) return app;
 			return a;
 		}))
-	}, [applications])
+	}, [])
 
 	const getAmtOpenApps = useCallback((apps: FudgeApp[]): number => {
 		let amt = 0;
@@ -531,7 +548,8 @@ export default function TestPage() {
 			{/* Intro Code Text */}
 			<div className={clsx({
 				[styles.loadingTextContainer]: true,
-				[styles.fadeOut]: loadingTextFadeOut
+				[styles.hidden]: loadingTextState == ElementAnimState.Hidden,
+				[styles.fadeOut]: loadingTextState == ElementAnimState.Unloading
 			})}>
 				{
 					textList.map((val, index) => {
@@ -570,6 +588,8 @@ export default function TestPage() {
 			{/* Content Container */}
 			<div className={clsx({
 				[styles.textContentContainer]: true,
+				[styles.hidden]: contentContainerState == ElementAnimState.Hidden,
+				[styles.textContentContainerLoad]: contentContainerState == ElementAnimState.Loading,
 				[styles.textContentContainerUnload]: contentContainerState == ElementAnimState.Unloading,
 			})}>
 				<div className={clsx({
@@ -694,10 +714,13 @@ export default function TestPage() {
 			</div>
 
 			{/* Taskbar */}
-			<div className={clsx({
-				[styles.taskbar]: true,
-				[styles.taskbarLoad]: taskbarState == ElementAnimState.Loading
-			})}>
+			<div 
+				className={clsx({
+					[styles.taskbar]: true,
+					[styles.taskbarLoad]: taskbarState == ElementAnimState.Loading
+				})}
+				ref={taskbarRef}
+			>
 				<div className={styles.taskbarLeft}>
 					<div className={styles.taskbarIcon}>FUDGEU</div>
 					{
@@ -736,53 +759,6 @@ export default function TestPage() {
 							</div>
 						))
 					}
-					{/*<div 
-						className={clsx({
-							[styles.taskbarIcon]: !aboutMeTaskActive,
-							[styles.taskbarIconActive]: aboutMeTaskActive,
-						})}
-						onClick={() => {
-							if (aboutMeTaskActive) {
-								windows.forEach((window) => {
-									const minTo = getMinimizeTo(taskBarIconRef);
-									window.minimizeTo(minTo.x, minTo.y);
-								})
-							} else {
-								windows.forEach((window) => window.unminimize())
-							}
-							setAboutMeTaskActive(!aboutMeTaskActive)
-						}}
-						ref={taskBarIconRef}
-					>
-						ABOUT ME
-					</div>
-					<div className={styles.taskbarIcon} onClick={() => {
-						const wind = new FudgeWindow(forceRerender, "Projects", 0, 0, 800, 600, (
-							<div className={styles.windowContentContainer}>
-								<ShadowGL />
-							</div>
-						))
-						wind.unminimize()
-						setWindows((cur) => {
-							cur.push(wind)
-							return cur;
-						});
-					}}>
-						PROJECTS
-					</div>
-					<div className={styles.taskbarIcon} onClick={() => {
-						const wind = new FudgeWindow(forceRerender, "Education", 100, 100, 1200, 1000, (
-							<iframe className={styles.iframe} src="http://firecade.neocities.org" />
-						))
-						wind.unminimize()
-						setWindows((cur) => {
-							cur.push(wind)
-							return cur;
-						});
-					}}>
-						EDUCATION
-					</div>
-				<div className={styles.taskbarIcon}>CONTACT</div> */}
 				</div>
 				<div className={styles.taskbarRight}>
 					10:26 PM
@@ -797,6 +773,9 @@ export default function TestPage() {
 					from={app.windowInstance}
 					minimizeTo={getMinimizeTo(taskBarIconRef)}
 					onMinimize={() => handleAppFunction(minimizeAppTo(app, taskbarRefs[app.title]?.getBoundingClientRect()))}
+					onClose={() => handleAppFunction(closeApp(app))}
+					onMaximize={() => handleAppFunction(maximizeApp(app, window.innerWidth, window.innerHeight - (taskbarRef.current?.clientHeight || 0)))}
+					onDrag={(x, y) => handleAppFunction(onDrag(app, x, y))}
 					onClick={() => setFocus(app)}
 				/>
 			})}

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { createElement, forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
+import { createElement, forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import styles from './styles.module.css'
 import ResizeFrame from '../resize-frame/ResizeFrame';
 import FudgeWindow from '@/app/util/FudgeWindow';
@@ -12,19 +12,26 @@ type WindowProps = {
 	minimizeTo: {x: number, y: number}
 	onMinimize: () => void;
 	onClick: () => void;
+	onClose: () => void;
+	onMaximize: () => void;
+	onDrag: onDragFunction;
 }
+
+type onDragFunction = (x: number, y: number) => void;
 
 type MousePos = {
 	x: number;
 	y: number;
 }
 
-export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from, minimizeTo, onMinimize, onClick }, ref) {
+export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from, minimizeTo, onMinimize, onClick, onClose, onMaximize, onDrag }, ref) {
 
 	const windowRef = useRef<HTMLDivElement>(null);
 	const titleBarRef = useRef<HTMLDivElement>(null);
 
 	const lastMousePos = useRef<MousePos>();
+	const dragFlag = useRef<boolean>(false);
+	const doubleClickFlag = useRef<boolean>(false);
 
 	useImperativeHandle(ref, () => {
 		if (windowRef.current)
@@ -42,13 +49,28 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from, m
 		from.x -= deltaX;
 		from.y -= deltaY;
 		lastMousePos.current = {x: e.clientX, y: e.clientY}
-	}, [from])
+
+		if (!dragFlag.current) {
+			onDrag(e.clientX, e.clientY);
+			dragFlag.current = true;
+		}
+	}, [from, onDrag])
 
 	const onMouseUp = useCallback((e: MouseEvent) => {
 		document.body.style.userSelect = "auto";
 		window.removeEventListener("mousemove", onMouseMove)
 		window.removeEventListener("mouseup", onMouseUp)
-	}, [onMouseMove])
+		dragFlag.current = false;
+		
+		// Process double click
+		if (!doubleClickFlag.current) {
+			doubleClickFlag.current = true;
+			setTimeout(() => doubleClickFlag.current = false, 200);
+		} else {
+			onMaximize();
+			doubleClickFlag.current = false
+		}
+	}, [onMaximize, onMouseMove])
 
 	const onMouseDown = useCallback((e: MouseEvent) => {
 		lastMousePos.current = {x: e.clientX, y: e.clientY}
@@ -99,7 +121,12 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from, m
 		windowRef.current.style.width  = `${from.width}px`
 		windowRef.current.style.transform = `translate(${from.translateX}px, ${from.translateY}px) scale(${from.scale})`;
 		windowRef.current.style.zIndex = from.zIndex.toString();
-	}, [from.height, from.scale, from.translateX, from.translateY, from.width, from.x, from.y, from.zIndex])
+		if (from.useTransition) {
+			windowRef.current.style.transitionProperty = "transform, left, top, width, height"
+		} else {
+			windowRef.current.style.transitionProperty = "transform"
+		}
+	}, [from.height, from.scale, from.translateX, from.translateY, from.useTransition, from.width, from.x, from.y, from.zIndex])
 	
 	return (
 		<article className={styles.container} ref={windowRef}>
@@ -114,10 +141,10 @@ export default forwardRef<HTMLDivElement, WindowProps>(function Window({ from, m
 					}}>
 						<img alt="Minimize window" src="dash.svg" />
 					</div>
-					<div className={styles.button}>
+					<div className={styles.button} onClick={onMaximize}>
 						<img alt="Maximize window" src="square.svg" />
 					</div>					
-					<div className={styles.button}>
+					<div className={styles.button} onClick={onClose}>
 						<img alt="Close window" src="x.svg" />
 					</div>
 				</div>

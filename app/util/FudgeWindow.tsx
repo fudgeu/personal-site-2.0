@@ -10,6 +10,7 @@ export default class FudgeWindow {
 	translateY: number = 0;
 	scale: number = 0;
 	zIndex: number = 1;
+	useTransition: boolean = false;
 	content: ReactNode;
 	rerender: Dispatch<SetStateAction<number>>;
 
@@ -52,4 +53,39 @@ export default class FudgeWindow {
 		this.translateY = 0;
 		this.rerender(Math.random())
 	}
+
+	maximize(screenW: number, screenH: number) {
+		this.x = 0;
+		this.y = 0;
+		this.width = screenW;
+		this.height = screenH;
+		this.useTransition = true;
+		setTimeout(() => {
+			this.useTransition = false;
+			this.rerender(Math.random());
+		}, 200);
+		this.rerender(Math.random());
+	}
+
+	unmaximize(x: number, y: number, w: number, h: number) {
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+		this.useTransition = true;
+		setTimeout(() => {
+			this.useTransition = false;
+			this.rerender(Math.random());
+		}, 200);
+		this.rerender(Math.random());
+	}
+
+	unmaximizeInstantly(x: number, y: number, w: number, h: number) {
+		this.x = x;
+		this.y = y;
+		this.width = w;
+		this.height = h;
+		this.rerender(Math.random());
+	}
+
 }
