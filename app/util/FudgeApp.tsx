@@ -16,14 +16,16 @@ export type FudgeApp = {
 	windowInstance: FudgeWindow | null,
 }
 
-export function makeApp(
+export function makeAppSized(
 	title: string,
+	width: number,
+	height: number,
 	content: () => React.ReactNode
 ): FudgeApp {
 	return {
 		title,
-		defaultWidth: 800,
-		defaultHeight: 600,
+		defaultWidth: width,
+		defaultHeight: height,
 		getContent: content,
 		isOpen: false,
 		isMinimized: true,
@@ -34,6 +36,13 @@ export function makeApp(
 		unminimizedY: 0,
 		windowInstance: null
 	}
+}
+
+export function makeApp(
+	title: string,
+	content: () => React.ReactNode
+): FudgeApp {
+	return makeAppSized(title, 800, 600, content);
 }
 
 export function startApp(app: FudgeApp, surfaceWidth: number, surfaceHeight: number, forceRerender: Dispatch<SetStateAction<number>>): FudgeApp {
