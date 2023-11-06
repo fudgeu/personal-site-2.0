@@ -45,7 +45,7 @@ export default function About() {
 						</div>
 					</div>
 					<p>
-						I'm a current college student at UCF, studying computer science - I love designing great user
+						I&apos;m a current college student at UCF, studying computer science - I love designing great user
 						interfaces and creating products that are both simple to use yet powerful. On top of that, I
 						also love to experiment and create things both utterly useless and full of potential!
 					</p>
