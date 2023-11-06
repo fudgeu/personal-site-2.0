@@ -28,9 +28,7 @@ export default function About() {
 				{generateHeader()}
 			</div>
 			<div className={styles.content}>
-				<Marquee className={styles.topDecorationContainer} autoFill speed={20} direction='right'>
-					<div className={styles.topDecoBox} />
-				</Marquee>
+				
 				<section className={styles.section}>
 					<div className={styles.firstHeaderContainer}>
 						<h2>WELCOME!</h2>
