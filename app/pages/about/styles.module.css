@@ -34,6 +34,8 @@
 	flex-direction: column;
 	padding: 4rem;
 	gap: 4rem;
+	width: 100%;
+	overflow-y: auto;
 }
 
 .topDecorationContainer {
@@ -45,10 +47,6 @@
 	height: 1rem;
 	background-color: var(--accent-color);
 	margin-right: 1rem;
-}
-
-.section {
-
 }
 
 .firstHeaderContainer {
@@ -116,14 +114,23 @@
 	transform: translate(57px, 8px);
 }
 
-.section h2 {
-	font-size: 2.5rem;
-	font-style: italic;
+.section {
+	max-width: 50rem;
 }
 
-.section p {
-	padding-left: 0.25rem;
+.sectionContent {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
 	font-family: 'Source Code Pro', monospace;
 	text-transform: uppercase;
 	color: white;
+	padding-left: 0.2rem;
+}
+
+.section h2 {
+	font-size: 2.5rem;
+	font-style: italic;
+	color: var(--accent-color);
+	font-family: 'Rubik Mono One', monospace;
 }

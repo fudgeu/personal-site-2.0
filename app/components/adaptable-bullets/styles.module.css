@@ -1,0 +1,12 @@
+.list {
+  display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	max-width: 32rem;
+}
+
+.list>li {
+  list-style-position: inside;
+	min-width: 16rem;
+	max-width: 16rem;
+}

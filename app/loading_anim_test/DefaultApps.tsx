@@ -2,12 +2,14 @@ import styles from './app-styles.module.css'
 import ShadowGL from "../rat/RatGL/RatGL";
 import { makeApp, makeAppSized } from "../util/FudgeApp";
 import About from '../pages/about/About';
+import Contact from '../pages/contact/Contact';
+import Projects from '../pages/projects/Projects';
 
 export const defaultApps = [
 	makeAppSized("About", 1200, 800, () => <About />),
-	makeApp("Projects", () => <ShadowGL />),
+	makeApp("Projects", () => <Projects />),
 	makeApp("Education", () => <iframe className={styles.iframe} src="https://firecade.neocities.org" />),
-	makeApp("Contact", () => <iframe src="https://scratch.mit.edu/projects/392505255/embed" width="800" height="600"></iframe>),
+	makeApp("Contact", () => <Contact />),
 	makeApp("fish", () => (
 		<div className={styles.windowContentContainer}>
 			<p>Congratulations, you are our lucky winner!</p>
