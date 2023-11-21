@@ -9,7 +9,7 @@ const projects: ProjectProps[] = [
 		description: "A Minecraft mod rewriting the in-game music system, allowing for complete control over what and how music plays. Amongst the settings offered to players are the ability to control the time between songs, as well as the conditions under which song is played.",
 		images: ["https://www.fudgeu.dev/playlist1.png", "https://www.fudgeu.dev/playlist1.png", "https://www.fudgeu.dev/playlist1.png"],
 		imageAlt: "test",
-		buttons: [{type: "github", text: "test", link: "google.com"}],
+		buttons: [{type: "github", text: "Curseforge", link: "google.com"}, {type: "github", text: "Github", link: "google.com"}],
 	},
 	{
 		title: "Refont",
@@ -61,7 +61,7 @@ export default function Projects() {
 			</header>
 			<main className={styles.content}>
 				{projects.map((p) => (
-					<Project key={p.title} title={p.title} description={p.description} images={p.images} buttons={p.buttons} />
+					<Project key={p.title} title={p.title} description={p.description} images={p.images} imageAlt={p.imageAlt} buttons={p.buttons} />
 				))}
 			</main>
 		</div>
