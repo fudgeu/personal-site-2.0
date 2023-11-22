@@ -1,10 +1,17 @@
+/* eslint-disable @next/next/no-img-element */
 import Marquee from 'react-fast-marquee';
 import styles from './styles.module.css';
 import { useCallback, useRef, useState } from 'react';
 import clsx from 'clsx';
 
 type ProjectButtonProps = {
-	from: ProjectButton
+	from: ProjectButtonInfo
+}
+
+const iconLookupTable: {[key in ProjectButtonType as string]: string} = {
+	'github': 'projects/github-mark.svg',
+	'curseforge': 'projects/curseforge.svg',
+	'other': 'projects/globe.svg',
 }
 
 export default function ProjectButton({ from }: ProjectButtonProps) {
@@ -59,10 +66,10 @@ export default function ProjectButton({ from }: ProjectButtonProps) {
 		
 		return (
 			<div className={styles.floatingBox} style={resultingStyle}>
-				<Marquee className={styles.marquee} speed={20} autoFill direction="right"><img src="projects/github-mark.svg" /></Marquee>
+				<Marquee className={styles.marquee} speed={20} autoFill direction="right"><img src={iconLookupTable[from.type]} alt="" /></Marquee>
 			</div>
 		)
-	}, []);
+	}, [from.type]);
 
 	const handleMouseOut = useCallback(() => {
 		setIsHovered(false);
@@ -70,11 +77,12 @@ export default function ProjectButton({ from }: ProjectButtonProps) {
 	}, [])
 
 	return (
-		<button
+		<a
 			className={styles.button}
 			type="button"
 			onMouseOver={() => setIsHovered(true)}
 			onMouseOut={handleMouseOut}
+			href={from.link}
 		>
 			{from.text}
 			{
@@ -85,6 +93,6 @@ export default function ProjectButton({ from }: ProjectButtonProps) {
 				{generateFloatingBox(3)}
 				</>
 			}
-		</button>
+		</a>
 	)
 }

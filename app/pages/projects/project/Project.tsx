@@ -7,7 +7,7 @@ export type ProjectProps = {
 	description: string,
 	images: string[],
 	imageAlt: string,
-	buttons: ProjectButton[]
+	buttons: ProjectButtonInfo[]
 }
 
 export default function Project({ title, description, images, imageAlt, buttons }: ProjectProps) {
