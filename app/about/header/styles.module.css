@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  min-width: 25rem;
+  max-width: 25rem;
+  border-right: solid 0.25rem var(--accent-color);
+}
+
+.marquee {
+  transform: scaleX(2) rotate(45deg) !important;
+  font-size: 2rem;
+  min-height: 4.5rem;
+  overflow: hidden;
+  -webkit-text-stroke: var(--accent-color) 0.1rem;
+  color: transparent;
+}
+
+.marqueeFilled {
+  composes: marquee;
+  -webkit-text-stroke: 0;
+  color: var(--accent-color);
+}

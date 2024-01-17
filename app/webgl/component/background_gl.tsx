@@ -6,7 +6,7 @@ import {
 import initShaderProgram, { ProgramInfo } from '@/app/webgl/Shaders';
 import drawScene from '@/app/webgl/DrawScene';
 import {
-	World,
+  World,
   WorldObject
 } from '@/app/webgl/World';
 import { Object3D, createObject } from '@/app/webgl/Object3D';
@@ -20,19 +20,42 @@ type ModelResult = {
 };
 
 type MainGLProps = {
-	mouseX: number,
-	mouseY: number,
-	model: string,
-}
+  model: string,
+};
 
-let lastUsedShape = "torus"
-let then = 0
-let introAnimProgress = 1
+let lastUsedShape = 'torus';
+let then = 0;
+let introAnimProgress = 1;
 
-export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
+export default function BackgroundGL({ model }: MainGLProps) {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const [world, _] = useState(new World());
-	const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0});
+
+  /* Parallax effect */
+  const doParallaxEffect = useCallback(() => {
+    world.getObjects().forEach(({ worldPosition }: WorldObject) => {
+      const xOffset = lastMousePos.current.x - mousePos.current.x;
+      const yOffset = lastMousePos.current.y - mousePos.current.y;
+      mat4.translate(
+        worldPosition,
+        worldPosition,
+        [0.0004 * xOffset, -0.0004 * yOffset, 0]
+      );
+    });
+  }, [world]);
+
+  /* Mouse pos */
+  const mousePos = useRef({x: 0, y: 0});
+  const lastMousePos = useRef({x: 0, y: 0});
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      lastMousePos.current = mousePos.current;
+      mousePos.current = {x: event.clientX, y: event.clientY};
+      doParallaxEffect();
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  });
 
   const ref = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -40,30 +63,28 @@ export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
 
   // Render WebGL
   const render = useCallback((now: number, gl: WebGLRenderingContext, prgmInfo: ProgramInfo) => {
-		now *= 0.001
-		const delta = now - then
-		then = now
+    now *= 0.001;
+    const delta = now - then;
+    then = now;
 
-		// rotate shape
-		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-			mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1])
-			mat4.translate(worldPosition, worldPosition, [0.01, 0, 0]);
+    // rotate shape
+    world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
+      mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1]);
+      mat4.translate(worldPosition, worldPosition, [0.01, 0, 0]);
 
-			if (introAnimProgress < 100) {
-				mat4.translate(worldPosition, worldPosition, [0, 0, -(0.02 * introAnimProgress * (100 - introAnimProgress)) * delta])
-			}
+      if (introAnimProgress < 100) {
+        mat4.translate(worldPosition, worldPosition, [0, 0, -(0.02 * introAnimProgress * (100 - introAnimProgress)) * delta]);
+      }
 
-			if (worldPosition[12] > 100) {
-				worldPosition[12] = -100
-			}
-		});
+      if (worldPosition[12] > 100) {
+        worldPosition[12] = -100;
+      }
+    });
 
-		introAnimProgress += (0.02 * introAnimProgress * (100 - introAnimProgress)) * delta
+    introAnimProgress += (0.02 * introAnimProgress * (100 - introAnimProgress)) * delta;
 
     drawScene(gl, prgmInfo, world);
-    animationRequestRef.current = requestAnimationFrame(
-      (newTime) => render(newTime, gl, prgmInfo),
-    );
+    animationRequestRef.current = requestAnimationFrame((newTime) => render(newTime, gl, prgmInfo),);
   }, []);
 
   // Init WebGL
@@ -81,11 +102,9 @@ export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
     [],
   );
 
-	// Load Shader
+  // Load Shader
   const loadShader = useCallback(
-    async (
-      gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc: string,
-    ): Promise<ProgramInfo> => {
+    async (gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc: string,): Promise<ProgramInfo> => {
       const [vertexResponse, fragmentResponse] = await Promise.all([
         fetch(vertexSrc),
         fetch(fragmentSrc),
@@ -112,7 +131,7 @@ export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
         attribLocations: {
           vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
           vertexNormal: gl.getAttribLocation(shaderProgram, 'aVertexNormal'),
-					barycentricCoords: gl.getAttribLocation(shaderProgram, 'aBarycentricCoords')
+          barycentricCoords: gl.getAttribLocation(shaderProgram, 'aBarycentricCoords')
         },
         uniformLocations: {
           projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
@@ -125,16 +144,16 @@ export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
     [],
   );
 
-	// Load World
+  // Load World
   const loadWorld = useCallback(
     (gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
       world.clearObjects();
 
-			const modelsArray = Array.from(models.values());
+      const modelsArray = Array.from(models.values());
       for (let i = 0; i < 400; i++) {
         const model = modelsArray[Math.floor(Math.random() * modelsArray.length)];
         const worldObj = createObject(gl, model);
-				if (worldObj == null) continue;
+        if (worldObj == null) continue;
         mat4.rotate(worldObj.localPosition, worldObj.localPosition, Math.PI / 2, [1, 1, 0]);
 
         const scale = 0.1;
@@ -158,25 +177,25 @@ export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
     // load gl
     const gl = ref.current?.getContext('webgl');
     if (gl == null) return () => {};
-		gl.getExtension('OES_standard_derivatives')
+    gl.getExtension('OES_standard_derivatives');
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // load models, then world
 
-		let loadList = []
-		if (model === "all") {
-			loadList = [
-				loadModel(gl, 'sphere', './sphere.obj'),
-      	loadModel(gl, 'cube', './cube.obj'),
-      	loadModel(gl, 'ico', './ico.obj'),
-      	loadModel(gl, 'torus', './torus.obj'),
-			]
-		} else {
-			loadList = [
-				loadModel(gl, model, `./${model}.obj`)
-			]
-		}
+    let loadList = [];
+    if (model === 'all') {
+      loadList = [
+        loadModel(gl, 'sphere', './sphere.obj'),
+        loadModel(gl, 'cube', './cube.obj'),
+        loadModel(gl, 'ico', './ico.obj'),
+        loadModel(gl, 'torus', './torus.obj'),
+      ];
+    } else {
+      loadList = [
+        loadModel(gl, model, `./${model}.obj`)
+      ];
+    }
 
     Promise.all([
       ...loadList
@@ -196,9 +215,7 @@ export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
     // load shader, then begin render
     loadShader(gl, './vertex.glsl', './fragment.glsl')
       .then((programInfo) => {
-        animationRequestRef.current = requestAnimationFrame(
-          (time) => render(time, gl, programInfo),
-        );
+        animationRequestRef.current = requestAnimationFrame((time) => render(time, gl, programInfo),);
       })
       .catch((err) => {
         console.error(`Failed to initialize WebGL - shader init failed: ${err}`);
@@ -219,32 +236,6 @@ export default function BackgroundGL({ mouseX, mouseY, model }: MainGLProps) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [setContainerDimensions]);
-
-	// Handle mouse movement
-	useEffect(() => {
-		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-			const xOffset = lastMousePos.x - mouseX
-			const yOffset = lastMousePos.y - mouseY
-			mat4.translate(
-				worldPosition,
-				worldPosition,
-				[0.0004 * xOffset, -0.0004 * yOffset, 0]
-			)
-			/*mat4.rotate(
-				worldPosition,
-				worldPosition,
-				0.0001 * xOffset,
-				[0, 1, 0]
-			)
-			mat4.rotate(
-				worldPosition,
-				worldPosition,
-				0.0001 * yOffset,
-				[1, 0, 0]
-			)*/
-		});
-		setLastMousePos({x: mouseX, y: mouseY});
-	}, [lastMousePos.x, lastMousePos.y, mouseX, mouseY, world])
 
   return (
     <div className={styles.bkgContainer} ref={containerRef}>

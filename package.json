@@ -8,19 +8,25 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "type": "module",
   "dependencies": {
     "@types/node": "20.5.8",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "clsx": "^2.0.0",
-    "eslint": "8.48.0",
-    "eslint-config-next": "13.4.19",
     "gl-matrix": "^3.4.3",
     "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-fast-marquee": "^1.6.0",
-    "typescript": "5.2.2",
     "webgl-obj-loader": "^2.0.8"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.5.3",
+    "@stylistic/eslint-plugin-js": "^1.5.3",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "typescript": "^5.3.3"
   }
 }
