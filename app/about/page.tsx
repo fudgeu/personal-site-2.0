@@ -6,7 +6,7 @@ import Header from '@/app/about/header/Header';
 export default function AboutPage() {
   return (
     <div className={styles.container}>
-      <Window title="About" redirectOnClose="loading_anim_test">
+      <Window title="About" redirectOnClose="/home">
         <div className={styles.about}>
 
           {/* Header */}

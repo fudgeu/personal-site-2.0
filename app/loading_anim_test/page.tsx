@@ -1,18 +1,16 @@
 'use client';
 
 import { Dispatch, RefObject, SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import styles from './styles.module.css';
 import clsx from 'clsx';
-import BackgroundGL from '../webgl/component/background_gl';
 import Marquee from 'react-fast-marquee';
 import GLView2 from '../webgl/component/GLView2';
 import Window from '../components/window/Window';
 import FudgeWindow from '../util/FudgeWindow';
-import ShadowGL from '../rat/RatGL/RatGL';
 import { FudgeApp, closeApp, maximizeApp, minimizeApp, minimizeAppTo, onDrag, startApp, unminimizeApp } from '../util/FudgeApp';
 import { defaultApps } from './DefaultApps';
-import Link from "next/link";
+import Link from 'next/link';
 
 type TerminalEvent = {
   action: () => void,
@@ -56,6 +54,8 @@ export default function TestPage() {
   const [windows, setWindows] = useState<FudgeWindow[]>([]);
 
   const searchParams = useSearchParams();
+
+  const router = useRouter();
 
   const taskbarRefs: { [key: string]: HTMLDivElement | null } = {};
 
@@ -456,42 +456,10 @@ export default function TestPage() {
     });
 
     eventList.push({
-      action: () => { setTaskbarState(ElementAnimState.Loading); },
+      action: () => { router.push('about'); },
       text: '',
-      timeout: 10
+      timeout: 200,
     });
-
-    eventList.push({
-      action: () => { setSpawnWindow(true); },
-      text: '',
-      timeout: 10
-    });
-
-    eventList.push({
-      action: () => {
-        const title = 'About';
-        setApplications(applications.map((a) => {
-          if (a.title == title) return startApp(a, window.innerWidth, window.innerHeight, forceRerender);
-          return a;
-        }));
-        setTimeout(() => {
-          setApplications((apps) => apps.map((a) => {
-            if (a.title == title) return unminimizeApp(a);
-            return a;
-          }));
-        }, 100);
-        // const toX = ((taskBarIconRef.current?.getBoundingClientRect().left || 0) + (taskBarIconRef.current?.getBoundingClientRect().right || 0) / 2);
-        // const toY = ((taskBarIconRef.current?.getBoundingClientRect().top || 0) + (taskBarIconRef.current?.getBoundingClientRect().bottom || 0) / 2);
-        // wind.minimizeTo(toX, toY)
-        // setWindows((cur) => {
-        // 	cur.push(wind)
-        // 	return cur;
-        // });
-      },
-      text: '',
-      timeout: 150
-    });
-
 
     processTerminalEvent(eventList);
   }, [processTerminalEvent]);
