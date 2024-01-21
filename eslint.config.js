@@ -2,6 +2,7 @@ import stylistic from '@stylistic/eslint-plugin';
 import parserTs from '@typescript-eslint/parser';
 import reactRecommended from 'eslint-plugin-react/configs/recommended.js';
 import reactJsxRuntime from 'eslint-plugin-react/configs/jsx-runtime.js';
+import reactHooks from 'eslint-plugin-react-hooks/cjs/eslint-plugin-react-hooks.development.js';
 import js from '@eslint/js';
 
 export default [
@@ -9,12 +10,23 @@ export default [
     ...reactRecommended,
     ...reactJsxRuntime,
     ...js.configs.recommended,
-    'plugins': { stylistic },
-    'languageOptions': {
-      'parser': parserTs,
+  },
+  {
+    plugins: { 'react-hooks': reactHooks }, // react hooks' config are not yet flat config ready
+    rules: reactHooks.configs.recommended.rules,
+  },
+  {
+    ...stylistic.configs.customize({
+      semi: true,
+      quotes: 'single',
+      arrowParens: true,
+      braceStyle: '1tbs',
+    }),
+    languageOptions: {
+      parser: parserTs,
     },
-    'files': ['**/*.js', '**/*.ts', '**/*.jsx', '**/*.tsx'],
-    'rules': {
+    files: ['**/*.js', '**/*.ts', '**/*.jsx', '**/*.tsx'],
+    /* 'rules': {
       'stylistic/semi': 'error',
       'stylistic/array-bracket-spacing': [
         'error',
@@ -58,6 +70,30 @@ export default [
       'stylistic/indent': ['error', 2],
       'stylistic/object-curly-spacing': ['error', 'always'],
       'no-unused-vars': 'warn',
-    }
-  }
+    } */
+  },
+  {
+    plugins: { stylistic },
+    languageOptions: {
+      parser: parserTs,
+    },
+    files: ['**/*.js', '**/*.ts', '**/*.jsx', '**/*.tsx'],
+    rules: {
+      '@stylistic/jsx-closing-bracket-location': 'off', // makes writing with clsx cleaner
+      '@stylistic/member-delimiter-style': [
+        'error',
+        {
+          multiline: {
+            delimiter: 'comma',
+            requireLast: true,
+          },
+          singleline: {
+            delimiter: 'comma',
+            requireLast: false,
+          },
+          multilineDetection: 'brackets',
+        },
+      ],
+    },
+  },
 ];

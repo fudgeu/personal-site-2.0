@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import {ReactNode} from 'react';
+import { ReactNode } from 'react';
 import BackgroundGL from '@/app/webgl/component/background_gl';
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: {
-  children: ReactNode
+  children: ReactNode,
 }) {
   return (
     <html lang="en">

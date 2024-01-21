@@ -6,31 +6,18 @@ import Marquee from 'react-fast-marquee';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-type SequenceStep = {
-  action: () => void,
-  iterations?: number,
-  wait?: number,
-};
-
-enum ElementState {
-  HIDDEN,
-  ENTER,
-  SHOWN,
-  EXIT,
-};
-
 const maxAmtSubTitles = 7;
 const numNavItems = 6;
 
 export default function Home() {
   /* Animation states */
-  const [titleTextState, setTitleTextState] = useState(ElementState.HIDDEN);
+  const [titleTextState, setTitleTextState] = useState<ElementState>('HIDDEN');
   const [amtSubTitles, setAmtSubTitles] = useState(0);
-  const [scrollingBinaryState, setScrollingBinaryState] = useState(ElementState.HIDDEN);
-  const [contentContainerState, setContentContainerState] = useState(ElementState.HIDDEN);
+  const [scrollingBinaryState, setScrollingBinaryState] = useState<ElementState>('HIDDEN');
+  const [contentContainerState, setContentContainerState] = useState<ElementState>('HIDDEN');
   const [navItemsState, setNavItemsState] = useState(0); // nav items only have an intro anim
-  const [topRightDecoState, setTopRightDecoState] = useState(ElementState.HIDDEN);
-  const [bottomDecoState, setBottomDecoState] = useState(ElementState.HIDDEN);
+  const [topRightDecoState, setTopRightDecoState] = useState<ElementState>('HIDDEN');
+  const [bottomDecoState, setBottomDecoState] = useState<ElementState>('HIDDEN');
 
   /* Router */
   const router = useRouter();
@@ -48,13 +35,13 @@ export default function Home() {
   }, []);
 
   const introSequence: SequenceStep[] = useMemo(() => [
-    { action: () => setTitleTextState(ElementState.ENTER) },
+    { action: () => setTitleTextState('ENTER') },
     { action: () => setAmtSubTitles((prev) => prev + 1), iterations: maxAmtSubTitles },
-    { action: () => setScrollingBinaryState(ElementState.ENTER) },
-    { action: () => setContentContainerState(ElementState.ENTER) },
+    { action: () => setScrollingBinaryState('ENTER') },
+    { action: () => setContentContainerState('ENTER') },
     { action: () => setNavItemsState((prev) => prev + 1), iterations: numNavItems },
-    { action: () => setTopRightDecoState(ElementState.ENTER) },
-    { action: () => setBottomDecoState(ElementState.ENTER) },
+    { action: () => setTopRightDecoState('ENTER') },
+    { action: () => setBottomDecoState('ENTER') },
   ], []);
 
   useEffect(() => {
@@ -63,9 +50,9 @@ export default function Home() {
 
   /* Animation outro */
   const outroSequence: SequenceStep[] = useMemo(() => [
-    { action: () => setTitleTextState(ElementState.EXIT) },
-    { action: () => setScrollingBinaryState(ElementState.EXIT) },
-    { action: () => setContentContainerState(ElementState.EXIT) },
+    { action: () => setTitleTextState('EXIT') },
+    { action: () => setScrollingBinaryState('EXIT') },
+    { action: () => setContentContainerState('EXIT') },
   ], []);
 
   const doExitAnimations = useCallback(() => {
@@ -92,9 +79,9 @@ export default function Home() {
       {/* Title Text */}
       <div className={clsx({
         [styles.titleTextContainer]: true,
-        [styles.titleTextContainter_enter]: titleTextState === ElementState.ENTER,
-        [styles.titleTextContainer_exit]: titleTextState === ElementState.EXIT,
-        [styles.hide]: titleTextState === ElementState.HIDDEN,
+        [styles.titleTextContainter_enter]: titleTextState === 'ENTER',
+        [styles.titleTextContainer_exit]: titleTextState === 'EXIT',
+        [styles.hide]: titleTextState === 'HIDDEN',
       })}>
         <span className={styles.subTitleTextTop}>
           {getSubtexts()}
@@ -110,9 +97,9 @@ export default function Home() {
       {/* Scrolling Binary Text */}
       <div className={clsx({
         [styles.scrollingBinaryContainer]: true,
-        [styles.scrollingBinaryContainer_exit]: scrollingBinaryState === ElementState.EXIT,
-        [styles.scrollingBinaryContainer_enter]: scrollingBinaryState === ElementState.ENTER,
-        [styles.hide]: scrollingBinaryState === ElementState.HIDDEN,
+        [styles.scrollingBinaryContainer_exit]: scrollingBinaryState === 'EXIT',
+        [styles.scrollingBinaryContainer_enter]: scrollingBinaryState === 'ENTER',
+        [styles.hide]: scrollingBinaryState === 'HIDDEN',
       })}>
         <Marquee autoFill speed={10} direction="right">011011000110111101101100001000000110011101100101011101000010000001110000011100100110000101101110011010110110010101100100</Marquee>
       </div>
@@ -120,8 +107,8 @@ export default function Home() {
       {/* Content Container */}
       <div className={clsx({
         [styles.contentContainer]: true,
-        [styles.contentContainer_enter]: contentContainerState === ElementState.ENTER,
-        [styles.contentContainer_exit]: contentContainerState === ElementState.EXIT,
+        [styles.contentContainer_enter]: contentContainerState === 'ENTER',
+        [styles.contentContainer_exit]: contentContainerState === 'EXIT',
       })}>
 
         {/* Subheader */}
@@ -156,9 +143,10 @@ export default function Home() {
                 [styles.navItem_enter]: navItemsState >= 3,
                 [styles.hide]: navItemsState < 3,
               })}>
-                <a className={styles.navLink} href="rat">
-                  <span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>ABOUT ME</span>
-                </a>
+                <button className={styles.navLink} onClick={() => goTo('/about')}>
+                  <span className={styles.navItemArrow}>&gt;</span>
+                  <span className={styles.navItemText}>ABOUT ME</span>
+                </button>
               </li>
 
               <li className={clsx({
@@ -166,9 +154,10 @@ export default function Home() {
                 [styles.navItem_enter]: navItemsState >= 4,
                 [styles.hide]: navItemsState < 4,
               })}>
-                <a className={styles.navLink} href="shadow">
-                  <span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>PROJECTS</span>
-                </a>
+                <button className={styles.navLink} onClick={() => goTo('/projects')}>
+                  <span className={styles.navItemArrow}>&gt;</span>
+                  <span className={styles.navItemText}>PROJECTS</span>
+                </button>
               </li>
 
               <li className={clsx({
@@ -176,8 +165,9 @@ export default function Home() {
                 [styles.navItem_enter]: navItemsState >= 5,
                 [styles.hide]: navItemsState < 5,
               })}>
-                <button className={styles.navLink} onClick={() => goTo('/about')}>
-                  <span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>EDUCATION</span>
+                <button className={styles.navLink} onClick={() => goTo('/education')}>
+                  <span className={styles.navItemArrow}>&gt;</span>
+                  <span className={styles.navItemText}>EDUCATION</span>
                 </button>
               </li>
 
@@ -186,8 +176,9 @@ export default function Home() {
                 [styles.navItem_enter]: navItemsState >= 6,
                 [styles.hide]: navItemsState < 6,
               })}>
-                <button className={styles.navLink} onClick={() => goTo('/about')}>
-                  <span className={styles.navItemArrow}>&gt;</span><span className={styles.navItemText}>CONTACT</span>
+                <button className={styles.navLink} onClick={() => goTo('/contact')}>
+                  <span className={styles.navItemArrow}>&gt;</span>
+                  <span className={styles.navItemText}>CONTACT</span>
                 </button>
               </li>
 
@@ -244,8 +235,8 @@ export default function Home() {
       {/* Bottom Decoration */}
       <div className={clsx({
         [styles.bottomDecoration]: true,
-        [styles.bottomDecoration_enter]: bottomDecoState === ElementState.ENTER,
-        [styles.hide]: bottomDecoState === ElementState.HIDDEN,
+        [styles.bottomDecoration_enter]: bottomDecoState === 'ENTER',
+        [styles.hide]: bottomDecoState === 'HIDDEN',
       })}>
         <div className={styles.bottomDecoBox} />
         <div className={styles.bottomDecoBox} />

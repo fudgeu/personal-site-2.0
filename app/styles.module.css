@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
+
+.hidden {
+	display: none;
+}
+
+.main {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	background-color: transparent;
+	perspective: 2000px;
+}
+
+.greenText {
+	color: var(--accent-color)
+}
+
+.terminalContainer {
+	position: absolute;
+	font-family: 'Source Code Pro', monospace;
+	padding: 0.5rem 0.5rem;
+	transition: transform 2s, filter 1s, opacity 2s;
+}
+
+.terminalContainer_exit {
+	transform: scale(0.9);
+	filter: blur(10px);
+	opacity: 0;
+}
+
+.lines {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	pointer-events: none;
+	z-index: 300;
+	opacity: 0.05;
+}
+	 
+.lines:before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	pointer-events: none;
+	background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, .5) 51%);
+	background-size: 100% 4px;
+	will-change: background, background-size;
+	animation: scanlines 0.2s linear infinite;
+	transform: rotate(5deg);
+}

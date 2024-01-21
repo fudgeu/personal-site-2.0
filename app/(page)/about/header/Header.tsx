@@ -10,7 +10,7 @@ export default function Header() {
     const array = Array(15);
     for (let i = 0; i < 15; i++) {
       const dir = (i % 2 == 0) ? 'left' : 'right';
-      array[i] = <Marquee className={styles.marquee} autoFill speed={20} direction={dir}><h1>ABOUT ME&nbsp;</h1></Marquee>;
+      array[i] = <Marquee key={i} className={styles.marquee} autoFill speed={20} direction={dir}><h1>ABOUT ME&nbsp;</h1></Marquee>;
     }
     return array;
   }, []);
@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <div className={styles.header}>
       {generateHeader()}
-      <Marquee className={styles.marqueeFilled} autoFill speed={20} direction='right'><h1>ABOUT ME&nbsp;</h1></Marquee>
+      <Marquee className={styles.marqueeFilled} autoFill speed={20} direction="right"><h1>ABOUT ME&nbsp;</h1></Marquee>
       {generateHeader()}
     </div>
   );

@@ -1,7 +1,7 @@
 import Marquee from 'react-fast-marquee'
 import styles from './styles.module.css'
 import { useEffect, useState } from 'react';
-import Project, { ProjectProps } from './project/Project';
+import Project, { ProjectProps } from '@/app/(page)/projects/project/Project';
 
 const projects: ProjectProps[] = [
 	{
