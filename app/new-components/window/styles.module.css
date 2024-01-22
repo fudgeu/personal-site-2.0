@@ -58,6 +58,7 @@
 }
 
 .content {
+  position: relative;
   border: inset 3px var(--accent-color);
   flex-grow: 1;
   overflow: auto;
