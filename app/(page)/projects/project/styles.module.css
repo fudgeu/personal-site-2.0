@@ -15,7 +15,10 @@
 	width: max-content;
 	background-color: var(--accent-color);
 	color: black;
-	font-size: 1.5rem;
+}
+
+.title h2 {
+	font-size: 2rem;
 }
 
 .description {
