@@ -1,6 +1,8 @@
 .container {
+  position: relative;
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
 }
 
 .contentContainer {
@@ -16,10 +18,11 @@
 }
 
 .content {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
+  padding: 3rem;
   width: 35rem;
   background-color: black;
   border: solid 0.1rem var(--accent-color);
@@ -56,6 +59,36 @@
   background-color: black;
   animation-name: floatingBoxIntro;
   animation-duration: 0.1s;
+  justify-content: center;
+  align-items: center;
+  transform: skewX(-10deg);
+
+}
+
+.floatingBoxBkg {
+  composes: floatingBox;
+  filter: blur(0.25rem) brightness(40%);
+}
+
+.backgroundDecorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+.backgroundIcon {
+  animation-name: floatingBoxIntro;
+  animation-duration: 0.1s;
+  filter: blur(0.2rem) brightness(40%);
+}
+
+.backgroundIcon img {
+  width: 7rem;
+  height: 7rem;
 }
 
 .marquee {
@@ -67,6 +100,36 @@
   display: flex; /* flex has the magical power to fix everything. for some reason */
   height: 3rem;
   margin: 0 0.25rem;
+}
+
+.marqueeImg {
+  display: flex;
+}
+
+.lines {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 300;
+  opacity: 0.05;
+}
+
+.lines:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, .5) 51%);
+  background-size: 100% 4px;
+  will-change: background, background-size;
+  animation: scanlines 0.2s linear infinite;
+  transform: rotate(5deg);
 }
 
 @keyframes floatingBoxIntro {
@@ -89,5 +152,16 @@
     transform: skewX(-10deg);
   }
   100% {
+  }
+}
+
+@keyframes scanlines {
+  from {
+    background: linear-gradient(to bottom, transparent 10%, rgba(0, 0, 0, .5) 51%);
+    background-size: 100% 10px;
+  }
+  to {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 50%, transparent 51%);
+    background-size: 100% 10px;
   }
 }
