@@ -21,7 +21,7 @@ export default function Contact() {
 
   /* Pixel size of 1rem */
   const unitRem = useMemo(() => {
-    if (getComputedStyle == null) return 0; // function does not exist while performing server-sided rendering
+    if (typeof getComputedStyle === 'undefined') return 0; // function does not exist while performing server-sided rendering
     return Number(getComputedStyle(document.documentElement).fontSize.slice(0, -2));
   }, []);
 
