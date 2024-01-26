@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './styles.module.css';
 import clsx from 'clsx';
+import { Sequence, useSequence } from 'use-sequence';
+import { ElementState } from '@/types/types';
 
 export default function TestPage() {
   const [textList, setTextList] = useState<string[]>([]);
@@ -23,18 +25,9 @@ export default function TestPage() {
     });
   }, []);
 
-  const doSequence = useCallback((sequence: SequenceStep[], defaultWait: number) => {
-    if (!sequence[0]) return; // base case
-    sequence[0].action();
-    if (sequence[0].iterations && sequence[0].iterations > 1) {
-      sequence[0].iterations -= 1;
-      setTimeout(() => doSequence(sequence, defaultWait), sequence[0].wait || defaultWait);
-    } else {
-      setTimeout(() => doSequence(sequence.slice(1), defaultWait), sequence[0].wait || defaultWait);
-    }
-  }, []);
+  const doSequence = useSequence();
 
-  const introSequence: SequenceStep[] = useMemo(() => [
+  const introSequence: Sequence = useMemo(() => [
     { action: () => addTerminalText('RUNNING MEMORY TEST...'), wait: 100 },
     { action: () => addTerminalText('MEMORY TEST OK') },
     { action: () => addTerminalText('KEYBOARD OK') },

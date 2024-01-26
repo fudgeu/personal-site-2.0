@@ -14,6 +14,7 @@
 
 /* Header/Title */
 .titleTextContainer {
+  --titleSize: 6rem;
   font-size: 6rem;
   align-self: center;
   border-left: solid 5rem var(--accent-color);
@@ -139,7 +140,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  max-width: 65rem;
+  max-width: 40rem;
+  padding-right: 7rem;
   font-size: 1.25rem;
   color: white;
 }
@@ -266,52 +268,52 @@
 /* Keyframe animations */
 @keyframes titleTextGlitch {
   0% {
-    line-height: 10rem;
+    line-height: calc(var(--titleSize) * 1.66);
   }
   20% {
-    line-height: 10rem;
+    line-height: calc(var(--titleSize) * 1.66);
   }
   20.01% {
-    line-height: 6rem;
+    line-height: var(--titleSize);
   }
   20.5% {
-    line-height: 6rem;
+    line-height: var(--titleSize);
   }
   20.51% {
-    line-height: 10rem;
+    line-height: calc(var(--titleSize) * 1.66);
   }
   21.0% {
-    line-height: 10rem;
+    line-height: calc(var(--titleSize) * 1.66);
   }
   21.01% {
-    line-height: 6rem;
+    line-height: var(--titleSize);
   }
   21.5% {
-    line-height: 6rem;
+    line-height: var(--titleSize);
   }
   21.51% {
-    line-height: 10rem;
+    line-height: calc(var(--titleSize) * 1.66);
   }
   22% {
-    line-height: 10rem;
+    line-height: calc(var(--titleSize) * 1.66);
   }
   22.01% {
-    line-height: 6rem;
+    line-height: var(--titleSize);
   }
   50% {
-    line-height: 6rem;
+    line-height: var(--titleSize);
   }
   50.01% {
-    line-height: 16rem;
+    line-height: calc(var(--titleSize) * 2.66);
   }
   50.5% {
-    line-height: 16rem;
+    line-height: calc(var(--titleSize) * 2.66);
   }
   50.51% {
-    line-height: 10rem;
+    line-height: calc(var(--titleSize) * 1.66);
   }
   100% {
-    line-height: 10rem;
+    line-height: calc(var(--titleSize) * 1.66);
   }
 }
 
@@ -462,5 +464,51 @@
   to {
     background: linear-gradient(to bottom, rgba(0, 0, 0, .5) 50%, transparent 51%);
     background-size: 100% 6px;
+  }
+}
+
+/* Smaller window size */
+@media (max-width: 1650px) {
+  .titleTextContainer {
+    --titleSize: 4.5rem;
+    font-size: 4.5rem;
+    border-left-width: 3.5rem;
+  }
+}
+
+@media (max-width: 1400px) {
+  .titleTextContainer {
+    --titleSize: 3.5rem;
+    font-size: 3.5rem;
+    border-left-width: 2.5rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .titleTextContainer {
+    --titleSize: 2.5rem;
+    font-size: 2.5rem;
+    border-left-width: 1.5rem;
+  }
+  .navLink {
+    font-size: 2rem;
+    padding: 0.25rem 0;
+  }
+}
+
+@media (max-width: 1000px) {
+  .titleTextContainer {
+    --titleSize: 2rem;
+    font-size: 2rem;
+    border-left-width: 1rem;
+  }
+  .descriptionAndNav {
+    font-size: 1rem;
+  }
+  .subHeader_enter h2 {
+    font-size: 1.5rem;
+  }
+  .navLink {
+    font-size: 1.5rem;
   }
 }

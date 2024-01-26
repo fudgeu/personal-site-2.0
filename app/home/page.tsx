@@ -5,9 +5,11 @@ import styles from './styles.module.css';
 import Marquee from 'react-fast-marquee';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ElementState } from '@/types/types';
+import { Sequence, useSequence } from 'use-sequence';
 
-const maxAmtSubTitles = 7;
-const numNavItems = 6;
+const maxAmtSubTitles = 25;
+const numNavItems = 5;
 
 export default function Home() {
   /* Animation states */
@@ -16,31 +18,21 @@ export default function Home() {
   const [scrollingBinaryState, setScrollingBinaryState] = useState<ElementState>('HIDDEN');
   const [contentContainerState, setContentContainerState] = useState<ElementState>('HIDDEN');
   const [navItemsState, setNavItemsState] = useState(0); // nav items only have an intro anim
-  const [topRightDecoState, setTopRightDecoState] = useState<ElementState>('HIDDEN');
   const [bottomDecoState, setBottomDecoState] = useState<ElementState>('HIDDEN');
 
   /* Router */
   const router = useRouter();
 
   /* Animation intro */
-  const doSequence = useCallback((sequence: SequenceStep[], defaultWait: number) => {
-    if (!sequence[0]) return; // base case
-    sequence[0].action();
-    if (sequence[0].iterations && sequence[0].iterations > 1) {
-      sequence[0].iterations -= 1;
-      setTimeout(() => doSequence(sequence, defaultWait), sequence[0].wait || defaultWait);
-    } else {
-      setTimeout(() => doSequence(sequence.slice(1), defaultWait), sequence[0].wait || defaultWait);
-    }
-  }, []);
+  const doSequence = useSequence();
 
-  const introSequence: SequenceStep[] = useMemo(() => [
+  const introSequence: Sequence = useMemo(() => [
     { action: () => setTitleTextState('ENTER') },
-    { action: () => setAmtSubTitles((prev) => prev + 1), iterations: maxAmtSubTitles },
+    { action: () => setAmtSubTitles((prev) => prev + 1), iterations: maxAmtSubTitles, proceedAfter: 5 },
     { action: () => setScrollingBinaryState('ENTER') },
     { action: () => setContentContainerState('ENTER') },
-    { action: () => setNavItemsState((prev) => prev + 1), iterations: numNavItems },
-    { action: () => setTopRightDecoState('ENTER') },
+    { action: () => console.log('called') },
+    { action: () => setNavItemsState((prev) => prev + 1), iterations: numNavItems, wait: 50 },
     { action: () => setBottomDecoState('ENTER') },
   ], []);
 
@@ -49,7 +41,7 @@ export default function Home() {
   }, []);
 
   /* Animation outro */
-  const outroSequence: SequenceStep[] = useMemo(() => [
+  const outroSequence: Sequence = useMemo(() => [
     { action: () => setTitleTextState('EXIT') },
     { action: () => setScrollingBinaryState('EXIT') },
     { action: () => setContentContainerState('EXIT') },
@@ -62,7 +54,7 @@ export default function Home() {
   /* Prefetch links */
   useEffect(() => {
     router.prefetch('/about');
-  }, []);
+  }, [router]);
 
   /* Misc */
   const goTo = useCallback((link: string) => {
@@ -131,7 +123,7 @@ export default function Home() {
             [styles.description_enter]: navItemsState >= 2,
             [styles.hide]: navItemsState < 2,
           })}>
-            ASPIRING WEB DEVELOPER, GAME DEVELOPER, AND MAYBE MORE?
+            FULL-STACK DEVELOPER WITH A PASSION TO KEEP LEARNING
           </p>
 
           {/* Navigation */}
@@ -164,17 +156,6 @@ export default function Home() {
                 [styles.navItem]: true,
                 [styles.navItem_enter]: navItemsState >= 5,
                 [styles.hide]: navItemsState < 5,
-              })}>
-                <button className={styles.navLink} onClick={() => goTo('/education')}>
-                  <span className={styles.navItemArrow}>&gt;</span>
-                  <span className={styles.navItemText}>EDUCATION</span>
-                </button>
-              </li>
-
-              <li className={clsx({
-                [styles.navItem]: true,
-                [styles.navItem_enter]: navItemsState >= 6,
-                [styles.hide]: navItemsState < 6,
               })}>
                 <button className={styles.navLink} onClick={() => goTo('/contact')}>
                   <span className={styles.navItemArrow}>&gt;</span>
@@ -224,14 +205,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Bottom Right Decoration */}
-      <div className={clsx({
-        [styles.brCornerDecoration]: true,
-        // [styles.hide]: brCornerDecoState === ElementState.HIDE,
-      })}>
-        {/* <GLView2 mouseX={mousePos.x} mouseY={mousePos.y} /> */}
-      </div>
-
       {/* Bottom Decoration */}
       <div className={clsx({
         [styles.bottomDecoration]: true,
@@ -249,9 +222,6 @@ export default function Home() {
         <div className={styles.bottomDecoBox} />
         <div className={styles.bottomDecoBox} />
       </div>
-
-      {/* CRT effect, courtesy of greenlemon */}
-      <div className={styles.lines}></div>
     </main>
   );
 }
