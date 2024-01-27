@@ -6,7 +6,7 @@ import Marquee from 'react-fast-marquee';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ElementState } from '@/types/types';
-import { Sequence, useSequence } from '../../../../../useSequence';
+import { Sequence, useSequence } from 'use-sequence';
 
 const maxAmtSubTitles = 25;
 const numNavItems = 5;

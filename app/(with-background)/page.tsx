@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './styles.module.css';
 import clsx from 'clsx';
-import { Sequence, useSequence } from '../../../../useSequence';
+import { Sequence, useSequence } from 'use-sequence';
 import { ElementState } from '@/types/types';
 
 export default function TestPage() {
