@@ -6,7 +6,7 @@ import {
 } from 'react';
 import Marquee from 'react-fast-marquee';
 import { Bounds } from './types';
-import GetBackgroundDecoration from '@/app/(page)/contact/BackgroundDecoration';
+import GetBackgroundDecoration from '@/app/(with-background)/(page)/contact/BackgroundDecoration';
 
 export default function Contact() {
   /* Background decorations */

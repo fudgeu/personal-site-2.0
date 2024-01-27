@@ -3,13 +3,13 @@
 import {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import initShaderProgram, { ProgramInfo } from '@/app/webgl/Shaders';
-import drawScene from '@/app/webgl/DrawScene';
+import initShaderProgram, { ProgramInfo } from '@/app/new-components/webgl/Shaders';
+import drawScene from '@/app/new-components/webgl/DrawScene';
 import {
-  World,
-  WorldObject
-} from '@/app/webgl/World';
-import { Object3D, createObject } from '@/app/webgl/Object3D';
+	World,
+  WorldObject,
+} from '@/app/new-components/webgl/World';
+import { Object3D, createObject } from '@/app/new-components/webgl/Object3D';
 import { mat4 } from 'gl-matrix';
 import { MeshWithBuffers, OBJ } from 'webgl-obj-loader';
 import styles from './style.module.css';
@@ -19,73 +19,36 @@ type ModelResult = {
   id: string
 };
 
-type MainGLProps = {
-  model: string,
-};
+let lastUsedShape = "torus"
 
-let lastUsedShape = 'torus';
-let then = 0;
-let introAnimProgress = 1;
+type GLProps = {
+	mouseX: number,
+	mouseY: number,
+}
 
-export default function BackgroundGL({ model }: MainGLProps) {
+export default function GLView({ mouseX, mouseY }: GLProps) {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
-  const [world, _] = useState(new World());
+  const [world, setWorld] = useState(new World());
+	const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0});
 
-  /* Parallax effect */
-  const doParallaxEffect = useCallback(() => {
-    world.getObjects().forEach(({ worldPosition }: WorldObject) => {
-      const xOffset = lastMousePos.current.x - mousePos.current.x;
-      const yOffset = lastMousePos.current.y - mousePos.current.y;
-      mat4.translate(
-        worldPosition,
-        worldPosition,
-        [0.0004 * xOffset, -0.0004 * yOffset, 0]
-      );
-    });
-  }, [world]);
-
-  /* Mouse pos */
-  const mousePos = useRef({x: 0, y: 0});
-  const lastMousePos = useRef({x: 0, y: 0});
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      lastMousePos.current = mousePos.current;
-      mousePos.current = {x: event.clientX, y: event.clientY};
-      doParallaxEffect();
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  });
 
   const ref = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRequestRef = useRef<number>();
 
   // Render WebGL
-  const render = useCallback((now: number, gl: WebGLRenderingContext, prgmInfo: ProgramInfo) => {
-    now *= 0.001;
-    const delta = now - then;
-    then = now;
+  const render = useCallback((time: number, gl: WebGLRenderingContext, prgmInfo: ProgramInfo) => {
 
-    // rotate shape
-    world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-      mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1]);
-      mat4.translate(worldPosition, worldPosition, [0.01, 0, 0]);
-
-      if (introAnimProgress < 100) {
-        mat4.translate(worldPosition, worldPosition, [0, 0, -(0.02 * introAnimProgress * (100 - introAnimProgress)) * delta]);
-      }
-
-      if (worldPosition[12] > 100) {
-        worldPosition[12] = -100;
-      }
-    });
-
-    introAnimProgress += (0.02 * introAnimProgress * (100 - introAnimProgress)) * delta;
+		// rotate shape
+		world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
+			mat4.rotate(object.localPosition, object.localPosition, 0.005, [0, 0, 1])
+		});
 
     drawScene(gl, prgmInfo, world);
-    animationRequestRef.current = requestAnimationFrame((newTime) => render(newTime, gl, prgmInfo),);
-  }, []);
+    animationRequestRef.current = requestAnimationFrame(
+      (newTime) => render(newTime, gl, prgmInfo),
+    );
+  }, [world]);
 
   // Init WebGL
   const loadModel = useCallback(
@@ -102,9 +65,11 @@ export default function BackgroundGL({ model }: MainGLProps) {
     [],
   );
 
-  // Load Shader
+	// Load Shader
   const loadShader = useCallback(
-    async (gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc: string,): Promise<ProgramInfo> => {
+    async (
+      gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc: string,
+    ): Promise<ProgramInfo> => {
       const [vertexResponse, fragmentResponse] = await Promise.all([
         fetch(vertexSrc),
         fetch(fragmentSrc),
@@ -131,7 +96,7 @@ export default function BackgroundGL({ model }: MainGLProps) {
         attribLocations: {
           vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
           vertexNormal: gl.getAttribLocation(shaderProgram, 'aVertexNormal'),
-          barycentricCoords: gl.getAttribLocation(shaderProgram, 'aBarycentricCoords')
+					barycentricCoords: gl.getAttribLocation(shaderProgram, 'aBarycentricCoords')
         },
         uniformLocations: {
           projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
@@ -144,30 +109,29 @@ export default function BackgroundGL({ model }: MainGLProps) {
     [],
   );
 
-  // Load World
+
+	// Load World
   const loadWorld = useCallback(
     (gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
       world.clearObjects();
 
-      const modelsArray = Array.from(models.values());
-      for (let i = 0; i < 400; i++) {
-        const model = modelsArray[Math.floor(Math.random() * modelsArray.length)];
-        const worldObj = createObject(gl, model);
-        if (worldObj == null) continue;
-        mat4.rotate(worldObj.localPosition, worldObj.localPosition, Math.PI / 2, [1, 1, 0]);
-
-        const scale = 0.1;
-        mat4.scale(worldObj.localPosition, worldObj.localPosition, [scale, scale, scale]);
-
-        const x = Math.random() * 200 - 100;
-        const y = Math.random() * 100 - 50;
-        const z = -Math.random() * 100 + 85;
-
-        const objPos = mat4.create();
-        mat4.translate(objPos, objPos, [x, y, z]);
-
-        world.addObject(worldObj, objPos);
+			const circle = models.get('circles');
+			if (circle === undefined) {
+        console.log('Could not load world, circle model not loaded');
+        return;
       }
+
+			const shape2 = createObject(gl, circle);
+			if (shape2 == null) {
+				console.error("Could not create Object3D")
+				return
+			}
+      mat4.scale(shape2.localPosition, shape2.localPosition, [2, 2, 2]);
+      mat4.rotate(shape2.localPosition, shape2.localPosition, -0.75, [1, 1, 0]);
+      const shape2Pos = mat4.create();
+      mat4.translate(shape2Pos, shape2Pos, [5, -5, -10]);
+
+      world.addObject(shape2, shape2Pos);
     },
     [world],
   );
@@ -177,28 +141,13 @@ export default function BackgroundGL({ model }: MainGLProps) {
     // load gl
     const gl = ref.current?.getContext('webgl');
     if (gl == null) return () => {};
-    gl.getExtension('OES_standard_derivatives');
+		gl.getExtension('OES_standard_derivatives')
     gl.clearColor(0, 0, 0, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // load models, then world
-
-    let loadList = [];
-    if (model === 'all') {
-      loadList = [
-        loadModel(gl, 'sphere', './sphere.obj'),
-        loadModel(gl, 'cube', './cube.obj'),
-        loadModel(gl, 'ico', './ico.obj'),
-        loadModel(gl, 'torus', './torus.obj'),
-      ];
-    } else {
-      loadList = [
-        loadModel(gl, model, `./${model}.obj`)
-      ];
-    }
-
     Promise.all([
-      ...loadList
+      loadModel(gl, 'circles', './circles.obj'),
     ])
       .then((models) => {
         // register each loaded model
@@ -215,7 +164,9 @@ export default function BackgroundGL({ model }: MainGLProps) {
     // load shader, then begin render
     loadShader(gl, './vertex.glsl', './fragment.glsl')
       .then((programInfo) => {
-        animationRequestRef.current = requestAnimationFrame((time) => render(time, gl, programInfo),);
+        animationRequestRef.current = requestAnimationFrame(
+          (time) => render(time, gl, programInfo),
+        );
       })
       .catch((err) => {
         console.error(`Failed to initialize WebGL - shader init failed: ${err}`);
@@ -225,7 +176,7 @@ export default function BackgroundGL({ model }: MainGLProps) {
       if (animationRequestRef.current == null) return;
       cancelAnimationFrame(animationRequestRef.current);
     };
-  }, [loadShader, loadModel, loadWorld, render, model]);
+  }, [loadShader, loadModel, loadWorld, render]);
 
   // Handle Resize
   useEffect(() => {
@@ -238,8 +189,8 @@ export default function BackgroundGL({ model }: MainGLProps) {
   }, [setContainerDimensions]);
 
   return (
-    <div className={styles.bkgContainer} ref={containerRef}>
-      <canvas className={styles.bkgCanvas} width={containerDimensions.width} height={containerDimensions.height} ref={ref} />
+    <div className={styles.container} ref={containerRef}>
+      <canvas className={styles.canvas} width={containerDimensions.width} height={containerDimensions.height} ref={ref} />
     </div>
   );
 }
