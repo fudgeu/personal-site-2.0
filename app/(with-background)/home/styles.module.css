@@ -513,7 +513,7 @@
 
 @media (prefers-reduced-motion) {
   @keyframes titleTextGlitch {
-    0% { opacity: 100% }
+    0% { opacity: 1 }
   }
   @keyframes textLoad {
     0% { opacity: 0; }
