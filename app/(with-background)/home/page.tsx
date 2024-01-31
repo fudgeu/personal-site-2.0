@@ -12,6 +12,10 @@ const maxAmtSubTitles = 25;
 const numNavItems = 5;
 
 export default function Home() {
+  /* Is reduced motion on? */
+  const useReducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
+  const marqueeSpeed = useMemo(() => useReducedMotion ? 0 : 10, [useReducedMotion]);
+
   /* Animation states */
   const [titleTextState, setTitleTextState] = useState<ElementState>('HIDDEN');
   const [amtSubTitles, setAmtSubTitles] = useState(0);
@@ -89,14 +93,14 @@ export default function Home() {
         [styles.scrollingBinaryContainer_enter]: scrollingBinaryState === 'ENTER',
         [styles.hide]: scrollingBinaryState === 'HIDDEN',
       })}>
-        <Marquee autoFill speed={10} direction="right">011011000110111101101100001000000110011101100101011101000010000001110000011100100110000101101110011010110110010101100100</Marquee>
+        <Marquee autoFill speed={marqueeSpeed} direction="right">011011000110111101101100001000000110011101100101011101000010000001110000011100100110000101101110011010110110010101100100</Marquee>
       </div>
 
       {/* Content Container */}
       <div className={clsx({
         [styles.contentContainer]: true,
-        [styles.contentContainer_enter]: contentContainerState === 'ENTER',
         [styles.contentContainer_exit]: contentContainerState === 'EXIT',
+        [styles.hide]: scrollingBinaryState === 'HIDDEN',
       })}>
 
         {/* Subheader */}

@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useMemo } from 'react';
-import Window from '@/app/new-components/window/Window';
+import Window from '@/app/components/window/Window';
 import styles from './layout-styles.module.css';
 import { usePathname } from 'next/navigation';
 

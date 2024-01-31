@@ -1,6 +1,8 @@
-import Marquee from 'react-fast-marquee';
+'use client';
+
 import styles from './styles.module.css';
 import Project, { ProjectProps } from './project/Project';
+import Header from './header/Header';
 
 const projects: ProjectProps[] = [
   {
@@ -43,14 +45,7 @@ const projects: ProjectProps[] = [
 export default function Projects() {
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <Marquee className={styles.bkgMarquee} autoFill speed={20}>+</Marquee>
-        <Marquee className={styles.bkgMarquee} autoFill speed={20}>+</Marquee>
-        <Marquee className={styles.bkgMarquee} autoFill speed={20}>+</Marquee>
-        <Marquee className={styles.bkgMarquee} autoFill speed={20}>+</Marquee>
-        <Marquee className={styles.bkgMarquee} autoFill speed={20}>+</Marquee>
-        <h1 className={styles.headerText}>PROJECTS</h1>
-      </div>
+      <Header />
       <main className={styles.content}>
         {projects.map((p) => (
           <Project key={p.title} title={p.title} description={p.description} images={p.images} imageAlt={p.imageAlt} buttons={p.buttons} />

@@ -2,7 +2,7 @@
 import { Bounds } from './types';
 import { CSSProperties } from 'react';
 
-export default function GetBackgroundDecoration(
+export default function getBackgroundDecoration(
   unitRem: number,
   allBounds: Bounds[],
   // eslint-disable-next-line no-unused-vars
@@ -26,7 +26,6 @@ export default function GetBackgroundDecoration(
   const boxHeightPx = unitRem * boxHeight;
 
   // Generate position
-  let t = false;
   let decXPos = 0;
   let decYPos = 0;
   let decBounds: Bounds = { x: 0, y: 0, eX: 0, eY: 0 };
@@ -56,7 +55,6 @@ export default function GetBackgroundDecoration(
     }
 
     // If this point is reached, all checks have passed and the decoration is good.
-    t = true;
     break;
   }
 

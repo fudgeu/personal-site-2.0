@@ -3,13 +3,13 @@
 import {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import initShaderProgram, { ProgramInfo } from '@/app/new-components/webgl/Shaders';
-import drawScene from '@/app/new-components/webgl/DrawScene';
+import initShaderProgram, { ProgramInfo } from '@/app/components/webgl/Shaders';
+import drawScene from '@/app/components/webgl/DrawScene';
 import {
 	World,
   WorldObject,
-} from '@/app/new-components/webgl/World';
-import { Object3D, createObject } from '@/app/new-components/webgl/Object3D';
+} from '@/app/components/webgl/World';
+import { Object3D, createObject } from '@/app/components/webgl/Object3D';
 import { mat4 } from 'gl-matrix';
 import { MeshWithBuffers, OBJ } from 'webgl-obj-loader';
 import styles from './styles.module.css';

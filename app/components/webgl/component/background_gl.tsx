@@ -1,22 +1,27 @@
 'use client';
 
+/* This entire file and many of the ones relating to it are a mess - they're from
+   when I first started learning WebGL/OpenGL, and still had quite a bit to learn
+   about React and webdev in general. I'm impressed I got everything to work in
+   the first place, but it is 100% in need of a re-write/format in the future lol */
+
 import {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
-import initShaderProgram, { ProgramInfo } from '@/app/new-components/webgl/Shaders';
-import drawScene from '@/app/new-components/webgl/DrawScene';
+import initShaderProgram, { ProgramInfo } from '@/app/components/webgl/Shaders';
+import drawScene from '@/app/components/webgl/DrawScene';
 import {
   World,
-  WorldObject
-} from '@/app/new-components/webgl/World';
-import { Object3D, createObject } from '@/app/new-components/webgl/Object3D';
+  WorldObject,
+} from '@/app/components/webgl/World';
+import { createObject } from '@/app/components/webgl/Object3D';
 import { mat4 } from 'gl-matrix';
 import { MeshWithBuffers, OBJ } from 'webgl-obj-loader';
 import styles from './style.module.css';
 
 type ModelResult = {
   model: MeshWithBuffers,
-  id: string
+  id: string,
 };
 
 type MainGLProps = {
@@ -28,10 +33,16 @@ let then = 0;
 let introAnimProgress = 1;
 
 export default function BackgroundGL({ model }: MainGLProps) {
+  /* Is reduced motion on? */
+  const useReducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    [],
+  );
+
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const [world, _] = useState(new World());
 
-  /* Parallax effect */
+  /* Mouse parallax effect */
   const doParallaxEffect = useCallback(() => {
     world.getObjects().forEach(({ worldPosition }: WorldObject) => {
       const xOffset = lastMousePos.current.x - mousePos.current.x;
@@ -39,18 +50,19 @@ export default function BackgroundGL({ model }: MainGLProps) {
       mat4.translate(
         worldPosition,
         worldPosition,
-        [0.0004 * xOffset, -0.0004 * yOffset, 0]
+        [0.0004 * xOffset, -0.0004 * yOffset, 0],
       );
     });
   }, [world]);
 
   /* Mouse pos */
-  const mousePos = useRef({x: 0, y: 0});
-  const lastMousePos = useRef({x: 0, y: 0});
+  const mousePos = useRef({ x: 0, y: 0 });
+  const lastMousePos = useRef({ x: 0, y: 0 });
   useEffect(() => {
+    if (useReducedMotion) return;
     const handleMouseMove = (event: MouseEvent) => {
       lastMousePos.current = mousePos.current;
-      mousePos.current = {x: event.clientX, y: event.clientY};
+      mousePos.current = { x: event.clientX, y: event.clientY };
       doParallaxEffect();
     };
     window.addEventListener('mousemove', handleMouseMove);
@@ -68,23 +80,25 @@ export default function BackgroundGL({ model }: MainGLProps) {
     then = now;
 
     // rotate shape
-    world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
-      mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1]);
-      mat4.translate(worldPosition, worldPosition, [0.01, 0, 0]);
+    if (!useReducedMotion) {
+      world.getObjects().forEach(({ object, worldPosition }: WorldObject) => {
+        mat4.rotate(object.localPosition, object.localPosition, 0.01, [0, 0, 1]);
+        mat4.translate(worldPosition, worldPosition, [0.01, 0, 0]);
 
-      if (introAnimProgress < 100) {
-        mat4.translate(worldPosition, worldPosition, [0, 0, -(0.02 * introAnimProgress * (100 - introAnimProgress)) * delta]);
-      }
+        if (introAnimProgress < 100) {
+          mat4.translate(worldPosition, worldPosition, [0, 0, -(0.02 * introAnimProgress * (100 - introAnimProgress)) * delta]);
+        }
 
-      if (worldPosition[12] > 100) {
-        worldPosition[12] = -100;
-      }
-    });
+        if (worldPosition[12] > 100) {
+          worldPosition[12] = -100;
+        }
+      });
 
-    introAnimProgress += (0.02 * introAnimProgress * (100 - introAnimProgress)) * delta;
+      introAnimProgress += (0.02 * introAnimProgress * (100 - introAnimProgress)) * delta;
+    }
 
     drawScene(gl, prgmInfo, world);
-    animationRequestRef.current = requestAnimationFrame((newTime) => render(newTime, gl, prgmInfo),);
+    animationRequestRef.current = requestAnimationFrame((newTime) => render(newTime, gl, prgmInfo));
   }, []);
 
   // Init WebGL
@@ -104,7 +118,7 @@ export default function BackgroundGL({ model }: MainGLProps) {
 
   // Load Shader
   const loadShader = useCallback(
-    async (gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc: string,): Promise<ProgramInfo> => {
+    async (gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc: string): Promise<ProgramInfo> => {
       const [vertexResponse, fragmentResponse] = await Promise.all([
         fetch(vertexSrc),
         fetch(fragmentSrc),
@@ -131,7 +145,7 @@ export default function BackgroundGL({ model }: MainGLProps) {
         attribLocations: {
           vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
           vertexNormal: gl.getAttribLocation(shaderProgram, 'aVertexNormal'),
-          barycentricCoords: gl.getAttribLocation(shaderProgram, 'aBarycentricCoords')
+          barycentricCoords: gl.getAttribLocation(shaderProgram, 'aBarycentricCoords'),
         },
         uniformLocations: {
           projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
@@ -161,7 +175,7 @@ export default function BackgroundGL({ model }: MainGLProps) {
 
         const x = Math.random() * 200 - 100;
         const y = Math.random() * 100 - 50;
-        const z = -Math.random() * 100 + 85;
+        const z = (-Math.random() * 100 + 85) - (useReducedMotion ? 100 : 0);
 
         const objPos = mat4.create();
         mat4.translate(objPos, objPos, [x, y, z]);
@@ -193,12 +207,12 @@ export default function BackgroundGL({ model }: MainGLProps) {
       ];
     } else {
       loadList = [
-        loadModel(gl, model, `./${model}.obj`)
+        loadModel(gl, model, `./${model}.obj`),
       ];
     }
 
     Promise.all([
-      ...loadList
+      ...loadList,
     ])
       .then((models) => {
         // register each loaded model
@@ -215,7 +229,7 @@ export default function BackgroundGL({ model }: MainGLProps) {
     // load shader, then begin render
     loadShader(gl, './vertex.glsl', './fragment.glsl')
       .then((programInfo) => {
-        animationRequestRef.current = requestAnimationFrame((time) => render(time, gl, programInfo),);
+        animationRequestRef.current = requestAnimationFrame((time) => render(time, gl, programInfo));
       })
       .catch((err) => {
         console.error(`Failed to initialize WebGL - shader init failed: ${err}`);

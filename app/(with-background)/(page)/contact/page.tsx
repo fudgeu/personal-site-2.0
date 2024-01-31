@@ -6,9 +6,12 @@ import {
 } from 'react';
 import Marquee from 'react-fast-marquee';
 import { Bounds } from './types';
-import GetBackgroundDecoration from '@/app/(with-background)/(page)/contact/BackgroundDecoration';
+import getBackgroundDecoration from './get-background-decoration';
 
 export default function Contact() {
+  /* Is reduced motion on? */
+  const useReducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
+
   /* Background decorations */
   const [backgroundDecorationStyles, setBackgroundDecorationStyles] = useState<CSSProperties[]>([]);
   const allBounds = useRef<Bounds[]>([]);
@@ -33,7 +36,7 @@ export default function Contact() {
         setTimeout(() => {
           const rootDiv = rootRef.current;
           if (rootDiv == null) return;
-          const resultingStyle = GetBackgroundDecoration(
+          const resultingStyle = getBackgroundDecoration(
             unitRem,
             allBounds.current,
             (newBounds) => allBounds.current.push(newBounds),
@@ -84,7 +87,7 @@ export default function Contact() {
     calculatedStyles.map((style, i) => {
       const decoration = (
         <div key={i} className={styles.floatingBox} style={style}>
-          <Marquee autoFill direction="right" speed={20}>
+          <Marquee autoFill direction="right" speed={useReducedMotion ? 0 : 20}>
             <img className={styles.marqueeImg} src="/contact/email.svg" alt="" />
           </Marquee>
         </div>
@@ -95,12 +98,10 @@ export default function Contact() {
 
   return (
     <div className={styles.container} ref={rootRef}>
-      <Marquee direction="right" speed={15} className={styles.backgroundDecorations}>
-        {/* CRT effect, courtesy of greenlemon */}
-        <div className={styles.lines}></div>
+      <Marquee direction="right" speed={useReducedMotion ? 0 : 15} className={styles.backgroundDecorations}>
         {backgroundDecorationStyles.map((resultingStyle, i) => (
           <div key={i} className={styles.floatingBoxBkg} style={resultingStyle}>
-            <Marquee autoFill direction="left" speed={10}>
+            <Marquee autoFill direction="left" speed={useReducedMotion ? 0 : 10}>
               <img className={styles.marqueeImg} src="/contact/email.svg" alt="" />
             </Marquee>
           </div>
@@ -112,7 +113,7 @@ export default function Contact() {
           {contentDecorations.map((contentDeco) => contentDeco)}
           <h1>CONTACT</h1>
           <p>
-          IF YOU'D LIKE TO REACH OUT TO ME, WHETHER IT'S ABOUT A SPECIFIC REQUEST OR JUST TO TALK,
+            IF YOU'D LIKE TO REACH OUT TO ME, WHETHER IT'S ABOUT A SPECIFIC REQUEST OR JUST TO TALK,
             YOU CAN REACH ME AT:
           </p>
           <div className={styles.contact}>

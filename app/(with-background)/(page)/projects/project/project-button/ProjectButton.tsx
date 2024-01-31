@@ -2,7 +2,8 @@
 
 import Marquee from 'react-fast-marquee';
 import styles from './styles.module.css';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { ProjectButtonInfo, ProjectButtonType } from './project-button-type';
 
 type ProjectButtonProps = {
   from: ProjectButtonInfo,
@@ -15,6 +16,10 @@ const iconLookupTable: { [key in ProjectButtonType as string]: string } = {
 };
 
 export default function ProjectButton({ from }: ProjectButtonProps) {
+  /* Is reduced motion on? */
+  const useReducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
+  const marqueeSpeed = useMemo(() => useReducedMotion ? 0 : 20, [useReducedMotion]);
+
   const [isHovered, setIsHovered] = useState(false);
   const longBoxGenerated = useRef(false);
 
@@ -66,7 +71,7 @@ export default function ProjectButton({ from }: ProjectButtonProps) {
 
     return (
       <div className={styles.floatingBox} style={resultingStyle}>
-        <Marquee className={styles.marquee} speed={20} autoFill direction="right"><img src={iconLookupTable[from.type]} alt="" /></Marquee>
+        <Marquee className={styles.marquee} speed={marqueeSpeed} autoFill direction="right"><img src={iconLookupTable[from.type]} alt="" /></Marquee>
       </div>
     );
   }, [from.type]);
@@ -83,18 +88,14 @@ export default function ProjectButton({ from }: ProjectButtonProps) {
       onMouseOver={() => setIsHovered(true)}
       onMouseOut={handleMouseOut}
       href={from.link}
-		>
+    >
       {from.text}
-      {
-				isHovered && (
-  <>
-    {generateFloatingBox(0)}
-    {generateFloatingBox(1)}
-    {generateFloatingBox(2)}
-    {generateFloatingBox(3)}
-  </>
-				)
-			}
+      {isHovered && [
+        generateFloatingBox(0),
+        generateFloatingBox(1),
+        generateFloatingBox(2),
+        generateFloatingBox(3),
+      ]}
     </a>
   );
 }

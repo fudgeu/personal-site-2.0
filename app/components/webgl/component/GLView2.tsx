@@ -3,13 +3,13 @@
 import {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import initShaderProgram, { ProgramInfo } from '@/app/new-components/webgl/Shaders';
-import drawScene from '@/app/new-components/webgl/DrawScene';
+import initShaderProgram, { ProgramInfo } from '@/app/components/webgl/Shaders';
+import drawScene from '@/app/components/webgl/DrawScene';
 import {
 	World,
-  WorldObject
-} from '@/app/new-components/webgl/World';
-import { Object3D, createObject } from '@/app/new-components/webgl/Object3D';
+  WorldObject,
+} from '@/app/components/webgl/World';
+import { Object3D, createObject } from '@/app/components/webgl/Object3D';
 import { mat4 } from 'gl-matrix';
 import { MeshWithBuffers, OBJ } from 'webgl-obj-loader';
 import styles from './style.module.css';
@@ -19,17 +19,18 @@ type ModelResult = {
   id: string
 };
 
-type MainGLProps = {
+let lastUsedShape = "torus"
+
+type GLProps = {
 	mouseX: number,
 	mouseY: number,
 }
 
-let lastUsedShape = "torus"
-
-export default function MainGLView({ mouseX, mouseY }: MainGLProps) {
+export default function GLView({ mouseX, mouseY }: GLProps) {
   const [containerDimensions, setContainerDimensions] = useState({ width: 0, height: 0 });
   const [world, setWorld] = useState(new World());
 	const [lastMousePos, setLastMousePos] = useState({x: 0, y: 0});
+
 
   const ref = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,7 +48,7 @@ export default function MainGLView({ mouseX, mouseY }: MainGLProps) {
     animationRequestRef.current = requestAnimationFrame(
       (newTime) => render(newTime, gl, prgmInfo),
     );
-  }, []);
+  }, [world]);
 
   // Init WebGL
   const loadModel = useCallback(
@@ -108,72 +109,31 @@ export default function MainGLView({ mouseX, mouseY }: MainGLProps) {
     [],
   );
 
-	// Change shape every few seconds
-	const changeShapeEffect = useCallback((gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
-		world.clearObjects();
-		
-		const shapeArray = Array.from(models)
-		let shapeName: string;
-		let shape: MeshWithBuffers;
-		do {
-			const shapeEntry = shapeArray[Math.floor(Math.random() * shapeArray.length)]
-			shapeName = shapeEntry[0]
-			shape = shapeEntry[1]
-		} while (shapeName === lastUsedShape)
-
-		lastUsedShape = shapeName;
-
-		if (shape === undefined) {
-			console.log('Unable to load shape');
-			return;
-		}
-
-		const shape2 = createObject(gl, shape);
-		if (shape2 == null) {
-			console.error("Could not create Object3D")
-			return
-		}
-		mat4.scale(shape2.localPosition, shape2.localPosition, [2.5, 2.5, 2.5]);
-		mat4.rotate(shape2.localPosition, shape2.localPosition, Math.PI / 2, [1, -1, 0]);
-		const shape2Pos = mat4.create();
-		mat4.translate(shape2Pos, shape2Pos, [0, 0, -10]);
-
-		world.addObject(shape2, shape2Pos);
-
-		setLastMousePos({x: 0, y: 0})
-
-		const timeoutId = setTimeout(() => {changeShapeEffect(gl, models)}, 5000)
-		return () => { clearTimeout(timeoutId) }
-	},
-	[world]
-	);
 
 	// Load World
   const loadWorld = useCallback(
     (gl: WebGLRenderingContext, models: Map<string, MeshWithBuffers>) => {
       world.clearObjects();
 
-			const ico = models.get('ico');
-			if (ico === undefined) {
-        console.log('Could not load world, icosphere model not loaded');
+			const circle = models.get('circles');
+			if (circle === undefined) {
+        console.log('Could not load world, circle model not loaded');
         return;
       }
 
-			const shape2 = createObject(gl, ico);
+			const shape2 = createObject(gl, circle);
 			if (shape2 == null) {
 				console.error("Could not create Object3D")
 				return
 			}
-      mat4.scale(shape2.localPosition, shape2.localPosition, [2.5, 2.5, 2.5]);
-      mat4.rotate(shape2.localPosition, shape2.localPosition, Math.PI / 2, [1, -1, 0]);
+      mat4.scale(shape2.localPosition, shape2.localPosition, [2, 2, 2]);
+      mat4.rotate(shape2.localPosition, shape2.localPosition, -0.75, [1, 1, 0]);
       const shape2Pos = mat4.create();
-      mat4.translate(shape2Pos, shape2Pos, [0, 0, -10]);
+      mat4.translate(shape2Pos, shape2Pos, [5, -5, -10]);
 
       world.addObject(shape2, shape2Pos);
-
-			setTimeout(() => {changeShapeEffect(gl, models)}, 5000)
     },
-    [changeShapeEffect, world],
+    [world],
   );
 
   // begin init
@@ -187,14 +147,7 @@ export default function MainGLView({ mouseX, mouseY }: MainGLProps) {
 
     // load models, then world
     Promise.all([
-      loadModel(gl, 'sphere', './sphere.obj'),
-      //loadModel(gl, 'cube', './cube.obj'),
-      loadModel(gl, 'ico', './ico.obj'),
-      loadModel(gl, 'torus', './torus.obj'),
-      //loadModel(gl, 'stage', './stage.obj'),
-      //loadModel(gl, 'circles', './circles.obj'),
-      //loadModel(gl, 'kz', './stoodl_axo.obj'),
-      //loadModel(gl, 'shadow', './shadow.obj'),
+      loadModel(gl, 'circles', './circles.obj'),
     ])
       .then((models) => {
         // register each loaded model

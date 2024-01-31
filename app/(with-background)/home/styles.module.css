@@ -27,7 +27,7 @@
 }
 
 .titleTextContainer_enter {
-  display: block;
+  display: flex;
 }
 
 .titleTextContainer_exit {
@@ -87,16 +87,13 @@
 
 /* Content container */
 .contentContainer {
+  display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 1rem;
   padding-left: 5rem;
   transform: rotate(5deg);
   flex-grow: 1;
-}
-
-.contentContainer_enter {
-  display: flex;
 }
 
 .contentContainer_exit {
@@ -521,16 +518,16 @@
     100% { opacity: 1;}
   }
   @keyframes textUnload {
-    0% { opacity: 0; }
-    100% { opacity: 1;}
+    0% { opacity: 1; }
+    100% { opacity: 0;}
   }
   @keyframes scrollingTextLoad {
     0% { opacity: 0; }
     100% { opacity: 1;}
   }
   @keyframes scrollingTextUnload {
-    0% { opacity: 0; }
-    100% { opacity: 1;}
+    0% { opacity: 1; }
+    100% { opacity: 0;}
   }
   @keyframes trCornerIntro {
     0% { opacity: 0; }
