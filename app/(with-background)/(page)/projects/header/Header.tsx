@@ -6,7 +6,10 @@ import { useMemo } from 'react';
 
 export default function Header() {
   /* Is reduced motion on? */
-  const useReducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
+  const useReducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    [],
+  );
   const marqueeSpeed = useMemo(() => useReducedMotion ? 0 : 20, [useReducedMotion]);
 
   return (

@@ -13,7 +13,10 @@ const numNavItems = 5;
 
 export default function Home() {
   /* Is reduced motion on? */
-  const useReducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
+  const useReducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    [],
+  );
   const marqueeSpeed = useMemo(() => useReducedMotion ? 0 : 10, [useReducedMotion]);
 
   /* Animation states */

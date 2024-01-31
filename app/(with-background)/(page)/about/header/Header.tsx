@@ -6,7 +6,10 @@ import Marquee from 'react-fast-marquee';
 
 export default function Header() {
   /* Is reduced motion on? */
-  const useReducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
+  const useReducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    [],
+  );
 
   const generateHeader = useCallback(() => {
     // TODO remove constant, make dynamic to screen size

@@ -17,7 +17,10 @@ const iconLookupTable: { [key in ProjectButtonType as string]: string } = {
 
 export default function ProjectButton({ from }: ProjectButtonProps) {
   /* Is reduced motion on? */
-  const useReducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
+  const useReducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    [],
+  );
   const marqueeSpeed = useMemo(() => useReducedMotion ? 0 : 20, [useReducedMotion]);
 
   const [isHovered, setIsHovered] = useState(false);

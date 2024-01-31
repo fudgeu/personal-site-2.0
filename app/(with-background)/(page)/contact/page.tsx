@@ -10,7 +10,10 @@ import getBackgroundDecoration from './get-background-decoration';
 
 export default function Contact() {
   /* Is reduced motion on? */
-  const useReducedMotion = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
+  const useReducedMotion = useMemo(
+    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    [],
+  );
 
   /* Background decorations */
   const [backgroundDecorationStyles, setBackgroundDecorationStyles] = useState<CSSProperties[]>([]);

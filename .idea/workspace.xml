@@ -5,40 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cc40467-2f4f-4912-a473-fc9afaf28f71" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/header/Header.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/header/styles.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/project-button/project-button-type.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/personal-site-2.0.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/about/header/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/about/header/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/contact/BackgroundDecoration.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/contact/get-background-decoration.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/contact/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/contact/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/contact/styles.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/contact/styles.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/Project.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/Project.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/header/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/header/Header.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/project-button/ProjectButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/project-button/ProjectButton.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/project-button/styles.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/project-button/styles.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/project-button/types.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/styles.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/styles.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/(with-background)/home/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/home/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/home/styles.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/home/styles.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/Buffers.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/DrawScene.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/Object3D.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/Shaders.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/World.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/component/GLView2.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/component/background_gl.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/component/main_gl_view.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/webgl/component/style.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/window/Window.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/new-components/window/styles.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/rat/RatGL/RatGL.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/rat/RatGL/RatGL.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +114,7 @@
       <workItem from="1706659346009" duration="11538000" />
       <workItem from="1706677042568" duration="99000" />
       <workItem from="1706677169655" duration="22000" />
-      <workItem from="1706677227657" duration="1190000" />
+      <workItem from="1706677227657" duration="1587000" />
     </task>
     <servers />
   </component>
