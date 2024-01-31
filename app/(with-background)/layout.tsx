@@ -1,11 +1,7 @@
-import type { Metadata } from 'next';
-import { ReactNode } from 'react';
-import BackgroundGL from '@/app/new-components/webgl/component/background_gl';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'FUDGEU',
-  description: 'PERSONAL PORTFOLIO',
-};
+import { ReactNode, useEffect } from 'react';
+import BackgroundGL from '@/app/new-components/webgl/component/background_gl';
 
 export default function RootLayout({ children }: {
   children: ReactNode,

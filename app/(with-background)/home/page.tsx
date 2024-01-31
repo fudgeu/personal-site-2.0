@@ -24,8 +24,6 @@ export default function Home() {
   const router = useRouter();
 
   /* Animation intro */
-  const doSequence = useSequence();
-
   const introSequence: Sequence = useMemo(() => [
     { action: () => setTitleTextState('ENTER') },
     { action: () => setAmtSubTitles((prev) => prev + 1), iterations: maxAmtSubTitles, proceedAfter: 5 },
@@ -36,9 +34,9 @@ export default function Home() {
     { action: () => setBottomDecoState('ENTER') },
   ], []);
 
-  useEffect(() => {
-    doSequence(introSequence, 50);
-  }, []);
+  const [runIntroSequence] = useSequence(introSequence, 50);
+
+  useEffect(runIntroSequence, []);
 
   /* Animation outro */
   const outroSequence: Sequence = useMemo(() => [
@@ -47,9 +45,7 @@ export default function Home() {
     { action: () => setContentContainerState('EXIT') },
   ], []);
 
-  const doExitAnimations = useCallback(() => {
-    doSequence(outroSequence, 10);
-  }, []);
+  const [runOutroSequence] = useSequence(outroSequence, 10);
 
   /* Prefetch links */
   useEffect(() => {
@@ -58,9 +54,9 @@ export default function Home() {
 
   /* Misc */
   const goTo = useCallback((link: string) => {
-    doExitAnimations();
+    runOutroSequence();
     setTimeout(() => router.push(link), 40); // TODO switch to a promise based timeout system
-  }, []);
+  }, [router, runOutroSequence]);
 
   const getSubtexts = useCallback(() => {
     return Array(amtSubTitles).fill(<h1>FUDGEU</h1>);

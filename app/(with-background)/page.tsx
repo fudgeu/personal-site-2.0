@@ -14,6 +14,13 @@ export default function TestPage() {
 
   const router = useRouter();
 
+  // Redirect to warning page if first time visiting
+  useEffect(() => {
+    if (localStorage.getItem('firstVisit') == null) {
+      router.push('/warning');
+    }
+  }, [router]);
+
   // loading animations
   const addTerminalText = useCallback((text: string) => {
     setTextList((prev) => [...prev, text]);
@@ -24,8 +31,6 @@ export default function TestPage() {
       return [...prev.slice(0, -1), prev.slice(-1)[0] + text];
     });
   }, []);
-
-  const doSequence = useSequence();
 
   const introSequence: Sequence = useMemo(() => [
     { action: () => addTerminalText('RUNNING MEMORY TEST...'), wait: 100 },
@@ -64,8 +69,11 @@ export default function TestPage() {
     { action: () => router.push('home') },
   ], []);
 
+  const [runSequence, cancelSequence] = useSequence(introSequence, 50);
+
   useEffect(() => {
-    doSequence(introSequence, 50);
+    runSequence();
+    return cancelSequence;
   }, []);
 
   return (

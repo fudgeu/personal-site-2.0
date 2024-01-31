@@ -9,6 +9,7 @@ export default function Warning() {
   const router = useRouter();
 
   const onContinue = useCallback(() => {
+    localStorage.setItem('firstVisit', 'true');
     setShow(false);
     setTimeout(() => router.push('/'), 500);
   }, [router]);
