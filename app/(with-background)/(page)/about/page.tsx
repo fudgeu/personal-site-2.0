@@ -28,8 +28,8 @@ export default function AboutPage() {
           <div className={styles.sectionContent}>
             <p>
               I&apos;m a current college student at UCF, studying computer science - I love designing great user
-              interfaces and creating products that are both simple to use yet powerful. On top of that, I
-              also love to experiment and create things both utterly useless and full of potential!
+              interfaces and creating products that are both simple to use yet powerful - and while I've had a front-end
+              focus for a while now, I've been creeping into full-stack development and am excited to try new things
             </p>
           </div>
         </section>
@@ -37,15 +37,25 @@ export default function AboutPage() {
         <section className={styles.section}>
           <h2>SKILLS</h2>
           <div className={styles.sectionContent}>
-            <p>I&apos;ve worked with and familiarized myself with all the following:</p>
+            <p>I&apos;ve worked with the following a *lot*:</p>
             <AdaptableBullets>
               <li>Typescript/Javascript</li>
               <li>React.JS/Next.JS/Vite</li>
               <li>Java/Kotlin</li>
               <li>C</li>
-              <li>C#</li>
               <li>Fabric Toolchain</li>
               <li>Docker</li>
+              <li>Git</li>
+            </AdaptableBullets>
+            <p>And I also have a fair bit of experience with:</p>
+            <AdaptableBullets>
+              <li>C++</li>
+              <li>OpenGL</li>
+              <li>Python</li>
+              <li>Flask</li>
+              <li>REST APIs</li>
+              <li>C#</li>
+              <li>Unity</li>
             </AdaptableBullets>
           </div>
         </section>
@@ -59,9 +69,8 @@ export default function AboutPage() {
             </p>
             <p>At the moment, I&apos;m taking my time to learn the following:</p>
             <AdaptableBullets>
-              <li>C++</li>
               <li>Rust</li>
-              <li>OpenGL & Vulkan</li>
+              <li>SQL</li>
             </AdaptableBullets>
           </div>
         </section>

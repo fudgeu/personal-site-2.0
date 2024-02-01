@@ -16,6 +16,9 @@ export default function TestPage() {
 
   // Redirect to warning page if first time visiting
   useEffect(() => {
+    if (window.screen.width < 800) { // redirect to old site if mobile, temporary while mobile version of this site is being worked on
+      router.replace('https://old.fudgeu.dev');
+    }
     if (localStorage.getItem('firstVisit') == null) {
       router.push('/warning');
     }
