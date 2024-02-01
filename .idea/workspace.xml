@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7cc40467-2f4f-4912-a473-fc9afaf28f71" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/components/image-carousel/ImageCarousel.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/components/image-carousel/styles.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/about/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/about/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/about/styles.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/about/styles.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/Project.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/Project.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/styles.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/(page)/projects/project/styles.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/(with-background)/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(with-background)/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/components/window/styles.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/components/window/styles.module.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +111,7 @@
       <workItem from="1706677042568" duration="99000" />
       <workItem from="1706677169655" duration="22000" />
       <workItem from="1706677227657" duration="6006000" />
-      <workItem from="1706748717358" duration="16397000" />
+      <workItem from="1706748717358" duration="17810000" />
     </task>
     <servers />
   </component>
