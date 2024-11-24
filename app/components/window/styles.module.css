@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  visibility: hidden;
   flex-direction: column;
   border: outset 3px var(--accent-color);
   padding: 0.25rem;
@@ -7,6 +8,10 @@
   gap: 0.25rem;
   transition-duration: 0.2s;
   transition-property: transform;
+}
+
+.containerShow {
+  visibility: visible;
   animation-name: windowIntro;
   animation-duration: 0.1s;
 }
@@ -125,7 +130,7 @@
   }
 
   100% {
-    transform: scale(1) skew(0);
+    transform: scale(0) skew(0);
   }
 }
 
