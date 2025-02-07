@@ -1,6 +1,7 @@
 import styles from './styles.module.css';
 import AdaptableBullets from '@/app/components/adaptable-bullets/AdaptableBullets';
 import Header from './header/Header';
+import About from '@/app/text/about.mdx'
 
 export default function AboutPage() {
   return (
@@ -11,7 +12,6 @@ export default function AboutPage() {
 
       {/* Content */}
       <div className={styles.content}>
-
         <section className={styles.section}>
           <div className={styles.firstHeaderContainer}>
             <h2>WELCOME!</h2>
@@ -43,6 +43,7 @@ export default function AboutPage() {
               <li>React.JS/Next.JS/Vite</li>
               <li>Java/Kotlin</li>
               <li>C</li>
+              <li>Python</li>
               <li>Fabric Toolchain</li>
               <li>Docker</li>
               <li>Git</li>
@@ -51,26 +52,13 @@ export default function AboutPage() {
             <AdaptableBullets>
               <li>C++</li>
               <li>OpenGL</li>
-              <li>Python</li>
               <li>Flask</li>
+              <li>Django</li>
               <li>REST APIs</li>
               <li>C#</li>
               <li>Unity</li>
-            </AdaptableBullets>
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <h2>LEARNING...</h2>
-          <div className={styles.sectionContent}>
-            <p>
-              I&apos;m always eager to try new things, especially new technologies. Even if I personally will never
-              use it, there is always something I can learn that may apply to something that I will.
-            </p>
-            <p>At the moment, I&apos;m taking my time to learn the following:</p>
-            <AdaptableBullets>
-              <li>Rust</li>
               <li>SQL</li>
+              <li>nginx</li>
             </AdaptableBullets>
           </div>
         </section>
