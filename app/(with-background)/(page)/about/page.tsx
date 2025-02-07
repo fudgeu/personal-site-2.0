@@ -1,7 +1,6 @@
 import styles from './styles.module.css';
 import AdaptableBullets from '@/app/components/adaptable-bullets/AdaptableBullets';
 import Header from './header/Header';
-import About from '@/app/text/about.mdx'
 
 export default function AboutPage() {
   return (
