@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=El+Messiri&display=swap');
+
+:root {
+  --subtext-color: #6d6d6d;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+}
+
+body {
+  background-color: #fff9f0;
+  font-family: 'DM Serif Display', serif;
+}
+
+.page {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 3rem;
+  overflow-x: hidden;
+}
+
+.main {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.heading {
+  line-height: 1;
+
+  & h1 {
+    font-size: 62px;
+  }
+
+  & p {
+    font-size: 24px;
+    font-style: italic;
+    color: var(--subtext-color);
+  }
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-button {
+  flex: 1;
+  padding: 10px 10px;
+  text-decoration: none;
+  color: black;
+
+  &:hover {
+    background-color: #00000011;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+  }
+
+  &.active {
+    font-style: italic;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+  }
+}
+
+li {
+  margin-left: 1.5em;
+}
+
+li ul {
+  margin-left: 15px;
+}

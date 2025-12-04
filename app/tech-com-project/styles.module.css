@@ -1,0 +1,25 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sectionText {
+  font-family: 'El Messiri', sans-serif;
+}
+
+.professionalExp {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skills {
+  font-family: 'El Messiri', sans-serif;
+}

@@ -1,0 +1,13 @@
+.section {
+  font-family: 'El Messiri', sans-serif;
+}
+
+.sectionHeader {
+  font-size: 28px;
+}
+
+.divider {
+  height: 2px;
+  margin: 20px 0;
+  background-color: #eaeaea;
+}

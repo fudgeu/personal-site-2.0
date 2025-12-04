@@ -1,0 +1,28 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  font-family: 'El Messiri', sans-serif;
+  gap: 5px;
+}
+
+.sansText {
+  font-family: 'El Messiri', sans-serif;
+}
+
+.sectionHeader {
+  font-size: 28px;
+}
+
+.spacer {
+  height: 10px;
+}
+
+.divider {
+  height: 1px;
+  margin: 10px 0;
+  background-color: #00000022;
+}
+
+.coverLetter {
+  font-family: 'El Messiri', sans-serif;
+}
