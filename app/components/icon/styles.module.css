@@ -44,6 +44,9 @@
 .text {
   padding: 0 0.25rem;
   color: white;
+  font-family: var(--font-title), monospace;
+  font-size: 1.25rem;
+  font-weight: 900;
 }
 
 .iconImg {

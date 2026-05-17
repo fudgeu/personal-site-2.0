@@ -34,7 +34,10 @@
 }
 
 .titleBarLeft {
-
+  font-family: var(--font-body), monospace;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .titleBarRight {

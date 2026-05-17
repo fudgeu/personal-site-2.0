@@ -111,14 +111,13 @@ export default function NewHome() {
         <Window
           title="INFO"
           width={25}
-          height={14}
+          height={10.5}
           allowClose={false}
           delayIntro={150}
           doExit={exitStates.infoWindow}
         >
           <div className={styles.info}>
-            <h2>AKA PATRICK KOSS</h2>
-            <p>{`FULL-STACK DEVELOPER${subText}`}</p>
+            <p>{`SOFTWARE DEVELOPER, TINKERER, AND EVERYTHING ELSE`}</p>
           </div>
         </Window>
       </div>

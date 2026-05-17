@@ -12,23 +12,30 @@
 }
 
 .title {
-	padding: 0 1rem;
 	width: max-content;
-	background-color: var(--accent-color);
-	color: black;
+	color: var(--accent-color);
+	font-family: var(--font-title), monospace;
+	font-style: italic;
 }
 
 .title h2 {
 	font-size: 2rem;
+	font-weight: 900;
+	text-transform: uppercase;
 }
 
 .description {
-	font-family: 'Source Code Pro', monospace;
+	font-family: var(--font-title), monospace;
+	font-size: 1.25rem;
 	color: white;
 	width: 30rem;
 }
 
 .buttons {
+	font-family: var(--font-title), monospace;
+	text-transform: uppercase;
+	font-size: 1.25rem;
+	font-weight: 400;
 	display: flex;
 	flex-direction: row;
 	justify-content: end;

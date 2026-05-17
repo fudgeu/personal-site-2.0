@@ -116,8 +116,8 @@ export default function Contact() {
           {contentDecorations.map((contentDeco) => contentDeco)}
           <h1>CONTACT</h1>
           <p>
-            IF YOU'D LIKE TO REACH OUT TO ME, WHETHER IT'S ABOUT A SPECIFIC REQUEST OR JUST TO TALK,
-            YOU CAN REACH ME AT:
+            If you'd like to reach out to me, whether it's about a specific request or just to talk,
+            you can reach me at:
           </p>
           <div className={styles.contact}>
             <img src="/contact/discord-logo.svg" alt="Discord" />

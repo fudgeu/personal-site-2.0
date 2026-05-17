@@ -19,9 +19,12 @@
 
 .terminalContainer {
 	position: absolute;
-	font-family: 'Source Code Pro', monospace;
 	padding: 0.5rem 0.5rem;
 	transition: transform 2s, filter 1s, opacity 2s;
+}
+
+.terminalContainer pre {
+	font-family: 'Source Code Pro', monospace;
 }
 
 .terminalContainer_exit {
@@ -40,7 +43,7 @@
 	z-index: 300;
 	opacity: 0.05;
 }
-	 
+
 .lines:before {
 	content: '';
 	position: absolute;

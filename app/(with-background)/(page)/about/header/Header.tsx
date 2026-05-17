@@ -16,7 +16,7 @@ export default function Header() {
     const array = Array(15);
     for (let i = 0; i < 15; i++) {
       const dir = (i % 2 == 0) ? 'left' : 'right';
-      array[i] = <Marquee key={i} className={styles.marquee} autoFill speed={useReducedMotion ? 0 : 20} direction={dir}><h1>ABOUT ME&nbsp;</h1></Marquee>;
+      array[i] = <Marquee key={i} className={styles.marqueeFilled} autoFill speed={useReducedMotion ? 0 : 20} direction={dir}><h1>ABOUT ME&nbsp;</h1></Marquee>;
     }
     return array;
   }, []);

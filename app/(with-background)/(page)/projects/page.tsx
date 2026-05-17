@@ -20,22 +20,8 @@ const projects: ProjectProps[] = [
     buttons: [{ type: 'github', text: 'Github', link: 'https://github.com/fudgeu/Refont' }],
   },
   {
-    title: 'Classabull',
-    description: 'Classabull was created during a 24-hour university hackathon - made with the goal of providing a better class scheduling experience for the students of USF. It features a sleek, functional, and easily-digestible UI built using React, as well as a calendar to help visualize your week.',
-    images: ['/projects/classabull/1.png', '/projects/classabull/2.png', '/projects/classabull/3.png'],
-    imageAlts: ['Main interface of Classabul, showing a filled out schedule', 'Main interface, showing an empty schedule', 'Main interface, showing another filled out schedule'],
-    buttons: [{ type: 'other', text: 'Site', link: 'https://classabull.vercel.app/' }, { type: 'github', text: 'Github', link: 'https://github.com/fudgeu/classabull' }],
-  },
-  {
-    title: 'yuome',
-    description: 'Yuome was created in 36 hours at Shellhacks 2023 with the goal of making keeping track of tabs between friends easier. Built with React, Clerk, and Twilio, Yuome was made with the goal of having a minimum barrier of entry. Logins are passwordless, and SMS messages are used to notify friends of requests.',
-    images: ['/projects/yuome/1.png', '/projects/yuome/2.png'],
-    imageAlts: ['Main interface of Yuome, showing a list of active tabs', '\'Request money\' dialog'],
-    buttons: [{ type: 'other', text: 'Site', link: 'https://yuome.vercel.app/' }, { type: 'github', text: 'Github', link: 'https://github.com/fudgeu/yuome' }],
-  },
-  {
     title: 'This site',
-    description: 'Built using React, Next.js, and WebGL, this portfolio was a big challenge for me, both in advancing my understanding of these technologies and in getting the styling *just* right. I wanted this site to pop, stand out, and extrude personality. It had seen many forms in its days of development, but I\'m very happy with how it turned out',
+    description: 'Built using React, Next.js, and WebGL. I wanted this portfolio to pop out, which I feel like I\'ve succeeded in doing, and am very happy with. I do plan on eventually re-writing it though, likely with some new tech, improvements, and a new style - though It likely won\'t be for another while longer.',
     images: [],
     imageAlts: [],
     buttons: [{ type: 'github', text: 'Github', link: 'https://github.com/fudgeu/personal-site-2.0' }],
@@ -50,6 +36,11 @@ export default function Projects() {
         {projects.map((p) => (
           <Project key={p.title} title={p.title} description={p.description} images={p.images} imageAlts={p.imageAlts} buttons={p.buttons} />
         ))}
+
+        <p className={styles.aside}>
+          And, the tons of projects that I don't have listed here. Either because they're still being worked on, or am too lazy to list it.
+        </p>
+
       </main>
     </div>
   );

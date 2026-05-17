@@ -33,11 +33,14 @@
   width: max-content;
   background-color: var(--accent-color);
   color: black;
+  font-family: var(--font-title), monospace;
   font-size: 2rem;
+  font-weight: 900;
 }
 
 .content p {
-  font-family: 'Source Code Pro', monospace;
+  font-family: var(--font-title), monospace;
+  font-size: 1.25rem;
 }
 
 .contact {
@@ -45,6 +48,9 @@
   flex-direction: row;
   align-items: center;
   gap: 1rem;
+  font-family: var(--font-title), monospace;
+  font-size: 1.25rem;
+  font-weight: 900;
 }
 
 .contact img {

@@ -26,54 +26,59 @@ export default function AboutPage() {
           </div>
           <div className={styles.sectionContent}>
             <p>
-              I&apos;m a current college student at UCF, studying computer science - I love designing great user
-              interfaces and creating products that are both simple to use yet powerful - and while I've had a front-end
-              focus for a while now, I've been creeping into full-stack development and am excited to try new things
+              I&apos;m a software engineer currently based in Chicago (come say hi!), working on mobile app development
+              and test systems automation. Outside of work... I do more work! I have a variety of personal software and hardware
+              projects I work on, many of which relate to game modding and cool UIs (and UI libraries!).
             </p>
           </div>
         </section>
 
         <section className={styles.section}>
-          <h2>SKILLS</h2>
-          <div className={styles.sectionContent}>
-            <p>I&apos;ve worked with the following a *lot*:</p>
-            <AdaptableBullets>
-              <li>Typescript/Javascript</li>
-              <li>React.JS/Next.JS/Vite</li>
-              <li>Java/Kotlin</li>
-              <li>C</li>
-              <li>Python</li>
-              <li>Fabric Toolchain</li>
-              <li>Docker</li>
-              <li>Git</li>
-            </AdaptableBullets>
-            <p>And I also have a fair bit of experience with:</p>
-            <AdaptableBullets>
-              <li>C++</li>
-              <li>OpenGL</li>
-              <li>Flask</li>
-              <li>Django</li>
-              <li>REST APIs</li>
-              <li>C#</li>
-              <li>Unity</li>
-              <li>SQL</li>
-              <li>nginx</li>
-            </AdaptableBullets>
-          </div>
-        </section>
-
-        <section className={styles.section}>
-          <h2>Me, Actually</h2>
+          <h2>SOFTWARE</h2>
           <div className={styles.sectionContent}>
             <p>
-              Other things I love to do in my free time include skating, traveling both through nature and cities,
-              and of course playing a variety of games like Cities Skylines: 2, Counter Strike 2, and Beat Saber.
-              I also love photography, especially while traveling, where I can take photos of landscapes and cityscapes.
-              Outside of computer science, I also have a lot of interest in urban planning and electronics tinkering.
+              I primarily work full-stack with a few different UI libraries (React,
+              Jetpack Compose, SwiftUI), and usually Django on the backend. I also do a lot of Minecraft modding,
+              primarily with Kotlin. Otherwise, I love trying new languages/platforms and have a grab-bag of experiences
+              with a lot of different things (OpenGL, Unity, C...). Also trying to get more into embedded programming!
             </p>
           </div>
         </section>
 
+        <section className={styles.section}>
+          <h2>MUSIC</h2>
+          <div className={styles.sectionContent}>
+            <p>
+              My music taste is best described as largely electronic, a healthy chunk of vocaloid, and a bit pop/indie.
+              Most of my influence can be traced back to the euro-dance I heard regularly growing up,
+              and the soundtracks of a few games (Sonic Riders, Ridge Racer, and especially Forza Horizon 2).
+              I have way too many 'favorite artists' to list, but underscores, Porter Robinson, and Jamie Paige
+              likely give a good basis!
+            </p>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2>GAMING</h2>
+          <div className={styles.sectionContent}>
+            <p>
+              Deadlock, Minecraft, Cities: Skylines are what I play the most nowadays.
+              Portal 2 is my favorite of all time! Used to play a lot of Beat Saber and got shockingly good at it,
+              though haven't played in a while and really want to get back into it. Will also play Overwatch when given
+              the chance.
+            </p>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2>OTHER...</h2>
+          <div className={styles.sectionContent}>
+            <p>
+              Love to travel, though both cities and nature. Also a lot into urban planning and
+              public transit (especially trains)!
+            </p>
+          </div>
+        </section>
       </div>
 
     </div>
